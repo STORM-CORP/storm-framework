@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"net"
 	"sync"
-	"sync/atomic" // Untuk hitungan real-time yang akurat
+	"sync/atomic"
 	"time"
 )
 var count uint64 // Counter global

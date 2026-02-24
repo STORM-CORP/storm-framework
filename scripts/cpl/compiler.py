@@ -4,7 +4,7 @@ import shutil
 from rootmap import ROOT
 from concurrent.futures import ProcessPoolExecutor
 
-# Satukan semua cache di root agar tidak berantakan
+# Satukan semua cache
 SHARED_TARGET = os.path.join(ROOT, "lib", "smf", "core",  "cache", "rust_target")
 
 
@@ -26,7 +26,7 @@ def compile_rust_project(cargo_path):
 
     # Gunakan --offline karena kita sudah pakai cargo vendor
     # Flag --frozen memastikan Cargo tidak mengubah Cargo.lock
-    cmd = "cargo build --release --quiet --offline --frozen"
+    cmd = "cargo build --release --quiet --offline --frozen -j 1"
 
     if run_cmd(cmd, cwd=output_dir):
         src_bin = os.path.join(SHARED_TARGET, "release", output_name)
@@ -88,7 +88,7 @@ def main():
 
     # EXECUTE PARALLEL
     print(f"[*] Storm Engine: Compiling on {os.cpu_count()} core")
-    with ProcessPoolExecutor() as executor:
+    with ProcessPoolExecutor(max_workers=safe_mode()) as executor:
         # Submit Rust projects
         rust_results = list(executor.map(compile_rust_project, rust_tasks))
         # Submit Go & C files
@@ -96,9 +96,8 @@ def main():
 
     for r in rust_results + other_results: print(r)
 
-    # FINAL CLEANUP (Hemat ruang untuk user Termux)
     # Hapus folder build_cache tapi setelah semua biner dipindah
-    # shutil.rmtree(os.path.join(ROOT, "build_cache"), ignore_errors=True)
+    # shutil.rmtree(os.path.join(ROOT, "cache"), ignore_errors=True)
 
 if __name__ == "__main__":
     main()

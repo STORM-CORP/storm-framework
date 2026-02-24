@@ -47,7 +47,7 @@ def generate_folder_manifest():
         "storm.db",
         ".gitignore",
         ".env",
-        "cache/"
+        "res"
     }
 
     for path in ROOT.rglob("*"):

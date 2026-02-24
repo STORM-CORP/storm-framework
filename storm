@@ -7,7 +7,7 @@ import sys
 import readline  # noqa: F401
 import app.base.config_ui as config_ui
 import app.utility.verify as r
-import lib.smf.ldch as ldch
+import lib.smf.core.sf.ldch as ldch
 
 from app.base.config_update import check_update
 from app.utility.colors import C

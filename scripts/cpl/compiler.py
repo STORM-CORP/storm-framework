@@ -41,7 +41,7 @@ def compile_rust_project(cargo_path):
     # Run as --offline
     # The --frozen flag ensures Cargo does not modify Cargo.lock
     # -j 1 This ensures 1 process uses 1 CPU core
-    cmd = "cargo build --release --quiet --offline --frozen -j 1"
+    cmd = "cargo build --release --offline -j 1"
 
     if run_cmd(cmd, cwd=output_dir):
         bin_name = get_bin_name(cargo_path)

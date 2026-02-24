@@ -2,6 +2,7 @@ import os
 import subprocess
 import shutil
 from rootmap import ROOT
+from scripts.cpl.advcore import safe_mode
 from concurrent.futures import ProcessPoolExecutor
 
 # Satukan semua cache

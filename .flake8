@@ -1,0 +1,7 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    lib/smf/core/db/vendor,
+    build,
+    dist

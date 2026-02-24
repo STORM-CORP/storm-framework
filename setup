@@ -45,7 +45,7 @@ if [ -d "/data/data/com.termux" ]; then
     INSTALL_DIR="$PREFIX/share/$REPO_NAME"
 
     NEEDS_SUDO=false
-    pkg install -y python git golang rust  build-essential libpcap clang ffmpeg openssl binutils pkg-config make-repo
+    pkg install -y python git golang rust  build-essential libpcap clang ffmpeg openssl binutils pkg-config
 else
     # Standard Linux Environment
     echo -e "${GREEN}[!] Environment detected: Standard Linux${NC}"
@@ -120,14 +120,14 @@ if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Cannot access $INSTALL_DIR${NC}"; }
 fi
 
-COMPILER_SRC="scripts.cpl.compiler.py"
+COMPILER_SRC="scripts.cpl.compiler"
 
 if [ -f "$COMPILER_SRC" ]; then
     echo -e "[*] Run binary compilation."
     if $NEEDS_SUDO; then
-        sudo python3 -c "export NEEDS_SUDO=true; . $COMPILER_SRC; compile_modules"
+        sudo "$PYTHON_CMD" -m "$COMPILER_SRC"
     else
-        python3 "$COMPILER_SRC"
+        "$PYTHON_CMD" -m "$COMPILER_SRC"
     fi
     cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Lost track of directory!${NC}"; exit 1; }
 else

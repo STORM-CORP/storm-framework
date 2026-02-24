@@ -40,3 +40,6 @@ go.sum
 
 # ignore
 lib/core/database/signed_manifest.json
+
+# no ignore all folder
+!**/vendor/**

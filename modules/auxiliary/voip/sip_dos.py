@@ -34,8 +34,8 @@ def execute(options):
 
     except KeyboardInterrupt:
         pass
-
+    except Exception as e:
+        print(f"ERROR: {e}")
     finally:
         sock.close()
-
     return True

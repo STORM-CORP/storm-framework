@@ -13,7 +13,7 @@ from scripts.cpl.ioname import get_bin_name
 from scripts.cpl.advcore import safe_mode
 from concurrent.futures import ProcessPoolExecutor
 
-SHARED_TARGET = os.path.join(ROOT, "lib", "smf", "core", "cache", "rust.session")
+SHARED_TARGET = os.path.join(ROOT, "lib", "smf", "core", "cache", "rust-session")
 
 def run_cmd(cmd, cwd=None):
     env = os.environ.copy()
@@ -70,6 +70,8 @@ def compile_single_file(task):
         return f"[✓] {lang.upper()}: {os.path.basename(output)}"
     return f"[!] {lang.upper()} Failed: {output}"
 
+
+
 def main():
     os.chdir(ROOT)
     os.makedirs(SHARED_TARGET, exist_ok=True)
@@ -79,7 +81,7 @@ def main():
 
     # SCANNING PHASE (Fast & Accurate)
     for root, dirs, files in os.walk("."):
-        # Never enter a vendor or target!
+        # ignore sensitive folders no compile
         if any(x in root for x in [".git", "db", "cache", "target"]):
             continue
 
@@ -99,6 +101,7 @@ def main():
         for cargo_path in rust_tasks:
             rust_dir = os.path.dirname(cargo_path)
 
+            # Run heavy processes yourself with default logic
             with StormSpin():
                 run_cmd("cargo build --release --offline", cwd=rust_dir)
 
@@ -120,8 +123,7 @@ def main():
     for r in rust_results + other_results:
         print(r)
 
-    # Delete the build_cache folder but after all the binaries have been moved
-    # shutil.rmtree(os.path.join(ROOT, "cache"), ignore_errors=True)
-
 if __name__ == "__main__":
     main()
+
+

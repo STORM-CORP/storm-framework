@@ -17,7 +17,9 @@ def install_osint_module():
 
         try:
             # 1. Get the latest info without changing the locale first
-            subprocess.run(["git", "-C", target_dir, "fetch", "--all"], stdout=subprocess.DEVNULL)
+            subprocess.run(
+                ["git", "-C", target_dir, "fetch", "--all"], stdout=subprocess.DEVNULL
+            )
             # 2. CHECK CHANGES: Compare local (HEAD) with server (origin/main)
             check_diff = subprocess.run(
                 ["git", "-C", target_dir, "diff", "--name-only", "HEAD", "origin/main"],
@@ -26,7 +28,9 @@ def install_osint_module():
             )
             # 3. Reset Execution (Update file to the latest version)
             process = subprocess.run(
-                ["git", "-C", target_dir, "reset", "--hard", "origin/main"], stdout=subprocess.PIPE, text=True
+                ["git", "-C", target_dir, "reset", "--hard", "origin/main"],
+                stdout=subprocess.PIPE,
+                text=True,
             )
             if process.returncode == 0:
                 print(f"[✓] update success.")
@@ -66,6 +70,3 @@ def install_osint_module():
 
 if __name__ == "__main__":
     install_osint_module()
-
-
-

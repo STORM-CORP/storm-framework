@@ -21,6 +21,6 @@ def execute(args, context):
         if status == True:
             run_restart(context)
     else:
-        print(f"{C.INPUT}[!] WARN => {cmd} > Not found.")
+        print(f"{C.INPUT}[-] WARN => {cmd} > Not found.")
 
     return context

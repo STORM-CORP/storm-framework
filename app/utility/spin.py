@@ -15,7 +15,7 @@ class StormSpin:
                 if self._done:
                     break
 
-                sys.stdout.write(f"\r{cursor} ")
+                sys.stdout.write(f"\r {cursor} ")
                 sys.stdout.flush()
                 time.sleep(0.08)
 

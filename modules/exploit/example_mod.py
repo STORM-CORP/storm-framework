@@ -25,6 +25,7 @@ REQUIRED_OPTIONS = {
     "THREAD": "",
     "DOMAIN": "",
     "HOSTNAME": "",
+    "MODULE": "",
 }
 
 """

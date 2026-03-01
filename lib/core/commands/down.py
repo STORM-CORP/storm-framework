@@ -5,6 +5,7 @@
 
 
 from app.utility.down_osint import install_osint_module
+from app.utility.down_ghunt import install_ghunt_module
 from app.utility.restart import run_restart
 from app.utility.colors import C
 
@@ -20,6 +21,12 @@ def execute(args, context):
         status = install_osint_module()
         if status == True:
             run_restart(context)
+            
+    elif cmd == "ghunt":
+        status = install_ghunt_module()
+        if status == True:
+            run_restart(context)
+            
     else:
         print(f"{C.INPUT}[-] WARN => {cmd} > Not found.")
 

@@ -1,11 +1,25 @@
-## 🛡️ Storm-Framework
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-![Kali Linux](https://img.shields.io/badge/Kali%20Linux-supported-blue?logo=kalilinux)
-![Termux](https://img.shields.io/badge/Termux-supported-black?logo=android) 
+<h2 align="center">Storm-Framework</h2>
 
-*[Indonesia 🇮🇩](README_ID.md) Documentation*
+<p align="center">
+  <a href="https://github.com/storm-framework/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue">
+  </a>
+  <a href="">
+    <img src="https://img.shields.io/badge/Kali%20Linux-supported-black?logo=kalilinux">
+  </a>
+  </a>
+  <a href="">
+    <img src="https://img.shields.io/badge/Termux-supported-black?logo=android">
+  </a>
+  <a href="https://github.com/storm-framework/README_ID.md">
+    <img src="https://img.shields.io/badge/Language-Indonesian-red?logo=indonesia&logoColor=white">
+  </a>
+</p>
 
-Tool Suite for Information Gathering and Initial Vulnerability Analysis.
+<p align="center">
+  Tool Suite for Information Gathering and Initial Vulnerability Analysis.
+</p>
+
 
 ### 🚀 Introduction
 

@@ -5,7 +5,7 @@ from rootmap import ROOT
 
 REQUIRED_OPTIONS = {
     "MODULE": "",
-    "PORT": "",
+    "EMAIL": "",
 }
 
 

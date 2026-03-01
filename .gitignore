@@ -8,7 +8,8 @@
 venv/
 env/
 __pycache__/
-script/OSINT/
+script/osint/
+script/ghunt/
 
 # Go modules
 go.mod

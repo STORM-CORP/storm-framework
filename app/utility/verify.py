@@ -15,7 +15,7 @@ def run_verif():
     if not os.path.exists(bin_p):
         print(f"[-] ERROR: Rust binary not found in {bin_p}")
         sys.exit(1)
-    print(f"[*] [INTEGRITY] Launching Rust Engine")
+    print(f"[*] [INTEGRITY] Launching Storm Engine")
     try:
         result = subprocess.run([bin_p])
 

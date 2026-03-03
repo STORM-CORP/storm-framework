@@ -12,15 +12,13 @@ REQUIRED_OPTIONS = {
     "PORT": "ex: 25",
     "THREAD": "ex: 1000",
 }
-
-
 def execute(options):
     target = str(options.get("HOSTNAME"))
     port = str(options.get("PORT"))
     threads = str(options.get("THREAD"))
 
     bindir = os.path.join(ROOT, "external", "source", "binary")
-    bin_path = os.path.join(bidir, "smtp_flood")
+    bin_path = os.path.join(bindir, "smtp_flood")
     if not target:
         print("[-] Target is missing!")
         return

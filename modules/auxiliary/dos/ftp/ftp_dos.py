@@ -1,21 +1,20 @@
 # MIT License.
 # Copyright (c) 2026 Storm Framework
-
 # See LICENSE file in the project root for full license information.
-
-
 import subprocess
+import os
+from rootmap import ROOT 
 
 REQUIRED_OPTIONS = {"IP": "", "THREAD": "example: 1000"}
-
 
 def execute(options):
     target = options.get("IP")
     port = "21"
     threads = options.get("THREAD")
-    bin_path = "./modules/auxiliary/dos/ftp/src/ftp_flood"
+    bindir = os.path.join(ROOT, "external", "source", "binary")
+    bin_path = os.path.join(bindir, "ftp_flood")
     if not target:
-        print("[-] Error: TARGET is missing!")
+        print("[-] ERROR: TARGET is missing!")
         return
     print(f"[*] Preparing DoS to {target}:{port}")
     try:

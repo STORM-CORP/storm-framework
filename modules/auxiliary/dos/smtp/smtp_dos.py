@@ -12,6 +12,8 @@ REQUIRED_OPTIONS = {
     "PORT": "ex: 25",
     "THREAD": "ex: 1000",
 }
+
+
 def execute(options):
     target = str(options.get("HOSTNAME"))
     port = str(options.get("PORT"))

@@ -15,7 +15,9 @@ REQUIRED_OPTIONS = {
 
 def execute(options):
     iface = options.get("INTERFACE")
-    bin_path = os.path.join(ROOT, "external", "source", "binary", "dpi_netspy")
+
+    bindir = os.path.join(ROOT, "external", "source", "binary")
+    bin_path = os.path.join(bindir, "dpi_netspy")
     if not os.path.isfile(bin_path):
         print(f"[!] ERROR: Binary not found {bin_path}.")
         return False

@@ -58,7 +58,7 @@ def install_osint_module():
             check=True,
         )
 
-        print("[✓] OSINT Package osint-storm installed successfully.")
+        print("[✓] OSINT Package installed successfully.")
     try:
         from scripts.security.sign import generate_folder_manifest
 

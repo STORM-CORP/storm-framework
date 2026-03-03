@@ -39,30 +39,7 @@ jobs:
       run: |
         black . --verbose
 
-    - name: Commit black to repo
-      run: |
-        git config --global user.name "black-style[bot]"
-          git config --global user.email "storm[bot]@github.com"
-          CHANGED_FILES=$(git status --porcelain | sed 's/^M //g' | tr '\n' ', ')
-          git add .
-
-          if ! git diff --cached --quiet; then
-            git commit -m "Auto format with Black: ${CHANGED_FILES%, }"
-            git push
-          fi
-
     - name: Lint with flake8
       run: |
         flake8 . --count --select=E9,F63,F7,F82,F401,W191 --show-source --statistics
         
-    - name: Commit and Push Changes
-      run: |
-        git config --global user.name "flake8[bot]"
-        git config --global user.email "storm[bot]@github.com"       
-        CHANGED_FILES=$(git status --porcelain | sed 's/^M //g' | tr '\n' ', ')       
-        git add .
-        
-        if ! git diff --cached --quiet; then
-          git commit -m "style: Cleanup imports in: ${CHANGED_FILES%, }"
-          git push
-        fi

@@ -56,7 +56,7 @@ Make sure you have **Python 3.12.x** installed on your system. This tool is opti
 Use the command `curl` following to clone the repository and run the necessary installation scripts:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/storm-os/storm-framework/main/setup | bash
+curl -fsSL https://raw.githubusercontent.com/STORM-CORP/storm-framework/main/setup | bash
 ```
 
 ### 2. Run

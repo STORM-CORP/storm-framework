@@ -8,6 +8,7 @@ from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"IP": "", "PORT": "", "PASS": ""}
 
+
 def test_grafana(target_ip, port, username, password):
     """Trying to login to grafana using requests (HTTP POST)."""
     login_url = f"http://{target_ip}:{port}/login"
@@ -36,9 +37,7 @@ def execute(options):
     try:
         for user, passwd in DEFAULT_CREDS:
             if test_grafana(target_ip, port, user, passwd):
-                print(
-                    f"{C.SUCCESS}   LOGIN SUCCESS! (Grafana) -> U:{user} P:{passwd}"
-                )
+                print(f"{C.SUCCESS}   LOGIN SUCCESS! (Grafana) -> U:{user} P:{passwd}")
                 found_weak_creds = True
                 break
             print(f"{C.MENU}   FAIL: {user}:{passwd}")

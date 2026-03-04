@@ -1,14 +1,11 @@
 # MIT License.
 # Copyright (c) 2026 Storm Framework
-
 # See LICENSE file in the project root for full license information.
-
 
 from ipwhois import IPWhois
 from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"IP": "(ex: x.x.x.x)"}
-
 
 def execute(options):
     target_ip = options.get("IP")
@@ -18,10 +15,7 @@ def execute(options):
     print(f"{C.HEADER}[ IP WHOIS/RDAP LOOKUP ] -> {target_ip}")
     try:
         obj = IPWhois(target_ip)
-        # Using RDAP (more modern & stable than standard WHOIS)
         results = obj.lookup_rdap()
-
-        # Deep Email Extraction from RDAP objects
         emails = []
         if "objects" in results:
             for handle, info in results["objects"].items():
@@ -29,7 +23,6 @@ def execute(options):
                 if contact.get("email"):
                     for email_entry in contact["email"]:
                         emails.append(email_entry["value"])
-
         unique_emails = ", ".join(list(set(emails))) if emails else "N/A"
 
         # Show Information
@@ -42,6 +35,8 @@ def execute(options):
         )
         print(f"{C.MENU} Abuse Emails:   {C.RESET}{unique_emails}")
 
+    except KeyboardInterrupt:
+        return 
     except Exception as e:
         print(f"{C.ERROR} ERROR: Failed to retrieve IP data.")
         print(f"{C.ERROR} Detail: {e}")

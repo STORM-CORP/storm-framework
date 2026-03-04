@@ -8,10 +8,11 @@ from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"URL": ""}
 
+
 def execute(options):
     """Checking the security header of a URL."""
     target_url = options.get("URL")
-    
+
     if not target_url.startswith(("https://", "http://")):
         target_url = "https://" + target_url
     print(f"{C.HEADER} CHECKING THE HEADER: {target_url}")
@@ -22,7 +23,7 @@ def execute(options):
         response = requests.get(target_url, headers=headers, timeout=5)
         for header, value in response.headers.items():
             print(f"  {C.HEADER}{header}:{C.RESET} {value}")
-            
+
         print(f"{C.HEADER} \n--- HEADER SECURITY ANALYSIS ---\n")
 
         # check server

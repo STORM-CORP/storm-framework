@@ -57,7 +57,7 @@ def execute(options):
 
     found_count = 0
     PROTOCOLS = ["http", "https"]
-    
+
     for subdomain in SUBDOMAINS:
         with StormSpin():
             for proto in PROTOCOLS:

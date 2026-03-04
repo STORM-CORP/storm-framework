@@ -1,8 +1,6 @@
 # MIT License.
 # Copyright (c) 2026 Storm Framework
 # See LICENSE file in the project root for full license information.
-
-
 import subprocess
 import os
 import sys
@@ -24,6 +22,8 @@ def run_verif():
 
         return True
 
+    except KeyboardInterrupt:
+        return True
     except Exception as e:
         print(f"[-] ERROR during execution: {e}")
         sys.exit(1)

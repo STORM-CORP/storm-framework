@@ -71,7 +71,7 @@ def execute(options):
             except KeyboardInterrupt:
                 return
             except requests.exceptions.RequestException:
-                return
+                pass
             except Exception as e:
                 print(f"{C.ERROR}[!] ERROR on {url}: {e}{C.RESET}")
                 continue

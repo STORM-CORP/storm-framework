@@ -1,15 +1,9 @@
 # MIT License.
 # Copyright (c) 2026 Storm Framework
-
 # See LICENSE file in the project root for full license information.
-
-
-# subdomain.py
 import requests
 from app.utility.colors import C
 
-# Subdomain list sederhana untuk pengujian
-# Dalam pentest nyata, list ini bisa berisi ribuan kata
 SUBDOMAINS = [
     "www",
     "dev",
@@ -53,31 +47,21 @@ REQUIRED_OPTIONS = {"DOMAIN": ""}
 
 def execute(options):
     """Searching for active subdomains"""
-
     target_domain = options.get("DOMAIN")
 
-    # Menghapus 'http://' atau 'https://' jika ada
     target_domain = (
         target_domain.replace("http://", "").replace("https://", "").strip("/")
     )
-
     print(f"{C.HEADER} SUBDOMAIN ENUMERATION for {target_domain}")
 
-    # Jumlah subdomain ditemukan
     found_count = 0
-
     PROTOCOLS = ["http", "https"]
-
     for subdomain in SUBDOMAINS:
-        # Loop kedua untuk mengecek setiap protokol pada satu subdomain
         for proto in PROTOCOLS:
             url = f"{proto}://{subdomain}.{target_domain}"
-
             try:
-                # Mengirim permintaan HEAD
                 response = requests.head(url, timeout=3, allow_redirects=True)
                 status_code = response.status_code
-
                 if status_code < 400 or status_code == 403:
                     print(
                         f"{C.SUCCESS}[✓] Subdomain Found: {url} - Status: {status_code}"
@@ -87,7 +71,7 @@ def execute(options):
             except KeyboardInterrupt:
                 return
             except requests.exceptions.RequestException:
-                pass
+                return 
             except Exception as e:
                 print(f"{C.ERROR}[!] ERROR on {url}: {e}{C.RESET}")
                 continue

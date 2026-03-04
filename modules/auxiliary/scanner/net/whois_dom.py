@@ -7,6 +7,7 @@ from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"DOMAIN": "(e.g., example.com)"}
 
+
 def get_clean_data(data):
     """Tidy up the date or list format to make it easier to read."""
     if not data:
@@ -59,7 +60,7 @@ def execute(options):
         )
 
     except KeyboardInterrupt:
-        return 
+        return
     except Exception as e:
         print(f"{C.ERROR} ERROR: Unable to retrieve domain data.")
         print(f"{C.ERROR} Detail: {e}")

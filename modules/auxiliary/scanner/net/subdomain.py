@@ -58,8 +58,8 @@ def execute(options):
     found_count = 0
     PROTOCOLS = ["http", "https"]
 
-    for subdomain in SUBDOMAINS:
-        with StormSpin():
+    with StormSpin():
+        for subdomain in SUBDOMAINS:
             for proto in PROTOCOLS:
                 url = f"{proto}://{subdomain}.{target_domain}"
                 try:

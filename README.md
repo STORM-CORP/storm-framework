@@ -7,7 +7,6 @@
   <a href="https://github.com/StormWorld0/storm-framework">
     <img src="https://img.shields.io/badge/Kali%20Linux-supported-black?logo=kalilinux">
   </a>
-  </a>
   <a href="https://github.com/StormWorld0/storm-framework">
     <img src="https://img.shields.io/badge/Termux-supported-black?logo=android">
   </a>

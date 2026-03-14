@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/StormWorld0/storm-framework/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue">
+    <img src="https://img.shields.io/badge/license-GPL-blue">
   </a>
   <a href="https://github.com/StormWorld0/storm-framework">
     <img src="https://img.shields.io/badge/Kali%20Linux-supported-black?logo=kalilinux">
@@ -81,8 +81,4 @@ Thank you for your interest in contributing! 💙
 
 ### 📜 License 
 
-This tool is distributed under the [MIT License](LICENSE).
-
-License Summary 
-You are free to use, modify, and distribute this code for personal or commercial use, provided you include the original copyright notice and license permissions. 
-DISCLAIMER: AS STATED IN THE MIT LICENSE, THIS CODE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY.
+This tool is distributed under the [GPL License](LICENSE).

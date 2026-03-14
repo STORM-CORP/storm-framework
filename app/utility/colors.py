@@ -1,13 +1,8 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 from colorama import Fore, Style, init
 
 init(autoreset=True)
-
 
 # Dictionary Warna Global
 class C:

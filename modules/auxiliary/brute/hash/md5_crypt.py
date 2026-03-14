@@ -1,11 +1,7 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 import crypt
 from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"HASH": "", "PASS": ""}
-
 
 def execute(options):
     """

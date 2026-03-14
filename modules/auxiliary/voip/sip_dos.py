@@ -1,14 +1,9 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import socket
 import random
 
 REQUIRED_OPTIONS = {"IP": "", "PORT": "standar port 5060"}
-
 
 def execute(options):
     ip = options.get("IP")

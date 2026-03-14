@@ -19,11 +19,9 @@
   Tool Suite for Information Gathering and Initial Vulnerability Analysis.
 </p>
 
-
 ### 🚀 Introduction
 
 **Storm-Framework** is a cyber tool suite specifically designed to assist cybersecurity professionals, bug bounty hunters, and researchers in the cybersecurity phase **information gathering (reconnaissance)** and **initial vulnerability analysis**. This tool aims to simplify the initial steps in the penetration testing process (pentest).
-
 
 ### ⚠️ Important Warning & Legal Disclaimer
 
@@ -44,7 +42,6 @@ Developer **NO** responsible for any damage, loss, or illegal actions arising fr
 3.  **Ethical Use:** Use this tool ethically and responsibly.
 
 > **UNAUTHORIZED USE IS ILLEGAL. Use with caution and at your own risk.**
-
 
 ### 🛠️ Installation
 

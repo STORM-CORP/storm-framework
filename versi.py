@@ -1,6 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 
 # https://github.com/StormWorld0/version.txt
 VERSION = "3.5.11"

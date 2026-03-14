@@ -1,13 +1,9 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 import requests
 import os
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"IP": "", "PORT": "", "PASS": ""}
-
 
 def test_grafana(target_ip, port, username, password):
     """Trying to login to grafana using requests (HTTP POST)."""
@@ -25,7 +21,6 @@ def test_grafana(target_ip, port, username, password):
             return False
     except:
         return False
-
 
 def execute(options):
     """Operate BruteForce on service Grafana."""

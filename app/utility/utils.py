@@ -1,7 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import os
@@ -12,7 +8,6 @@ from rootmap import ROOT
 utils.py It all contains help logic to make it easier during repairs and updates.
 This is included in the core category which cannot be modified.
 """
-
 
 # LOGIC GLOBAL WORDLIST
 def resolve_path(kata_kunci):
@@ -31,7 +26,6 @@ def resolve_path(kata_kunci):
                 if kata_kunci.lower() in file.lower():
                     return os.path.join(root, file)
     return None
-
 
 # LOGIC SEARCHING & USE
 def load_module_dynamically(module_name):
@@ -60,10 +54,8 @@ def load_module_dynamically(module_name):
 
     return None
 
-
 # UI MODULES
 EXT = (".py", ".go", ".rs", ".c", ".cpp", ".rb", ".php", ".sh", ".js", ".ts", ".html")
-
 
 def count_modules():
     total = 0
@@ -78,7 +70,6 @@ def count_modules():
             if file.endswith(EXT) and file != "__init__.py":
                 total += 1
     return total
-
 
 def count_by_category():
     """
@@ -112,7 +103,6 @@ def count_by_category():
 
     return stats
 
-
 # LOGIC SHOW
 def get_categories():
     """Get a list of category folders inside /modules"""
@@ -124,7 +114,6 @@ def get_categories():
         for d in os.listdir(modules_path)
         if os.path.isdir(os.path.join(modules_path, d)) and d != "__pycache__"
     ]
-
 
 def get_modules_in_category(category):
     """Retrieves all .py files within a specified category"""

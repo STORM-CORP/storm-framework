@@ -1,7 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 """
@@ -33,7 +29,6 @@ For REQUIRED_OPTIONS select what you need.
 Make sure the method name for the main function to be executed matches the template's. If it's different, the module won't execute.
 
 """
-
 
 # --- Main function ---
 def execute(options):

@@ -1,11 +1,6 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 from app.utility.search import search_modules
-
 
 def execute(args, context):
     query = args[0] if args else ""

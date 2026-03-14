@@ -1,12 +1,7 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import os
 from rootmap import ROOT
-
 
 def session(options):
     full_path = os.path.join(ROOT, "lib", "smf", "cache", "res")

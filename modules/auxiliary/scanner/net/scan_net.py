@@ -1,12 +1,8 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 import socket
 from app.utility.colors import C
 
 STATUS_OPEN = "✅"
 STATUS_CLOSED = "❌"
-
 
 def get_service_banner(target_ip, port, timeout=1.0):
     """
@@ -59,9 +55,7 @@ def get_service_banner(target_ip, port, timeout=1.0):
     finally:
         s.close()
 
-
 REQUIRED_OPTIONS = {"IP": ""}
-
 
 def execute(options):
     """The main function is to run a scan with version/banner detection.."""

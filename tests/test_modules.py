@@ -1,7 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import importlib.util
@@ -22,7 +18,6 @@ def get_all_modules():
                 modules.append(str(path))
                 
     return modules
-
 
 @pytest.mark.security
 @pytest.mark.parametrize("module_file", get_all_modules())

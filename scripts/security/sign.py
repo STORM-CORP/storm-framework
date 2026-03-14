@@ -1,7 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import json
@@ -100,7 +96,6 @@ def generate_folder_manifest():
             json.dump(final_data, f, indent=4)
 
     print(f"[✓] Success! Manifest signed and saved.")
-
 
 if __name__ == "__main__":
     generate_folder_manifest()

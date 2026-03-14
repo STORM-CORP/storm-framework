@@ -1,12 +1,8 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 
 from ipwhois import IPWhois
 from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"IP": "(ex: x.x.x.x)"}
-
 
 def execute(options):
     target_ip = options.get("IP")

@@ -2,7 +2,6 @@ import sys
 import time
 import threading
 
-
 class StormSpin:
     def __init__(self):
         self._done = False

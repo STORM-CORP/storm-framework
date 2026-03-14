@@ -1,6 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 import os
 import subprocess
 import shutil
@@ -51,8 +48,6 @@ def compile_rust_project(cargo_path):
 
     return f"[!] Rust Binary Not Found: {bin_name}"
 
-
-
 def compile_single_file(task):
     lang, src_path = task
     outdir = os.path.join(ROOT, "external", "source", "binary")
@@ -71,8 +66,6 @@ def compile_single_file(task):
         os.chmod(output, 0o755)
         return f"[✓] {lang.upper()}: {os.path.basename(output)}"
     return f"[!] {lang.upper()} Failed: {output}"
-
-
 
 def main():
     os.chdir(ROOT)
@@ -123,5 +116,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 

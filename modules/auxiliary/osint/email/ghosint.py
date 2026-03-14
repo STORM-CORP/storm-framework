@@ -11,7 +11,6 @@ REQUIRED_OPTIONS = {
     "EMAIL": "",
 }
 
-
 def execute(options):
     module = options.get("MODULE")
     target = options.get("EMAIL")

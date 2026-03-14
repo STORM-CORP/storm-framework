@@ -1,14 +1,9 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 from app.utility.restart import run_restart
 from app.utility.update import run_update
 from app.utility.verify import run_verif
 from app.utility.colors import C
-
 
 def execute(args, context):
     cmd = args[0].lower() if args else ""

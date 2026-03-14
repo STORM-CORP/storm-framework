@@ -1,12 +1,7 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 from app.utility.colors import C
 import app.utility.utils as utils
-
 
 def execute(args, context):
     current_module = context["current_module"]

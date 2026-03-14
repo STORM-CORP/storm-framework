@@ -1,13 +1,8 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import versi as v
 import app.utility.utils as utils
 from app.utility.colors import C
-
 
 def show_about():
     print(
@@ -26,7 +21,6 @@ def show_about():
     print(
         f"{C.HEADER}==========================================================================\n"
     )
-
 
 def show_help():
     print(f"""
@@ -56,7 +50,6 @@ def show_help():
   storm restart                 : To restart if you experience a bug or error
 {C.HEADER}==========================================================================
     """)
-
 
 def stormUI():
     total = utils.count_modules()

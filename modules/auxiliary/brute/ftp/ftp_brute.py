@@ -1,13 +1,9 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 import ftplib
 import os
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from app.utility.colors import C
 
 REQUIRED_OPTIONS = {"IP": "", "PASS": ""}
-
 
 def test_ftp(target_ip, port, username, password):
     ftp = ftplib.FTP()
@@ -22,7 +18,6 @@ def test_ftp(target_ip, port, username, password):
         except:
             pass
         return False
-
 
 def execute(options):
     target_ip = options.get("IP")

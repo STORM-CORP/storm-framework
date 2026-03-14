@@ -1,7 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 # dns.py
@@ -43,7 +39,6 @@ DNS_RECORDS = [
 ]
 
 REQUIRED_OPTIONS = {"DOMAIN": ""}
-
 
 def execute(options):
     target_domain = options.get("DOMAIN")

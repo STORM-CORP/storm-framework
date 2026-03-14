@@ -91,7 +91,6 @@ else
     git clone "$GITHUB_REPO" "$INSTALL_DIR"
 fi
 
-
 if [ $? -ne 0 ]; then
     echo -e "${RED}[x] ERROR: Failed to clone repository.${NC}"
     if $NEEDS_SUDO; then sudo rm -rf "$INSTALL_DIR"; else rm -rf "$INSTALL_DIR"; fi
@@ -161,7 +160,6 @@ else
     chmod 600 .env
     python3 -m scripts.security.sign
 fi
-
 
 # 5. Creating a Dynamic Wrapper Script
 WRAPPER_DST="$BIN_DIR/$TOOL_NAME"

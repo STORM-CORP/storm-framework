@@ -1,12 +1,8 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 import requests
 import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 REQUIRED_OPTIONS = {"URL": ""}
-
 
 def execute(options):
     target = options.get("URL")

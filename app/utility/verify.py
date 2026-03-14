@@ -1,11 +1,7 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
 import subprocess
 import os
 import sys
 from app.utility.colors import C
-
 
 def run_verif():
     bin_p = "external/source/binary/check"
@@ -27,7 +23,6 @@ def run_verif():
     except Exception as e:
         print(f"[-] ERROR during execution: {e}")
         sys.exit(1)
-
 
 def check_critical_files():
     if not os.path.exists(".env"):

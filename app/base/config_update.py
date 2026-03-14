@@ -1,13 +1,8 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import requests
 from versi import VERSION
 from app.utility.colors import C
-
 
 def check_update():
     # Raw URL to the version.txt file on GitHub

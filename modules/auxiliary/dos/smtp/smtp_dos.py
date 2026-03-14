@@ -1,7 +1,3 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-# See LICENSE file in the project root for full license information.
-
 
 import subprocess
 import os
@@ -12,7 +8,6 @@ REQUIRED_OPTIONS = {
     "PORT": "ex: 25",
     "THREAD": "ex: 1000",
 }
-
 
 def execute(options):
     target = str(options.get("HOSTNAME"))

@@ -1,14 +1,9 @@
-# MIT License.
-# Copyright (c) 2026 Storm Framework
-
-# See LICENSE file in the project root for full license information.
 
 
 import os
 import importlib.util
 import textwrap
 from app.utility.colors import C
-
 
 # For those who like CVE collections, this logic is definitely needed
 # Because this will produce output that is neat in structure and style.

@@ -58,6 +58,7 @@ exclude = '''
     | build
     | dist
     | lib/smf/core/db/vendor
+    | example/ex-mod.py
 )/
 '''
 

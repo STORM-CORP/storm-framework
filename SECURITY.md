@@ -31,4 +31,4 @@ If your report is valid:
 This policy covers all files under the organization/repo `StormWorld0/storm-framework`. Issues related to third party dependencies (such as `requests`, `scapy`, etc.) must be reported to the respective vendors, but we would still appreciate it if you could inform us about the impact on this framework..
 
 ---
-*Thank you for helping keep the Storm Framework safe and open.*
+*Thank you for helping keep the Storm safe and open.*

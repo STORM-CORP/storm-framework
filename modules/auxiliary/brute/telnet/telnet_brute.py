@@ -23,7 +23,7 @@ async def test_telnet(target_ip, port, username, password):
         data = await asyncio.wait_for(reader.read(100), timeout=2)
         if "login" in data.lower() or "username" in data.lower():
             writer.write(username + "\n")
-            
+
         # Look for a password prompt (e.g.: "Password:")
         data = await asyncio.wait_for(reader.read(100), timeout=2)
         if "password" in data.lower():
@@ -34,7 +34,7 @@ async def test_telnet(target_ip, port, username, password):
 
         writer.close()
         await writer.wait_closed()
-        
+
         success_indicators = ["$", "#", "welcome", "last login"]
         return any(ind in result.lower() for ind in success_indicators)
 

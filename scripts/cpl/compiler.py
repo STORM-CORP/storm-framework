@@ -108,11 +108,12 @@ def main():
     # Perform parallel compilation in all languages
     print(f"[*] Storm Engine: Compiling on {os.cpu_count()} cores")
     with ThreadPoolExecutor(max_workers=safe_mode()) as executor:
-        rust_results_future = [executor.submit(compile_rust_project, task) for task in rust_tasks]
-        other_results_future = [executor.submit(compile_single_file, task) for task in other_tasks]
+        with StormSpin():
+            rust_results_future = [executor.submit(compile_rust_project, task) for task in rust_tasks]
+            other_results_future = [executor.submit(compile_single_file, task) for task in other_tasks]
 
-        rust_results = [f.result() for f in rust_results_future]
-        other_results = [f.result() for f in other_results_future]
+            rust_results = [f.result() for f in rust_results_future]
+            other_results = [f.result() for f in other_results_future]
 
 if __name__ == "__main__":
     main()

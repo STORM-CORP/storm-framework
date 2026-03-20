@@ -9,7 +9,7 @@ def get_random_banner():
     banner_dir = os.path.join(ROOT, "lib", "ui", "banners")
     try:
         if not os.path.exists(banner_dir):
-            return f"{C.SUCCESS}Cyber-Pentest Framework (Folder Not Found)"
+            return f"{C.SUCCESS}Storm Framework (Folder Not Found)"
         all_files = [
             f
             for f in os.listdir(banner_dir)
@@ -17,36 +17,24 @@ def get_random_banner():
         ]
 
         if not all_files:
-            return f"{C.SUCCESS}Cyber-Pentest Framework"
+            return f"{C.SUCCESS}Storm Framework"
 
         random_file = random.choice(all_files)
         module_path = f"lib.ui.banners.{random_file.replace('.py', '')}"
 
         # Reload module if necessary or import normally
         banner_module = importlib.import_module(module_path)
-        raw_banner = getattr(banner_module, "DATA", "Banner data not found.")
-
-        # --- SCREEN MEASUREMENT LOGIC ---
-        try:
-            columns = os.get_terminal_size().columns
-        except:
-            columns = 100
+        raw_banner = getattr(banner_module, "DATA", "Banner not found.")
 
         lines = raw_banner.splitlines()
+
         if not lines:
             return raw_banner
 
-        # Find the longest line to determine the original width of the banner.
-        max_banner_width = max(len(line) for line in lines)
+        padding_str = " " * 20
 
-        # Hitung jarak spasi dari kiri agar pas di tengah
-        padding_size = max(0, (columns - max_banner_width) // 2)
-        padding_str = " " * padding_size
+        result = "\n".join([f"{padding_str}{line}" for line in lines])
 
-        # Rejoin with additional spaces on each line
-        centered_banner = "\n".join([f"{padding_str}{line}" for line in lines])
-
-        return centered_banner
-
+        return result
     except Exception as e:
         return f"Error loading banner: {e}"

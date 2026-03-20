@@ -1,4 +1,4 @@
-// MIT License.
+// GPL License.
 // Copyright (c) 2026 Storm Framework
 // See LICENSE file in the project root for full license information.
 use sha2::{Sha256, Digest};
@@ -39,7 +39,6 @@ fn main() {
     let db_path = "lib/core/database/signed_manifest.json";
     let env_path = ".env";
 
-    // Ambil Public Key dari .env ---
     let env_content = fs::read_to_string(env_path).expect("[-] ERROR: .env not found");
     let pub_key_raw = env_content.lines()
         .find(|line| line.starts_with("STORM_PUBKEY="))
@@ -113,7 +112,6 @@ fn main() {
         }
     }
 
-    // Cek file yang hilang
     let mut missing_files = Vec::new();
     for json_path in manifest.files.keys() {
         if !found_in_disk.contains(json_path) {
@@ -121,7 +119,6 @@ fn main() {
         }
     }
 
-    // print log
     if !modified_files.is_empty() || !missing_files.is_empty() || !untracked_files.is_empty() {
         println!("\n\n[!] INTEGRITY BREACH DETECTED!");
         for f in &modified_files { println!("    [MODIFIED]  -> {}", f); }

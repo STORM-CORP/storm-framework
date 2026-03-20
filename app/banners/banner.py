@@ -20,7 +20,7 @@ def get_random_banner():
             return f"{C.SUCCESS}Storm Framework"
 
         random_file = random.choice(all_files)
-        module_path = f"lib.ui.banners.{random_file.replace('.py', '')}"
+        module_path = f"{banner_dir}, {random_file.replace('.py', '')}"
 
         # Reload module if necessary or import normally
         banner_module = importlib.import_module(module_path)

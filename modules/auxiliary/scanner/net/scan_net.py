@@ -13,11 +13,9 @@ MOD_INFO = {
     to find vulnerabilities, do a quick scan of.
     """,
     "license": "GPL-3.0",
-    "tag": [
-        "INET",
-        "Reconnaissance"
-    ],
+    "tag": ["INET", "Reconnaissance"],
 }
+
 
 def get_service_banner(target_ip, port, timeout=1.0):
     """

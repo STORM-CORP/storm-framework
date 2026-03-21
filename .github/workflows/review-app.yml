@@ -29,7 +29,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -U flake8 autoflake black
         [ -f requirements.txt ] && pip install -r requirements.txt
-        [ -f pyproject.toml ] && pip install .
 
     - name: Auto Cleanup (Remove Unused Imports)
       run: |

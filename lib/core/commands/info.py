@@ -24,49 +24,93 @@ def execute(args, context):
             found_path = os.path.join(root, f"{query}.py")
             break
 
+    filename = os.path.basename(found_path).lower()
     if found_path:
-        try:
-            spec = importlib.util.spec_from_file_location("temp_mod", found_path)
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
+        if filename.startswith("cve"):
+            try:
+                spec = importlib.util.spec_from_file_location("temp_mod", found_path)
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
 
-            # --- GET DICTIONARY CVE_INFO ---
-            info = mod.CVE_INFO
-            width = 55
+                # --- GET DICTIONARY CVE_INFO ---
+                info = mod.CVE_INFO
+                width = 55
 
-            print(f"\n{C.HEADER}{'='*width}")
-            print(f"{C.SUCCESS}{'STORM VULNERABILITY KNOWLEDGE BASE':^55}")
-            print(f"{C.HEADER}{'='*width}")
+                print(f"\n{C.HEADER}{'='*width}")
+                print(f"{C.SUCCESS}{'STORM VULNERABILITY KNOWLEDGE BASE':^55}")
+                print(f"{C.HEADER}{'='*width}")
 
-            print(f"{C.SUCCESS}{'ID CVE':<13} : {info['cve']}")
-            print(f"{C.SUCCESS}{'NAME':<13} : {info['name']}")
-            print(f"{C.SUCCESS}{'LEVEL':<13} : {info['severity']}")
-            print(f"{C.SUCCESS}{'PUBLISHED':<13} : {info['published']}")
-            print(f"{C.SUCCESS}{'UPDATED':<13} : {info['updated']}")
-            print(f"{C.HEADER}{'-'*width}")
+                print(f"{C.SUCCESS}{'ID CVE':<13} : {info['cve']}")
+                print(f"{C.SUCCESS}{'NAME':<13} : {info['name']}")
+                print(f"{C.SUCCESS}{'LEVEL':<13} : {info['severity']}")
+                print(f"{C.SUCCESS}{'PUBLISHED':<13} : {info['published']}")
+                print(f"{C.SUCCESS}{'UPDATED':<13} : {info['updated']}")
+                print(f"{C.HEADER}{'-'*width}")
 
-            # Clean Up Description
-            print(f"{C.SUCCESS}DESCRIPTION   :")
-            desc = textwrap.fill(
-                info["description"].strip(),
-                width=width - 2,
-                initial_indent=" ",
-                subsequent_indent=" ",
-            )
-            print(desc)
+                # Clean Up Description
+                print(f"{C.SUCCESS}DESCRIPTION   :")
+                desc = textwrap.fill(
+                    info["description"].strip(),
+                    width=width - 2,
+                    initial_indent=" ",
+                    subsequent_indent=" ",
+                )
+                print(desc)
 
-            print(f"{C.HEADER}{'-'*width}")
-            print(f"{C.SUCCESS}REFERENCES    :")
-            for link in info["URL"]:
-                print(f" - {link}")
-            print(f"{C.HEADER}{'-'*width}")
+                print(f"{C.HEADER}{'-'*width}")
+                print(f"{C.SUCCESS}REFERENCES    :")
+                for link in info["URL"]:
+                    print(f" - {link}")
+                print(f"{C.HEADER}{'-'*width}")
 
-            print(f"{C.SUCCESS}{'SCANNER':<13} : {info['scanner']}")
-            print(f"{C.SUCCESS}{'EXPLOIT':<13} : {info['exploit']}")
-            print(f"{C.HEADER}{'='*width}\n")
+                print(f"{C.SUCCESS}{'SCANNER':<13} : {info['scanner']}")
+                print(f"{C.SUCCESS}{'EXPLOIT':<13} : {info['exploit']}")
+                print(f"{C.HEADER}{'='*width}\n")
 
-        except Exception as e:
-            print(f"{C.ERROR}[-] Failed to read: {e}")
+            except Exception as e:
+                print(f"{C.ERROR}[-] Failed to read: {e}")
+
+        else:
+            try:
+                spec = importlib.util.spec_from_file_location("temp_mod", found_path)
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+
+                info = mod.MOD_INFO
+                width = 55
+
+                print(f"\n{C.HEADER}{'='*width}")
+                print(f"{C.SUCCESS}{'STORM INFORMATION MODULES':^55}")
+                print(f"{C.HEADER}{'='*width}")
+
+                print(f"{C.SUCCESS}{'NAME':<13} : {info['name']}")
+                print(f"{C.SUCCESS}{'AUTHOR':<13} : {info['author']}")
+                print(f"{C.HEADER}{'-'*width}")
+                
+                print(f"{C.SUCCESS}DESCRIPTION   :")
+                desc = textwrap.fill(
+                    info["description"].strip(),
+                    width=width - 2,
+                    initial_indent=" ",
+                    subsequent_indent=" ",
+                )
+                print(desc)
+                
+                print(f"{C.HEADER}{'-'*width}")
+                print(f"{C.SUCCESS}{'LICENSE':<13} : {info['license']}")
+                tags_raw = ", ".join(tag)
+                wrapped_tags = textwrap.fill(
+                    tags_raw, 
+                    width=width - 2, # Kurangi 16 untuk memberi ruang label "TAGS          : "
+                    subsequent_indent=" " * 2 # Baris baru bakal lurus dengan tag pertama
+                )
+                print(f"{C.SUCCESS}{'TAG':<13} : {wrapped_tags}")
+                print(f"{C.HEADER}{'='*width}")
+                ptint()
+
+            except Exception as e:
+                print(f"{C.ERROR}[-] Failed to read: {e}")
+
     else:
         print(f"{C.INPUT}[-] WARN => {query} > not found.")
 

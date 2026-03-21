@@ -247,10 +247,7 @@ use std::fs;
 use std::io::{self, Write};
 use std::path::{Component, Path, PathBuf};
 use std::process::{Command, Stdio};
-use std::sync::{
-    atomic::{AtomicU8, Ordering::Relaxed},
-    Arc, RwLock,
-};
+use std::sync::{Arc, RwLock};
 
 use shlex::Shlex;
 
@@ -360,11 +357,8 @@ struct CompilerFlag {
     flag: Box<OsStr>,
 }
 
-type Env = Option<Arc<OsStr>>;
-
 #[derive(Debug, Default)]
 struct BuildCache {
-    env_cache: RwLock<HashMap<Box<str>, Env>>,
     apple_sdk_root_cache: RwLock<HashMap<Box<str>, Arc<OsStr>>>,
     apple_versions_cache: RwLock<HashMap<Box<str>, Arc<str>>>,
     cached_compiler_family: RwLock<CompilerFamilyLookupCache>,
@@ -1391,14 +1385,34 @@ impl Build {
         self
     }
 
-    #[doc(hidden)]
-    pub fn __set_env<A, B>(&mut self, a: A, b: B) -> &mut Build
+    /// Set an environment variable for compiler invocations and other child processes.
+    ///
+    /// `cc` reads a lot of different variables from the current process' environment. It currently
+    /// allows the following standard environment variables to be overwritten by this function:
+    /// - `SDKROOT`
+    /// - `*_DEPLOYMENT_TARGET`
+    /// - `WASI_SDK_ROOT`
+    ///
+    /// The logic here is "environment variables that the C compiler could itself reasonably have
+    /// read".
+    pub fn env<K, V>(&mut self, key: K, val: V) -> &mut Build
     where
-        A: AsRef<OsStr>,
-        B: AsRef<OsStr>,
+        K: AsRef<OsStr>,
+        V: AsRef<OsStr>,
     {
-        self.env.push((a.as_ref().into(), b.as_ref().into()));
+        self.env.push((key.as_ref().into(), val.as_ref().into()));
         self
+    }
+
+    // retained for backwards compatibility only
+    #[doc(hidden)]
+    #[deprecated = "use `env` instead"]
+    pub fn __set_env<K, V>(&mut self, key: K, val: V) -> &mut Build
+    where
+        K: AsRef<OsStr>,
+        V: AsRef<OsStr>,
+    {
+        self.env(key, val)
     }
 }
 
@@ -1780,7 +1794,12 @@ impl Build {
     }
 
     fn compile_objects(&self, objs: &[Object]) -> Result<(), Error> {
-        check_disabled()?;
+        if self.is_disabled() {
+            return Err(Error::new(
+                ErrorKind::Disabled,
+                "the `cc` crate's functionality has been disabled by the `CC_FORCE_DISABLE` environment variable.",
+            ));
+        }
 
         #[cfg(feature = "parallel")]
         if objs.len() > 1 {
@@ -1809,11 +1828,7 @@ impl Build {
         let mut cmd = if is_assembler_msvc {
             self.msvc_macro_assembler()?
         } else {
-            let mut cmd = compiler.to_command();
-            for (a, b) in self.env.iter() {
-                cmd.env(a, b);
-            }
-            cmd
+            compiler.to_command()
         };
         let is_arm = is_arm(&target);
         command_add_output_file(
@@ -1861,9 +1876,6 @@ impl Build {
     pub fn try_expand(&self) -> Result<Vec<u8>, Error> {
         let compiler = self.try_get_compiler()?;
         let mut cmd = compiler.to_command();
-        for (a, b) in self.env.iter() {
-            cmd.env(a, b);
-        }
         cmd.arg("-E");
 
         assert!(
@@ -1971,7 +1983,7 @@ impl Build {
         }
 
         // Disable default flag generation via `no_default_flags` or environment variable
-        let no_defaults = self.no_default_flags || self.getenv_boolean("CRATE_CC_NO_DEFAULTS");
+        let no_defaults = self.no_default_flags || self.get_env_boolean("CRATE_CC_NO_DEFAULTS");
         if !no_defaults {
             self.add_default_flags(&mut cmd, &target, &opt_level)?;
         }
@@ -2054,6 +2066,13 @@ impl Build {
             }
         }
 
+        // Set custom env vars that the user specified with `Build::env`.
+        //
+        // Do this last, to allow overwriting the other values above.
+        for (key, val) in &self.env {
+            cmd.env.push((key.into(), val.into()));
+        }
+
         Ok(cmd)
     }
 
@@ -2074,7 +2093,7 @@ impl Build {
                     Some(true) => "-MT",
                     Some(false) => "-MD",
                     None => {
-                        let features = self.getenv("CARGO_CFG_TARGET_FEATURE");
+                        let features = cargo_env_var_os("CARGO_CFG_TARGET_FEATURE");
                         let features = features.as_deref().unwrap_or_default();
                         if features.to_string_lossy().contains("crt-static") {
                             "-MT"
@@ -2352,7 +2371,7 @@ impl Build {
                 }
 
                 if self.static_flag.is_none() {
-                    let features = self.getenv("CARGO_CFG_TARGET_FEATURE");
+                    let features = cargo_env_var_os("CARGO_CFG_TARGET_FEATURE");
                     let features = features.as_deref().unwrap_or_default();
                     if features.to_string_lossy().contains("crt-static") {
                         cmd.args.push("-static".into());
@@ -2571,7 +2590,7 @@ impl Build {
         cmd: &mut Tool,
         target: &TargetInfo<'_>,
     ) -> Result<(), Error> {
-        let env_os = match self.getenv("CARGO_ENCODED_RUSTFLAGS") {
+        let env_os = match cargo_env_var_os("CARGO_ENCODED_RUSTFLAGS") {
             Some(env) => env,
             // No encoded RUSTFLAGS -> nothing to do
             None => return Ok(()),
@@ -2650,13 +2669,22 @@ impl Build {
         // Add objects to the archive in limited-length batches. This helps keep
         // the length of the command line within a reasonable length to avoid
         // blowing system limits on limiting platforms like Windows.
-        let objs: Vec<_> = objs
+        let mut objs = objs
             .iter()
             .map(|o| o.dst.as_path())
             .chain(self.objects.iter().map(std::ops::Deref::deref))
-            .collect();
-        for chunk in objs.chunks(100) {
-            self.assemble_progressive(dst, chunk)?;
+            .peekable();
+        let mut batch = Vec::new();
+        while objs.peek().is_some() {
+            let mut remaining_len = 4000;
+            while let Some(path) =
+                objs.next_if(|peek| batch.is_empty() || peek.as_os_str().len() <= remaining_len)
+            {
+                batch.push(path);
+                remaining_len = remaining_len.saturating_sub(path.as_os_str().len());
+            }
+            self.assemble_progressive(dst, &batch)?;
+            batch.clear();
         }
 
         if self.cuda && self.cuda_file_count() > 0 {
@@ -2847,7 +2875,7 @@ impl Build {
     }
 
     fn prefer_clang(&self) -> bool {
-        if let Some(env) = self.getenv("CARGO_ENCODED_RUSTFLAGS") {
+        if let Some(env) = cargo_env_var_os("CARGO_ENCODED_RUSTFLAGS") {
             env.to_string_lossy().contains("linker-plugin-lto")
         } else {
             false
@@ -3123,25 +3151,25 @@ impl Build {
     }
 
     /// Returns a fallback `cc_compiler_wrapper` by introspecting `RUSTC_WRAPPER`
-    fn rustc_wrapper_fallback(&self) -> Option<Arc<OsStr>> {
+    fn rustc_wrapper_fallback(&self) -> Option<Cow<'_, OsStr>> {
         // No explicit CC wrapper was detected, but check if RUSTC_WRAPPER
         // is defined and is a build accelerator that is compatible with
         // C/C++ compilers (e.g. sccache)
         const VALID_WRAPPERS: &[&str] = &["sccache", "cachepot", "buildcache"];
 
-        let rustc_wrapper = self.getenv("RUSTC_WRAPPER")?;
+        let rustc_wrapper = cargo_env_var_os("RUSTC_WRAPPER")?;
         let wrapper_path = Path::new(&rustc_wrapper);
         let wrapper_stem = wrapper_path.file_stem()?;
 
         if VALID_WRAPPERS.contains(&wrapper_stem.to_str()?) {
-            Some(rustc_wrapper)
+            Some(Cow::Owned(rustc_wrapper))
         } else {
             None
         }
     }
 
     /// Returns compiler path, optional modifier name from whitelist, and arguments vec
-    fn env_tool(&self, name: &str) -> Option<(PathBuf, Option<Arc<OsStr>>, Vec<String>)> {
+    fn env_tool(&self, name: &str) -> Option<(PathBuf, Option<Cow<'_, OsStr>>, Vec<String>)> {
         let tool = self.getenv_with_target_prefixes(name).ok()?;
         let tool = tool.to_string_lossy();
         let tool = tool.trim();
@@ -3185,7 +3213,7 @@ impl Build {
             "cachepot",
             "buildcache",
         ];
-        let custom_wrapper = self.getenv("CC_KNOWN_WRAPPER_CUSTOM");
+        let custom_wrapper = self.get_env("CC_KNOWN_WRAPPER_CUSTOM");
         if custom_wrapper.is_some() {
             known_wrappers.push(custom_wrapper.as_deref().unwrap().to_str().unwrap());
         }
@@ -3198,7 +3226,7 @@ impl Build {
             if let Some(compiler) = parts.next() {
                 return Some((
                     compiler.into(),
-                    Some(Arc::<OsStr>::from(OsStr::new(&maybe_wrapper))),
+                    Some(Cow::Owned(maybe_wrapper.into())),
                     parts.map(|s| s.to_string()).collect(),
                 ));
             }
@@ -3513,13 +3541,13 @@ impl Build {
     // FIXME: Use parsed target instead of raw target.
     fn prefix_for_target(&self, target: &str) -> Option<Cow<'static, str>> {
         // CROSS_COMPILE is of the form: "arm-linux-gnueabi-"
-        self.getenv("CROSS_COMPILE")
+        self.get_env("CROSS_COMPILE")
             .as_deref()
             .map(|s| s.to_string_lossy().trim_end_matches('-').to_owned())
             .map(Cow::Owned)
             .or_else(|| {
                 // Put aside RUSTC_LINKER's prefix to be used as second choice, after CROSS_COMPILE
-                self.getenv("RUSTC_LINKER").and_then(|var| {
+                cargo_env_var_os("RUSTC_LINKER").and_then(|var| {
                     var.to_string_lossy()
                         .strip_suffix("-gcc")
                         .map(str::to_string)
@@ -3687,7 +3715,7 @@ impl Build {
         // Loop through PATH entries searching for each toolchain. This ensures that we
         // are more likely to discover the toolchain early on, because chances are good
         // that the desired toolchain is in one of the higher-priority paths.
-        self.getenv("PATH")
+        self.get_env("PATH")
             .as_ref()
             .and_then(|path_entries| {
                 env::split_paths(path_entries).find_map(|path_entry| {
@@ -3710,7 +3738,7 @@ impl Build {
 
     fn get_target(&self) -> Result<TargetInfo<'_>, Error> {
         match &self.target {
-            Some(t) if Some(&**t) != self.getenv_unwrap_str("TARGET").ok().as_deref() => {
+            Some(t) if Some(OsStr::new(&**t)) != cargo_env_var_os("TARGET").as_deref() => {
                 TargetInfo::from_rustc_target(t)
             }
             // Fetch target information from environment if not set, or if the
@@ -3726,7 +3754,7 @@ impl Build {
     fn get_raw_target(&self) -> Result<Cow<'_, str>, Error> {
         match &self.target {
             Some(t) => Ok(Cow::Borrowed(t)),
-            None => self.getenv_unwrap_str("TARGET").map(Cow::Owned),
+            None => cargo_env_var("TARGET").map(Cow::Owned),
         }
     }
 
@@ -3734,7 +3762,7 @@ impl Build {
         let target = self.get_raw_target()?;
         let host: Cow<'_, str> = match &self.host {
             Some(h) => Cow::Borrowed(h),
-            None => Cow::Owned(self.getenv_unwrap_str("HOST")?),
+            None => Cow::Owned(cargo_env_var("HOST")?),
         };
         Ok(host != target)
     }
@@ -3742,7 +3770,7 @@ impl Build {
     fn get_opt_level(&self) -> Result<Cow<'_, str>, Error> {
         match &self.opt_level {
             Some(ol) => Ok(Cow::Borrowed(ol)),
-            None => self.getenv_unwrap_str("OPT_LEVEL").map(Cow::Owned),
+            None => cargo_env_var("OPT_LEVEL").map(Cow::Owned),
         }
     }
 
@@ -3763,13 +3791,13 @@ impl Build {
     fn get_debug_str(&self) -> Result<Cow<'_, str>, Error> {
         match &self.debug {
             Some(d) => Ok(Cow::Borrowed(d)),
-            None => self.getenv_unwrap_str("DEBUG").map(Cow::Owned),
+            None => cargo_env_var("DEBUG").map(Cow::Owned),
         }
     }
 
     fn get_shell_escaped_flags(&self) -> bool {
         self.shell_escaped_flags
-            .unwrap_or_else(|| self.getenv_boolean("CC_SHELL_ESCAPED_FLAGS"))
+            .unwrap_or_else(|| self.get_env_boolean("CC_SHELL_ESCAPED_FLAGS"))
     }
 
     fn get_dwarf_version(&self) -> Option<u32> {
@@ -3796,9 +3824,7 @@ impl Build {
     fn get_out_dir(&self) -> Result<Cow<'_, Path>, Error> {
         match &self.out_dir {
             Some(p) => Ok(Cow::Borrowed(&**p)),
-            None => self
-                .getenv("OUT_DIR")
-                .as_deref()
+            None => cargo_env_var_os("OUT_DIR")
                 .map(PathBuf::from)
                 .map(Cow::Owned)
                 .ok_or_else(|| {
@@ -3810,76 +3836,54 @@ impl Build {
         }
     }
 
-    #[allow(clippy::disallowed_methods)]
-    fn getenv(&self, v: &str) -> Option<Arc<OsStr>> {
-        // Returns true for environment variables cargo sets for build scripts:
-        // https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
-        //
-        // This handles more of the vars than we actually use (it tries to check
-        // complete-ish set), just to avoid needing maintenance if/when new
-        // calls to `getenv`/`getenv_unwrap` are added.
-        fn provided_by_cargo(envvar: &str) -> bool {
-            match envvar {
-                v if v.starts_with("CARGO") || v.starts_with("RUSTC") => true,
-                "HOST" | "TARGET" | "RUSTDOC" | "OUT_DIR" | "OPT_LEVEL" | "DEBUG" | "PROFILE"
-                | "NUM_JOBS" | "RUSTFLAGS" => true,
-                _ => false,
-            }
-        }
-        if let Some(val) = self.build_cache.env_cache.read().unwrap().get(v).cloned() {
-            return val;
-        }
+    /// Look up an environment variable, and tell Cargo that we used it.
+    fn get_env(&self, v: &str) -> Option<OsString> {
         // Excluding `PATH` prevents spurious rebuilds on Windows, see
         // <https://github.com/rust-lang/cc-rs/pull/1215> for details.
-        if self.emit_rerun_if_env_changed && !provided_by_cargo(v) && v != "PATH" {
+        if self.emit_rerun_if_env_changed && v != "PATH" {
             self.cargo_output
                 .print_metadata(&format_args!("cargo:rerun-if-env-changed={v}"));
         }
-        let r = self
-            .env
-            .iter()
-            .find(|(k, _)| k.as_ref() == v)
-            .map(|(_, value)| value.clone())
-            .or_else(|| env::var_os(v).map(Arc::from));
+        #[allow(clippy::disallowed_methods)] // We emit rerun-if-env-changed above
+        let r = env::var_os(v);
         self.cargo_output.print_metadata(&format_args!(
             "{} = {}",
             v,
             OptionOsStrDisplay(r.as_deref())
         ));
-        self.build_cache
-            .env_cache
-            .write()
-            .unwrap()
-            .insert(v.into(), r.clone());
         r
     }
 
-    /// get boolean flag that is either true or false
-    fn getenv_boolean(&self, v: &str) -> bool {
-        match self.getenv(v) {
-            Some(s) => &*s != "0" && &*s != "false" && !s.is_empty(),
+    /// Look up an environment variable that's allowed to be overwritten by
+    /// [`Build::env`].
+    ///
+    /// This is useful for environment variables that the compiler could
+    /// reasonably read, such as `SDKROOT` and `WASI_SDK_PATH` - for these, we
+    /// generally want to allow build scripts to overwrite them.
+    ///
+    /// On the other hand, we don't want to allow overwriting environment
+    /// variables that are `CC`-specific such as `CC_FORCE_DISABLE`
+    /// (`Build::env` applies to child processes, not to `cc` itself).
+    fn get_env_overridable(&self, key: &str) -> Option<Cow<'_, OsStr>> {
+        // Try to look up in overrides first.
+        if let Some((_key, val)) = self.env.iter().find(|(k, _)| k.as_ref() == key) {
+            return Some(Cow::Borrowed(&**val));
+        }
+
+        // If not found in overrides, look up from environment.
+        self.get_env(key).map(Cow::Owned)
+    }
+
+    /// Get boolean flag that is either true or false.
+    ///
+    /// Used for `CC_*`-style flags.
+    fn get_env_boolean(&self, key: &str) -> bool {
+        match self.get_env(key) {
+            // Set -> `true`, unless set to `""`, `"0"`, `"no"` `"false"`
+            Some(s) => &*s != "0" && &*s != "false" && &*s != "no" && !s.is_empty(),
+            // Not set -> default to `false`.
             None => false,
         }
-    }
-
-    fn getenv_unwrap(&self, v: &str) -> Result<Arc<OsStr>, Error> {
-        match self.getenv(v) {
-            Some(s) => Ok(s),
-            None => Err(Error::new(
-                ErrorKind::EnvVarNotFound,
-                format!("Environment variable {v} not defined."),
-            )),
-        }
-    }
-
-    fn getenv_unwrap_str(&self, v: &str) -> Result<String, Error> {
-        let env = self.getenv_unwrap(v)?;
-        env.to_str().map(String::from).ok_or_else(|| {
-            Error::new(
-                ErrorKind::EnvVarNotFound,
-                format!("Environment variable {v} is not valid utf-8."),
-            )
-        })
     }
 
     /// The list of environment variables to check for a given env, in order of priority.
@@ -3901,12 +3905,12 @@ impl Build {
     }
 
     /// Get a single-valued environment variable with target variants.
-    fn getenv_with_target_prefixes(&self, env: &str) -> Result<Arc<OsStr>, Error> {
+    fn getenv_with_target_prefixes(&self, env: &str) -> Result<OsString, Error> {
         // Take from first environment variable in the environment.
         let res = self
             .target_envs(env)?
             .iter()
-            .filter_map(|env| self.getenv(env))
+            .filter_map(|env| self.get_env(env))
             .next();
 
         match res {
@@ -3927,7 +3931,7 @@ impl Build {
         let mut any_set = false;
         let mut res = vec![];
         for env in self.target_envs(env)?.iter().rev() {
-            if let Some(var) = self.getenv(env) {
+            if let Some(var) = self.get_env(env) {
                 any_set = true;
 
                 let var = var.to_string_lossy();
@@ -3942,6 +3946,11 @@ impl Build {
         Ok(if any_set { Some(res) } else { None })
     }
 
+    /// Returns true if `cc` has been disabled by `CC_FORCE_DISABLE`.
+    fn is_disabled(&self) -> bool {
+        self.get_env_boolean("CC_FORCE_DISABLE")
+    }
+
     fn fix_env_for_apple_os(&self, cmd: &mut Command) -> Result<(), Error> {
         let target = self.get_target()?;
         if cfg!(target_os = "macos") && target.os == "macos" {
@@ -3953,9 +3962,9 @@ impl Build {
         Ok(())
     }
 
-    fn apple_sdk_root_inner(&self, sdk: &str) -> Result<Arc<OsStr>, Error> {
+    fn apple_sdk_root_inner(&self, sdk: &str) -> Result<Cow<'_, OsStr>, Error> {
         // Code copied from rustc's compiler/rustc_codegen_ssa/src/back/link.rs.
-        if let Some(sdkroot) = self.getenv("SDKROOT") {
+        if let Some(sdkroot) = self.get_env_overridable("SDKROOT") {
             let p = Path::new(&sdkroot);
             let does_sdkroot_contain = |strings: &[&str]| {
                 let sdkroot_str = p.to_string_lossy();
@@ -4003,7 +4012,7 @@ impl Build {
                 ));
             }
         };
-        Ok(Arc::from(OsStr::new(sdk_path.trim())))
+        Ok(Cow::Owned(sdk_path.trim().into()))
     }
 
     fn apple_sdk_root(&self, target: &TargetInfo<'_>) -> Result<Arc<OsStr>, Error> {
@@ -4019,7 +4028,7 @@ impl Build {
         {
             return Ok(ret);
         }
-        let sdk_path = self.apple_sdk_root_inner(sdk)?;
+        let sdk_path: Arc<OsStr> = self.apple_sdk_root_inner(sdk)?.into();
         self.build_cache
             .apple_sdk_root_cache
             .write()
@@ -4055,16 +4064,7 @@ impl Build {
         };
 
         let deployment_from_env = |name: &str| -> Option<Arc<str>> {
-            // note that self.env isn't hit in production codepaths, its mostly just for tests which don't
-            // set the real env
-            self.env
-                .iter()
-                .find(|(k, _)| &**k == OsStr::new(name))
-                .map(|(_, v)| v)
-                .cloned()
-                .or_else(|| self.getenv(name))?
-                .to_str()
-                .map(Arc::from)
+            self.get_env_overridable(name)?.to_str().map(Arc::from)
         };
 
         // Determines if the acquired deployment target is too low to support modern C++ on some Apple platform.
@@ -4165,8 +4165,8 @@ impl Build {
         version
     }
 
-    fn wasm_musl_sysroot(&self) -> Result<Arc<OsStr>, Error> {
-        if let Some(musl_sysroot_path) = self.getenv("WASM_MUSL_SYSROOT") {
+    fn wasm_musl_sysroot(&self) -> Result<OsString, Error> {
+        if let Some(musl_sysroot_path) = self.get_env("WASM_MUSL_SYSROOT") {
             Ok(musl_sysroot_path)
         } else {
             Err(Error::new(
@@ -4176,8 +4176,8 @@ impl Build {
         }
     }
 
-    fn wasi_sysroot(&self) -> Result<Arc<OsStr>, Error> {
-        if let Some(wasi_sysroot_path) = self.getenv("WASI_SYSROOT") {
+    fn wasi_sysroot(&self) -> Result<OsString, Error> {
+        if let Some(wasi_sysroot_path) = self.get_env("WASI_SYSROOT") {
             Ok(wasi_sysroot_path)
         } else {
             Err(Error::new(
@@ -4206,7 +4206,7 @@ impl Build {
         } else {
             path_entries
                 .and_then(find_exe_in_path)
-                .or_else(|| find_exe_in_path(&self.getenv("PATH")?))
+                .or_else(|| find_exe_in_path(&self.get_env("PATH")?))
         }
     }
 
@@ -4244,7 +4244,9 @@ impl Build {
 
         impl ::find_msvc_tools::EnvGetter for BuildEnvGetter<'_> {
             fn get_env(&self, name: &str) -> Option<::find_msvc_tools::Env> {
-                self.0.getenv(name).map(::find_msvc_tools::Env::Arced)
+                // TODO: Should we allow overriding these with `Build::env`?
+                // <https://github.com/rust-lang/cc-rs/issues/1688>
+                self.0.get_env(name).map(::find_msvc_tools::Env::Owned)
             }
         }
 
@@ -4266,7 +4268,7 @@ impl Build {
     ///
     /// [wasi-sdk]: https://github.com/WebAssembly/wasi-sdk
     fn autodetect_wasi_compiler(&self, raw_target: &str, clang: &str) -> PathBuf {
-        if let Some(path) = self.getenv("WASI_SDK_PATH") {
+        if let Some(path) = self.get_env_overridable("WASI_SDK_PATH") {
             let target_clang = Path::new(&path)
                 .join("bin")
                 .join(format!("{raw_target}-clang"));
@@ -4424,49 +4426,6 @@ impl AsmFileExt {
         }
         None
     }
-}
-
-/// Returns true if `cc` has been disabled by `CC_FORCE_DISABLE`.
-fn is_disabled() -> bool {
-    static CACHE: AtomicU8 = AtomicU8::new(0);
-
-    let val = CACHE.load(Relaxed);
-    // We manually cache the environment var, since we need it in some places
-    // where we don't have access to a `Build` instance.
-    #[allow(clippy::disallowed_methods)]
-    fn compute_is_disabled() -> bool {
-        match std::env::var_os("CC_FORCE_DISABLE") {
-            // Not set? Not disabled.
-            None => false,
-            // Respect `CC_FORCE_DISABLE=0` and some simple synonyms, otherwise
-            // we're disabled. This intentionally includes `CC_FORCE_DISABLE=""`
-            Some(v) => &*v != "0" && &*v != "false" && &*v != "no",
-        }
-    }
-    match val {
-        2 => true,
-        1 => false,
-        0 => {
-            let truth = compute_is_disabled();
-            let encoded_truth = if truth { 2u8 } else { 1 };
-            // Use compare_exchange to avoid race condition
-            let _ = CACHE.compare_exchange(0, encoded_truth, Relaxed, Relaxed);
-            truth
-        }
-        _ => unreachable!(),
-    }
-}
-
-/// Automates the `if is_disabled() { return error }` check and ensures
-/// we produce a consistent error message for it.
-fn check_disabled() -> Result<(), Error> {
-    if is_disabled() {
-        return Err(Error::new(
-            ErrorKind::Disabled,
-            "the `cc` crate's functionality has been disabled by the `CC_FORCE_DISABLE` environment variable.",
-        ));
-    }
-    Ok(())
 }
 
 fn check_exe(mut exe: PathBuf) -> Option<PathBuf> {

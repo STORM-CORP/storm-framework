@@ -375,6 +375,7 @@ macro_rules! opt_unsafe_fn {
 /// }
 /// ```
 #[cfg_attr(__ZEROCOPY_INTERNAL_USE_ONLY_DEV_MODE, macro_export)] // Used in `doctests.rs`
+#[doc(hidden)]
 macro_rules! impl_or_verify {
     // The following two match arms follow the same pattern as their
     // counterparts in `unsafe_impl!`; see the documentation on those arms for
@@ -835,3 +836,201 @@ macro_rules! impl_transitive_transmute_from {
 /// must wrap the call in `unsafe { ... }`.
 #[inline(always)]
 pub(crate) const unsafe fn __unsafe() {}
+
+/// Extracts the contents of doc comments.
+#[allow(unused)]
+macro_rules! docstring {
+    ($(#[doc = $content:expr])*) => {
+        concat!($($content, "\n",)*)
+    }
+}
+
+/// Generate a rustdoc-style header with `$name` as the HTML ID for the 'Code
+/// Generation' section of documentation.
+#[allow(unused)]
+macro_rules! codegen_header {
+    ($level:expr, $name:expr) => {
+        concat!(
+            "
+<",
+            $level,
+            " id='method.",
+            $name,
+            ".codegen'>
+    <a class='doc-anchor' href='#method.",
+            $name,
+            ".codegen'>§</a>
+    Code Generation
+</",
+            $level,
+            ">
+"
+        )
+    };
+}
+
+/// Generates HTML tabs.
+#[rustfmt::skip]
+#[allow(unused)]
+macro_rules! tabs {
+    (
+        name = $name:expr,
+        arity = $arity:literal,
+        $([
+            $($open:ident)?
+            @index $n:literal
+            @title $title:literal
+            $(#[doc = $content:expr])*
+        ]),*
+    ) => {
+        concat!("
+<div class='codegen-tabs' style='--arity: ", $arity ,"'>", $(concat!("
+    <details name='tab-", $name,"' style='--n: ", $n ,"'", $(stringify!($open),)*">
+        <summary><h6>", $title, "</h6></summary>
+        <div>
+
+", $($content, "\n",)* "
+\
+        </div>
+    </details>"),)*
+"</div>")
+    }
+}
+
+/// Generates the HTML for a single benchmark example.
+#[allow(unused)]
+macro_rules! codegen_example {
+    (format = $format:expr, bench = $bench:expr) => {
+        tabs!(
+            name = $bench,
+            arity = 4,
+            [
+                @index 1
+                @title "Format"
+                /// ```ignore
+                #[doc = include_str!(concat!("../benches/formats/", $format, ".rs"))]
+                /// ```
+            ],
+            [
+                @index 2
+                @title "Benchmark"
+                /// ```ignore
+                #[doc = include_str!(concat!("../benches/", $bench, ".rs"))]
+                /// ```
+            ],
+            [
+                open
+                @index 3
+                @title "Assembly"
+                /// ```plain
+                #[doc = include_str!(concat!("../benches/", $bench, ".x86-64"))]
+                /// ```
+            ],
+            [
+                @index 4
+                @title "Machine Code Analysis"
+                /// ```plain
+                #[doc = include_str!(concat!("../benches/", $bench, ".x86-64.mca"))]
+                /// ```
+            ]
+        )
+    }
+}
+
+/// Generate the HTML for a suite of benchmark examples.
+#[allow(unused)]
+macro_rules! codegen_example_suite {
+    (
+        bench = $bench:expr,
+        format = $format:expr,
+        arity = $arity:literal,
+        $([
+            $($open:ident)?
+            @index $index:literal
+            @title $title:literal
+            @variant $variant:literal
+        ]),*
+    ) => {
+        tabs!(
+            name = $bench,
+            arity = $arity,
+            $([
+                $($open)*
+                @index $index
+                @title $title
+                #[doc = codegen_example!(
+                    format = concat!($format, "_", $variant),
+                    bench = concat!($bench, "_", $variant)
+                )]
+            ]),*
+        )
+    }
+}
+
+/// Generates the string for code generation preamble.
+#[allow(unused)]
+macro_rules! codegen_preamble {
+    () => {
+        docstring!(
+            ///
+            /// This abstraction is safe and cheap, but does not necessarily
+            /// have zero runtime cost. The codegen you experience in practice
+            /// will depend on optimization level, the layout of the destination
+            /// type, and what the compiler can prove about the source.
+            ///
+        )
+    }
+}
+
+/// Generates the HTML for code generation documentation.
+#[allow(unused)]
+macro_rules! codegen_section {
+    (
+        header = $level:expr,
+        bench = $bench:expr,
+        format = $format:expr,
+        arity = $arity:literal,
+        $([
+            $($open:ident)?
+            @index $index:literal
+            @title $title:literal
+            @variant $variant:literal
+        ]),*
+    ) => {
+        concat!(
+            codegen_header!($level, $bench),
+            codegen_preamble!(),
+            docstring!(
+                ///
+                /// The below examples illustrate typical codegen for
+                /// increasingly complex types:
+                ///
+            ),
+            codegen_example_suite!(
+                bench = $bench,
+                format = $format,
+                arity = $arity,
+                $([
+                    $($open)*
+                    @index $index
+                    @title $title
+                    @variant $variant
+                ]),*
+            )
+        )
+    };
+    (
+        header = $level:expr,
+        bench = $bench:expr,
+        format = $format:expr,
+    ) => {
+        concat!(
+            codegen_header!($level, $bench),
+            codegen_preamble!(),
+            codegen_example!(
+                format = $format,
+                bench = $bench
+            )
+        )
+    }
+}

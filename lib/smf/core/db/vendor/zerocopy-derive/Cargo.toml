@@ -12,7 +12,7 @@
 [package]
 edition = "2021"
 name = "zerocopy-derive"
-version = "0.8.39"
+version = "0.8.47"
 authors = [
     "Joshua Liebow-Feeser <joshlf@google.com>",
     "Jack Wrenn <jswrenn@amazon.com>",
@@ -139,8 +139,8 @@ name = "struct_unaligned"
 path = "tests/struct_unaligned.rs"
 
 [[test]]
-name = "trybuild"
-path = "tests/trybuild.rs"
+name = "ui"
+path = "tests/ui.rs"
 
 [[test]]
 name = "union_from_bytes"
@@ -190,12 +190,6 @@ version = "1.0.9"
 [dev-dependencies.prettyplease]
 version = "=0.2.17"
 
-[dev-dependencies.proc-macro2]
-version = "=1.0.80"
-
-[dev-dependencies.quote]
-version = "=1.0.40"
-
 [dev-dependencies.rustversion]
 version = "1.0"
 
@@ -205,10 +199,6 @@ version = "1.1"
 [dev-dependencies.syn]
 version = "2.0.46"
 features = ["visit"]
-
-[dev-dependencies.trybuild]
-version = "=1.0.89"
-features = ["diff"]
 
 [lints.rust.unexpected_cfgs]
 level = "warn"

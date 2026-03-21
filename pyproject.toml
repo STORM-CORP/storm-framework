@@ -42,7 +42,7 @@ keywords=["storm", "pentest", "cybersecurity", "security-research", "pentesting-
 line-length = 88
 target-version = ['py312']
 include = '.*\.py$'
-exclude = '''
+force-exclude = '''
 /(
     \.git
     | \.hg
@@ -53,7 +53,7 @@ exclude = '''
     | buck-out
     | build
     | dist
-    | /vendor/
+    | ^/lib/smf/core/db/vendor/
     | example/exmod.py
 )/
 '''

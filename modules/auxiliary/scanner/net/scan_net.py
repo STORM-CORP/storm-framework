@@ -4,6 +4,20 @@ from app.utility.colors import C
 STATUS_OPEN = "✅"
 STATUS_CLOSED = "❌"
 
+MOD_INFO = {
+    "name": "Publicly accessible port scanning",
+    "author": "zxelzy",
+    "description": """
+    To scan public or local IPs to look for open ports
+    and look for specific ports that allow for testing
+    to find vulnerabilities, do a quick scan of.
+    """,
+    "license": "GPL-3.0",
+    "tag": [
+        "INET",
+        "Reconnaissance"
+    ],
+}
 
 def get_service_banner(target_ip, port, timeout=1.0):
     """

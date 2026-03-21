@@ -5,6 +5,7 @@ import json
 import re
 import sys
 import posixpath
+import os
 
 # Exit codes
 SUCCESS = 0

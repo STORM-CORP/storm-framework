@@ -1,5 +1,3 @@
-# script/wordlist.py
-# Default credentials list
 DEFAULT_CREDS = [
     ("admin", "admin"),
     ("user", "user"),
@@ -33,16 +31,18 @@ DEFAULT_CREDS = [
     ("root", "ponroot"),
     ("admin", "admin123"),
     ("superadmin", "superoem"),
-    ("", ""),  # Anonymous login
+    ("", ""),
 ]
 
-# Tambahkan list apapun disini
 COMMON_USERS = [
     "admin",
     "root",
     "tester",
     "grafana",
-    "user" "service" "mikrotik" "postgres",
+    "user",
+    "service",
+    "mikrotik",
+    "postgres",
     "mysql",
     "operator",
     "realtek",

@@ -17,7 +17,7 @@ def execute(args, context):
 
     # This is a special logic to know where the CVE is located.
     # Make sure CVE is always in the vulnerability folder
-    vuln_path = "modules/vulnerability/"
+    vuln_path = "modules/"
     found_path = None
     for root, dirs, files in os.walk(vuln_path):
         if f"{query}.py" in files:

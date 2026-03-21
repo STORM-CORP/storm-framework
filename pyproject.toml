@@ -57,7 +57,7 @@ exclude = '''
     | buck-out
     | build
     | dist
-    | lib/smf/core/db/vendor
+    | lib/smf/core/db/vendor/.*
     | example/exmod.py
 )/
 '''

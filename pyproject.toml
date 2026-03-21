@@ -41,11 +41,7 @@ keywords=["storm", "pentest", "cybersecurity", "security-research", "pentesting-
 [tool.black]
 line-length = 88
 target-version = ['py312']
-
-# Forcefully override .gitignore rules
-include = '(app/|modules/|lib/).*\.py$'
-
-# Keep the metadata folder safe
+include = '.*\.py$'
 exclude = '''
 /(
     \.git

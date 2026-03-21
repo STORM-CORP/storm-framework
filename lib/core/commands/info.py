@@ -98,17 +98,17 @@ def execute(args, context):
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'LICENSE':<13} : {info['license']}")
-                tags_raw = ", ".join(tag)
+                tags_raw = ", ".join(f"{info['tag']}")
                 wrapped_tags = textwrap.fill(
                     tags_raw,
                     width=width
-                    - 2,  # Kurangi 16 untuk memberi ruang label "TAGS          : "
+                    - 2,
                     subsequent_indent=" "
-                    * 2,  # Baris baru bakal lurus dengan tag pertama
+                    * 2,
                 )
                 print(f"{C.SUCCESS}{'TAG':<13} : {wrapped_tags}")
                 print(f"{C.HEADER}{'='*width}")
-                ptint()
+                print()
 
             except Exception as e:
                 print(f"{C.ERROR}[-] Failed to read: {e}")

@@ -98,11 +98,13 @@ def execute(args, context):
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'LICENSE':<13} : {info['license']}")
-                tags_raw = ", ".join(f"{info['tag']}")
+                
+                tags_list = info.get("tag", [])
+                tags_raw = ", ".join(tags_list)
                 wrapped_tags = textwrap.fill(
                     tags_raw,
-                    width=width - 2,
-                    subsequent_indent=" " * 2,
+                    width=width - 16,
+                    subsequent_indent=" " * 16,
                 )
                 print(f"{C.SUCCESS}{'TAG':<13} : {wrapped_tags}")
                 print(f"{C.HEADER}{'='*width}")

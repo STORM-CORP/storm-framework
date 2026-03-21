@@ -1,5 +1,0 @@
-app
-assets
-lib
-modules
-script

@@ -12,12 +12,11 @@ MOD_INFO = {
     to find vulnerabilities, do a quick scan of.
     """,
     "Author": ["zxelzy"],
-    "Action": [
-        ["Scan", {"Description": "Searching for open ports"}]
-    ],
+    "Action": [["Scan", {"Description": "Searching for open ports"}]],
     "DefaultAction": "Scanner",
     "License": "SMF License",
 }
+
 
 def get_service_banner(target_ip, port, timeout=1.0):
     """

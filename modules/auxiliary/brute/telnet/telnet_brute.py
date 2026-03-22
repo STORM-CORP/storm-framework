@@ -26,6 +26,7 @@ SYM_FAILED = "🔒"
 
 REQUIRED_OPTIONS = {"IP": "", "PASS": ""}
 
+
 async def test_telnet(target_ip, port, username, password):
     """
     Attempting Telnet login using telnetlib3 with prompt-based interaction.

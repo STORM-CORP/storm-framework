@@ -78,7 +78,8 @@ def execute(args, context):
                 # --- GET DICTIONARY MOD_INFO ---
                 info = mod.MOD_INFO
                 width = 55
-
+                label_w = 13
+                
                 print()
                 print(f"{C.HEADER}{'='*width}")
                 print(f"{C.SUCCESS}{'STORM INFORMATION MODULES':^55}")
@@ -95,25 +96,18 @@ def execute(args, context):
                 print(desc)
 
                 print(f"{C.HEADER}{'-'*width}")
-                print(f"{C.SUCCESS}{'AUTHOR':<13} :")
-                authors_list = info.get("Author", [])
-                if not authors_list:
-                    print(f"{C.SUCCESS}{' ' * 16}- Unknown")
-                else:
-                    for person in authors_list:
-                        print(f"{' ' * 16}- {person}")
+                authors = info.get("Author", [])
+                first_auth = authors[0] if authors else "Unknown"
+                print(f"{C.SUCCESS}{'AUTHOR':<{label_w}} : - {first_auth}"}
+                for extra in authors[1:]:
+                    print(f"{C.SUCCESS}{' '*(label_w)} : - {extra}")
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'ACTION':<13} :")
-                for action in info["Action"]:
+                for action in info.get("Action", []):
                     name = action[0]
                     desc = action[1].get("Description", "")
-                    wrapped_desc = textwrap.fill(
-                        desc,
-                        width=width - 18,
-                        subsequent_indent=" " * 18,
-                    )
-                    print(f"{name:<13} :{wrapped_desc}")
+                    print(f"{C.SUCCESS}  > {name:<13} : {desc}")
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")

@@ -3,8 +3,21 @@ import os
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from app.utility.colors import C
 
+MOD_INFO = {
+    "Name": "Bruteforce FTP connection",
+    "Description": """
+    Bruteforce FTP username and password 
+    to bypass FTP login quickly to find out
+    is FTP login auth that weak or quite strong.
+    """,
+    "Author": ["zxelzy"],
+    "Action": [
+        ["Bruteforce", {"Description": "Trying to bypass with thousands of passwords and usernames"}],
+    ],
+    "DefaultAction": "Bruteforce",
+    "License": "SMF License",
+}
 REQUIRED_OPTIONS = {"IP": "", "PASS": ""}
-
 
 def test_ftp(target_ip, port, username, password):
     ftp = ftplib.FTP()

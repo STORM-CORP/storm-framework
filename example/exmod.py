@@ -10,6 +10,29 @@ from rootmap import ROOT  # noqa
 # If you are confused about what the colors are, you can check the file according to the path.
 from app.utility.colors import C  # noqa
 
+#
+# Apply MOD_INFO with this template in every module you create
+# This serves to identify the module and provide information about its creator
+# valid license for the security of the code you create
+MOD_INFO = {
+    "Name": "fill in the module name",
+    "Description": """
+    For a complete explanation
+    """,
+    "Author": ["fill in your name", "examples"],
+    "Action": [
+        ["Function name", {"Description": "Brief explanation of the function"}],
+        ["Function name", {"Description": "Brief explanation of the function"}],
+    ],
+    "DefaultAction": "Main function",
+    "License": "fill in your module license or match GPL-3.0",
+}
+
+#
+# For REQUIRED_OPTIONS select what you need.
+# Make sure the method name for the main function to be executed matches the template's.
+# If it's different, the module won't execute.
+#
 REQUIRED_OPTIONS = {
     "IP": "",
     "PORT": "",
@@ -28,13 +51,6 @@ REQUIRED_OPTIONS = {
     "HOSTNAME": "",
     "MODULE": "",
 }
-
-"""
-For REQUIRED_OPTIONS select what you need.
-Make sure the method name for the main function to be executed matches the template's. 
-If it's different, the module won't execute.
-
-"""
 
 
 # --- Main function ---

@@ -93,22 +93,27 @@ def execute(args, context):
                     subsequent_indent=" ",
                 )
                 print(desc)
+                
+                print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'AUTHOR':<13} :")
-                for author in info["Author"]:
-                    print(f"{author:>13}")
+                authors_list = info.get("author", [])
+                if not authors_list:
+                    print(f"{C.SUCCESS}{' ' * 16}- Unknown")
+                else:
+                    for person in authors_list:
+                        print(f"{C.SUCCESS}{' ' * 16}- {person}")
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'ACTION':<13} :")
                 for action in info["Action"]:
                     name = action[0]
-                    desc_text = action[1].get("Description", "")
+                    desc = action[1].get("Description", "")
                     wrapped_desc = textwrap.fill(
-                        desc_text,
-                        width=width,
-                        initial_indent=" ",
-                        subsequent_indent=" " * 16,
+                        desc,
+                        width=width - 18,
+                        subsequent_indent=" " * 18,
                     )
-                    print(f"{C.SUCCESS}{name:>13} :{wrapped_desc}")
+                    print(f"{name:<10} :{wrapped_desc}")
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")

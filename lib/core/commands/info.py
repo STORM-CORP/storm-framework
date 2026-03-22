@@ -97,21 +97,19 @@ def execute(args, context):
                 for author in info["Author"]:
                     print(f" {author}")
                 print(f"{C.SUCCESS}{'ACTION':<13} :")
-                for act in info["Action"]:
-                    print(f" {act}")
+                for action in info["Action"]:
+                    name = action[0]
+                    desc_text = action[1].get("Description", "")
+                    wrapped_desc = textwrap.fill(
+                        desc_text,
+                        width=width,
+                        initial_indent=" ",
+                        subsequent_indent=" " * 16
+                    )
+                    print(f"{C.SUCCESS}{name:<13} : {wrapped_desc}")
+                    
                 print(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")
-
-                print(f"{C.HEADER}{'-'*width}")
-
                 print(f"{C.SUCCESS}{'LICENSE':<13} : {info['License']}")
-                tags_list = info.get("Tag", [])
-                tags_raw = ", ".join(tags_list)
-                wrapped_tags = textwrap.fill(
-                    tags_raw,
-                    width=width - 16,
-                    subsequent_indent=" " * 16,
-                )
-                print(f"{C.SUCCESS}{'TAG':<13} : {wrapped_tags}")
 
                 print(f"{C.HEADER}{'='*width}")
                 print()

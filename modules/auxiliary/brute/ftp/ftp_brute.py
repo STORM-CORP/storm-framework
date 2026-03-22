@@ -12,12 +12,18 @@ MOD_INFO = {
     """,
     "Author": ["zxelzy"],
     "Action": [
-        ["Bruteforce", {"Description": "Trying to bypass with thousands of passwords and usernames"}],
+        [
+            "Bruteforce",
+            {
+                "Description": "Trying to bypass with thousands of passwords and usernames"
+            },
+        ],
     ],
     "DefaultAction": "Bruteforce",
     "License": "SMF License",
 }
 REQUIRED_OPTIONS = {"IP": "", "PASS": ""}
+
 
 def test_ftp(target_ip, port, username, password):
     ftp = ftplib.FTP()

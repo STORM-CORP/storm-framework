@@ -3,8 +3,21 @@ import os
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from app.utility.colors import C
 
+MOD_INFO = {
+    "Name": "Grafana bruteforce login",
+    "Description": """
+    Trying to log in multiple times using the password
+    default and custom username and password, to match
+    and get user login access up to admin.
+    """,
+    "Author": ["zxelzy"],
+    "Action": [
+        ["Bruteforce", {"Description": "Grafana login bypass"}],
+    ],
+    "DefaultAction": "Bruteforce",
+    "License": "SMF License",
+}
 REQUIRED_OPTIONS = {"IP": "", "PORT": "", "PASS": ""}
-
 
 def test_grafana(target_ip, port, username, password):
     """Trying to login to grafana using requests (HTTP POST)."""

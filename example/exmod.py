@@ -15,13 +15,18 @@ from app.utility.colors import C  # noqa
 # This serves to identify the module and provide information about its creator
 # valid license for the security of the code you create
 MOD_INFO = {
-    "name": "fill in the module name",
-    "author": "fill in your name",
-    "description": """
-    Explain about the module you created
+    "Name": "fill in the module name",
+    "Description": """
+    For a complete explanation
     """,
-    "license": "fill in your module license or match GPLv3",
-    "tag": ["make sure the tag matches the module function"],
+    "Author": ["fill in your name", "examples"],
+    "Action": [
+        ["Function name", {"Description": "Brief explanation of the function"}],
+        ["Function name", {"Description": "Brief explanation of the function"}]
+    ],
+    "DefaultAction": "Main function",
+    "License": "fill in your module license or match GPL-3.0",
+    "Tag": ["make sure the tag matches the module function", "examples"],
 }
 
 #

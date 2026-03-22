@@ -1,8 +1,20 @@
 import crypt
 from app.utility.colors import C
 
+MOD_INFO = {
+    "Name": "Bruteforce hashing MD5-Crypt",
+    "Description": """
+    Trying thousands of keywords to find a match against the hash
+    MD5-Crypt.
+    """,
+    "Author": ["zxelzy"],
+    "Action": [
+        ["Bruteforce", {"Description": "Trying thousands of keywords"}],
+    ],
+    "DefaultAction": "Bruteforce",
+    "License": "SMF License",
+}
 REQUIRED_OPTIONS = {"HASH": "", "PASS": ""}
-
 
 def execute(options):
     """

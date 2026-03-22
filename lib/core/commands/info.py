@@ -104,10 +104,10 @@ def execute(args, context):
                         desc_text,
                         width=width,
                         initial_indent=" ",
-                        subsequent_indent=" " * 16
+                        subsequent_indent=" " * 16,
                     )
                     print(f"{C.SUCCESS}{name:<13} : {wrapped_desc}")
-                    
+
                 print(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")
                 print(f"{C.SUCCESS}{'LICENSE':<13} : {info['License']}")
 

@@ -98,7 +98,7 @@ def execute(args, context):
                 print(f"{C.HEADER}{'-'*width}")
                 authors = info.get("Author", [])
                 first_auth = authors[0] if authors else "Unknown"
-                print(f"{C.SUCCESS}{'AUTHOR':<{label_w}} : - {first_auth}"}
+                print(f"{C.SUCCESS}{'AUTHOR':<{label_w}} : - {first_auth}")
                 for extra in authors[1:]:
                     print(f"{C.SUCCESS}{' '*(label_w)} : - {extra}")
 

@@ -22,7 +22,7 @@ MOD_INFO = {
     "Author": ["fill in your name", "examples"],
     "Action": [
         ["Function name", {"Description": "Brief explanation of the function"}],
-        ["Function name", {"Description": "Brief explanation of the function"}]
+        ["Function name", {"Description": "Brief explanation of the function"}],
     ],
     "DefaultAction": "Main function",
     "License": "fill in your module license or match GPL-3.0",

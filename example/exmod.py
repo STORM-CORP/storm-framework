@@ -26,7 +26,6 @@ MOD_INFO = {
     ],
     "DefaultAction": "Main function",
     "License": "fill in your module license or match GPL-3.0",
-    "Tag": ["make sure the tag matches the module function", "examples"],
 }
 
 #

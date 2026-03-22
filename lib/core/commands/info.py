@@ -101,7 +101,7 @@ def execute(args, context):
                     print(f"{C.SUCCESS}{' ' * 16}- Unknown")
                 else:
                     for person in authors_list:
-                        print(f"{C.SUCCESS}{' ' * 16}- {person}")
+                        print(f"{' ' * 16}- {person}")
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'ACTION':<13} :")
@@ -113,7 +113,7 @@ def execute(args, context):
                         width=width - 18,
                         subsequent_indent=" " * 18,
                     )
-                    print(f"{name:<10} :{wrapped_desc}")
+                    print(f"{name:<13} :{wrapped_desc}")
 
                 print(f"{C.HEADER}{'-'*width}")
                 print(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")

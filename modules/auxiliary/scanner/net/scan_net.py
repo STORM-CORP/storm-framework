@@ -7,10 +7,10 @@ STATUS_CLOSED = "❌"
 MOD_INFO = {
     "Name": "Publicly accessible port scanning",
     "Description": """
-    To scan public or local IPs to look for open ports
-    and look for specific ports that allow for testing
-    to find vulnerabilities, do a quick scan of.
-    """,
+To scan public or local IPs to look for open ports
+and look for specific ports that allow for testing
+to find vulnerabilities, do a quick scan of.
+""",
     "Author": ["zxelzy"],
     "Action": [["Scan", {"Description": "Searching for open ports"}]],
     "DefaultAction": "Scanner",

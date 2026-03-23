@@ -91,12 +91,14 @@ def execute(args, context):
                     if not line.strip():
                         continue
                     clean_line = " ".join(line.split())
-                    print(textwrap.fill(
-                        clean_line,
-                        width=width - 2,
-                        initial_indent=" ",
-                        subsequent_indent=" ",
-                    ))
+                    print(
+                        textwrap.fill(
+                            clean_line,
+                            width=width - 2,
+                            initial_indent=" ",
+                            subsequent_indent=" ",
+                        )
+                    )
                     print(desc)
 
                 print(f"{C.HEADER}{'-'*width}")

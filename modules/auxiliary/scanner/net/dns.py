@@ -7,9 +7,9 @@ from app.utility.colors import C
 MOD_INFO = {
     "Name": "Scanning DNS Records",
     "Description": """
-    Scan the DNS Record to find out the DNS data in it
-    used by a website.
-    """,
+Scan the DNS Record to find out the DNS data in it
+used by a website.
+""",
     "Author": ["zxelzy"],
     "Action": [
         ["Scanner", {"Description": "Scan DNS Records"}],

@@ -6,10 +6,10 @@ from app.utility.colors import C
 MOD_INFO = {
     "Name": "Grafana bruteforce login",
     "Description": """
-    Trying to log in multiple times using the password
-    default and custom username and password, to match
-    and get user login access up to admin.
-    """,
+Trying to log in multiple times using the password
+default and custom username and password, to match
+and get user login access up to admin.
+""",
     "Author": ["zxelzy"],
     "Action": [
         ["Bruteforce", {"Description": "Grafana login bypass"}],

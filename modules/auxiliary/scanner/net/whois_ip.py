@@ -1,6 +1,19 @@
 from ipwhois import IPWhois
 from app.utility.colors import C
 
+MOD_INFO = {
+    "Name": "Searching for information",
+    "Description": """
+    Finding information behind an IP Address using Whois
+    allows to find ASN, Country, CIDR, etc. data.
+    """,
+    "Author": ["zxelzy"],
+    "Action": [
+        ["Scanner", {"Description": "Searching for data"}],
+    ],
+    "DefaultAction": "Scanner",
+    "License": "SMF License",
+}
 REQUIRED_OPTIONS = {"IP": "(ex: x.x.x.x)"}
 
 
@@ -9,7 +22,7 @@ def execute(options):
     if not target_ip:
         print(f"{C.ERROR} ERROR: IP variable content 'set ip x.x.x.x'!")
         return
-    print(f"{C.HEADER}[ IP WHOIS/RDAP LOOKUP ] -> {target_ip}")
+    print(f"{C.HEADER}[ IP WHOIS/RDAP LOOKUP ]")
     try:
         obj = IPWhois(target_ip)
         results = obj.lookup_rdap()

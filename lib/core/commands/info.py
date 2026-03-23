@@ -99,7 +99,6 @@ def execute(args, context):
                             subsequent_indent=" ",
                         )
                     )
-                    print(desc)
 
                 print(f"{C.HEADER}{'-'*width}")
                 authors = info.get("Author", [])

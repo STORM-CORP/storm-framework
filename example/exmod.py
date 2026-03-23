@@ -17,8 +17,8 @@ from app.utility.colors import C  # noqa
 MOD_INFO = {
     "Name": "fill in the module name",
     "Description": """
-    For a complete explanation
-    """,
+For a complete explanation
+""",
     "Author": ["fill in your name", "examples"],
     "Action": [
         ["Function name", {"Description": "Brief explanation of the function"}],

@@ -7,9 +7,9 @@ from app.utility.colors import C
 MOD_INFO = {
     "Name": "SSH login bruteforce",
     "Description": """
-    Tried thousands of passwords and passphrases for
-    found a match against SSH login auth.
-    """,
+Tried thousands of passwords and passphrases for
+found a match against SSH login auth.
+""",
     "Author": ["zxelzy"],
     "Action": [
         ["Bruteforce", {"Description": "Searching for SSH login data matches"}],

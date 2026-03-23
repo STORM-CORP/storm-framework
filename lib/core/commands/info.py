@@ -88,7 +88,7 @@ def execute(args, context):
                 print(f"{C.SUCCESS}{'NAME':<13} : {info['Name']}")
                 print(f"{C.SUCCESS}DESCRIPTION   :")
                 desc = textwrap.fill(
-                    info["description"].strip(),
+                    info["Description"].strip(),
                     width=width - 2,
                     initial_indent=" ",
                     subsequent_indent=" ",

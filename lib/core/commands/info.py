@@ -87,20 +87,13 @@ def execute(args, context):
 
                 print(f"{C.SUCCESS}{'NAME':<13} : {info['Name']}")
                 print(f"{C.SUCCESS}DESCRIPTION   :")
-                desc = textwrap.dedent(info["Description"]).strip()
-                for line in desc.splitlines():
-                    clean = " ".join(line.strip().split())
-                    if not clean:
-                        print("")
-                        continue
-                    print(
-                        textwrap.fill(
-                            clean,
-                            width=width - 2,
-                            initial_indent=" ",
-                            subsequent_indent=" ",
-                        )
-                    )
+                desc = textwrap.fill(
+                    info["description"].strip(),
+                    width=width - 2,
+                    initial_indent=" ",
+                    subsequent_indent=" ",
+                )
+                print(desc)
 
                 print(f"{C.HEADER}{'-'*width}")
                 authors = info.get("Author", [])

@@ -5,9 +5,9 @@ from rootmap import ROOT
 MOD_INFO = {
     "Name": "DoS to FTP connection",
     "Description": """
-    Flooding an FTP network to disrupt its functionality
-    and make the server slow until it crashes.
-    """,
+Flooding an FTP network to disrupt its functionality
+and make the server slow until it crashes.
+""",
     "Author": ["zxelzy"],
     "Action": [
         ["DoS", {"Description": "Sending annoying requests"}],

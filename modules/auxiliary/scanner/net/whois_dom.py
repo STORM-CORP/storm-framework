@@ -1,6 +1,19 @@
 import whoisdomain as whois
 from app.utility.colors import C
 
+MOD_INFO = {
+    "Name": "Searching for information",
+    "Description": """
+    Looking for specific information on whois data to
+    an active domain, to get email data, servers, org, etc.
+    """,
+    "Author": ["zxelzy"],
+    "Action": [
+        ["Scanner", {"Description": "Searching for data"}],
+    ],
+    "DefaultAction": "Scanner",
+    "License": "SMF License",
+}
 REQUIRED_OPTIONS = {"DOMAIN": "(e.g., example.com)"}
 
 

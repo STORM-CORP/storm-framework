@@ -5,10 +5,10 @@ from app.utility.colors import C
 MOD_INFO = {
     "Name": "Searching for website header",
     "Description": """
-    Send a request to get the headers of an active website
-    and look for weaknesses or unintentionally specific versions
-    public or look for other loopholes to exploit weaknesses.
-    """,
+Send a request to get the headers of an active website
+and look for weaknesses or unintentionally specific versions
+public or look for other loopholes to exploit weaknesses.
+""",
     "Author": ["zxelzy"],
     "Action": [
         ["Scanner", {"Description": "Looking for vulnerabilities"}],

@@ -10,7 +10,7 @@ MOD_INFO = {
     "Author": ["zxelzy"],
     "Action": [
         ["DoS", {"Description": "Spam thousands of requests"}],
-        ["SIP", {"Description": "Telephone traffic"}]
+        ["SIP", {"Description": "Telephone traffic"}],
     ],
     "DefaultAction": "DoS",
     "License": "SMF Lisense",

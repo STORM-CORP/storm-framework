@@ -4,9 +4,9 @@ from app.utility.colors import C
 MOD_INFO = {
     "Name": "Searching for information",
     "Description": """
-    Finding information behind an IP Address using Whois
-    allows to find ASN, Country, CIDR, etc. data.
-    """,
+Finding information behind an IP Address using Whois
+allows to find ASN, Country, CIDR, etc. data.
+""",
     "Author": ["zxelzy"],
     "Action": [
         ["Scanner", {"Description": "Searching for data"}],

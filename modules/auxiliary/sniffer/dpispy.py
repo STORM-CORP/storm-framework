@@ -5,10 +5,10 @@ from rootmap import ROOT
 MOD_INFO = {
     "Name": "Deep Packet Inspection",
     "Description": """
-    Analyzing incoming and outgoing packets
-    to find out the origin of the packet,
-    payload content if HTTP, analyze connection
-    malware.
+Analyzing incoming and outgoing packets
+to find out the origin of the packet,
+payload content if HTTP, analyze connection
+malware.
     """,
     "Author": ["zxelzy"],
     "Action": [

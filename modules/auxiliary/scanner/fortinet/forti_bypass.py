@@ -26,7 +26,7 @@ def execute(options):
 
     url = f"https://{target}:{port}/api/v2/monitor/system/status"
     headers = {
-        "User-Agent": "Mozilla/5.0",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
         "Node-Id": "1",
         "Node-Type": "fgfm",
         "Authorization": "Basic Og==",

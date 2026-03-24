@@ -1,4 +1,3 @@
-import requests
 import urllib3
 from lib.smf.ssl.netssl import *
 

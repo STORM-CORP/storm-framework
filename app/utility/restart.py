@@ -12,5 +12,5 @@ def run_restart(context):
     try:
         os.execv(executable, args)
     except Exception as e:
-        print(f"[-] Restart failed: {e}")
+        print(f"[-] Restart failed => {e}")
         sys.exit(1)

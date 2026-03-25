@@ -4,12 +4,12 @@ from rootmap import ROOT
 
 def search_modules(query):
     modules_path = os.path.join(ROOT, "modules")
-    print(f"\n[*] Searching for: {query}")
+    print(f"\n[*] Searching for => {query}")
     print(f"{'Module Path':<35} {'Category'}")
     print(f"{'-'*35} {'-'*15}")
     count = 0
     if not os.path.exists(modules_path):
-        print(f"[-] Directory not found: {modules_path}")
+        print(f"[-] Directory not found => {modules_path}")
         return
     for root, dirs, files in os.walk(modules_path):
         for file in files:
@@ -25,7 +25,7 @@ def search_modules(query):
                     print(f"{clean_path:<35} {category}")
 
     if count == 0:
-        print(f"[-] '{query}' Not found.")
+        print(f"[-] {query} => Not found.")
         print("")
     else:
         print(f"\n[*] Found {count} module.")

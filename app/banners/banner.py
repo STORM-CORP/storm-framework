@@ -9,7 +9,7 @@ def get_random_banner():
     banner_dir = os.path.join(ROOT, "lib", "ui", "banners")
     try:
         if not os.path.exists(banner_dir):
-            return f"{C.SUCCESS}Storm Framework (Folder Not Found)"
+            return f"{C.SUCCESS}[!] Folder Not Found => {banner_dir}"
         all_files = [
             f
             for f in os.listdir(banner_dir)
@@ -37,4 +37,4 @@ def get_random_banner():
 
         return result
     except Exception as e:
-        return f"Error loading banner: {e}"
+        return f"Error loading banner => {e}"

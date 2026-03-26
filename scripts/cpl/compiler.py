@@ -26,29 +26,31 @@ def run_cmd(cmd, cwd=None):
         )
         return True
     except subprocess.CalledProcessError as e:
-        print(f"ERROR: {e}")
-        print(f"[!] Rust Failed: {os.path.basename(cwd)}")
+        print(f"ERROR => {e}")
+        print(f"[!] Rust Failed => {os.path.basename(cwd)}")
         return False
 
-
 def compile_rust_project(cargo_path):
-    output_dir = os.path.dirname(cargo_path)
-
     outdir = os.path.join(ROOT, "external", "source", "binary")
     bin_name = get_bin_name(cargo_path)
-
     src_bin = os.path.join(SHARED_TARGET, "release", bin_name)
-    dst_bin = os.path.join(outdir, bin_name)
+    
+    if bin_name.startswith("lib") and bin_name.endswith(".so"):
+        clean_name = bin_name[3:] 
+    else:
+        clean_name = bin_name
 
+    dst_bin = os.path.join(outdir, clean_name)
     if os.path.exists(src_bin):
         try:
             shutil.copy(src_bin, dst_bin)
             os.chmod(dst_bin, 0o755)
-            return f"[✓] Rust: {bin_name}"
+            return f"[✓] Rust => {clean_name}"
         except Exception as e:
-            return f"[!] Copy Error: {bin_name} ({e})"
+            return f"[!] Copy Error => {clean_name} > ({e})"
 
-    return f"[!] Rust Binary Not Found: {bin_name}"
+    return f"[!] Rust Binary Not Found => {bin_name}"
+    
 
 
 def compile_single_file(task):
@@ -67,8 +69,8 @@ def compile_single_file(task):
 
     if run_cmd(cmd):
         os.chmod(output, 0o755)
-        return f"[✓] {lang.upper()}: {os.path.basename(output)}"
-    return f"[!] {lang.upper()} Failed: {output}"
+        return f"[✓] {lang.upper()} => {os.path.basename(output)}"
+    return f"[!] {lang.upper()} Failed => {output}"
 
 
 def main():

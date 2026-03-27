@@ -191,7 +191,7 @@ fn generate_folder_manifest(py: Python) -> PyResult<()> {
 
 // Mendaftarkan fungsi ke module Python
 #[pymodule]
-fn storm_core(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn sign(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(generate_folder_manifest, m)?)?;
     Ok(())
 }

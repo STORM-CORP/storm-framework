@@ -1,12 +1,14 @@
+import sys
+
 def run_sign():
     try:
-        from external.source.binary import signed
+        from external.source.binary import signed.sign
 
-        signed()
+        signed.sign()
         return True
     except ImportError as e:
         print(
-            f"[!] Critical: Binary 'storm_sign' not found or ABI mismatch.",
+            f"[!] Critical => Binary not found.",
             file=sys.stderr,
         )
         print(f"[!] Detail => {e}", file=sys.stderr)

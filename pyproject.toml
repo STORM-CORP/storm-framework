@@ -1,6 +1,6 @@
 [project]
 name = "Storm-Framework"
-version = "3.5.11"
+version = "3.5.12"
 authors = [
     {name = "Elzy", email = "elzyproot@protonmail.com"}
 ]

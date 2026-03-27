@@ -36,7 +36,7 @@ fn calculate_sha256(file_path: &Path) -> std::io::Result<String> {
 }
 
 #[pyfunction]
-fn generate_folder_manifest(py: Python) -> PyResult<()> {
+fn storm_sign(py: Python) -> PyResult<()> {
     log!("[+] Get started with Storm Framework security.");
 
     // 1. Memanggil objek Python: from rootmap import ROOT
@@ -191,7 +191,7 @@ fn generate_folder_manifest(py: Python) -> PyResult<()> {
 
 // Mendaftarkan fungsi ke module Python
 #[pymodule]
-fn sign(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(generate_folder_manifest, m)?)?;
+fn run(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(storm_sign, m)?)?;
     Ok(())
 }

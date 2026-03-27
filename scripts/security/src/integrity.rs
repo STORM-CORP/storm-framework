@@ -49,7 +49,7 @@ fn generate_folder_manifest(py: Python) -> PyResult<()> {
     let env_path = ".env";
     let mut priv_key_b64 = None;
 
-    if env_path.exists() {
+    if Path::new(env_path).exists() {
         if let Ok(file) = File::open(&env_path) {
             let reader = BufReader::new(file);
             for line in reader.lines().flatten() {

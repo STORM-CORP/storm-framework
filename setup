@@ -45,7 +45,6 @@ if [ -d "/data/data/com.termux" ]; then
     INSTALL_DIR="$PREFIX/share/$REPO_NAME"
 
     NEEDS_SUDO=false
-    pkg update && pkg upgrade
     pkg install -y python git golang rust  build-essential libpcap clang ffmpeg openssl binutils pkg-config
 else
     # Standard Linux Environment
@@ -57,7 +56,6 @@ else
     INSTALL_DIR="/opt/$REPO_NAME"
 
     NEEDS_SUDO=true
-    sudo apt update && sudo apt upgrade
     sudo apt install -y python3-full git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
 fi
 

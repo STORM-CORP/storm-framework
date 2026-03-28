@@ -5,7 +5,7 @@ edition = "2024"
 
 [[bin]]
 name = "check"
-path = "src/test.rs"
+path = "src/check.rs"
 
 [dependencies]
 sha2 = "0.10"
@@ -14,4 +14,9 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 ed25519-dalek = { version = "2", features = ["rand_core"] }
 base64 = "0.21"
-rayon = "1"
+
+# These are the required dependencies
+# by fast.rs as a backup if check.rs is already
+# feels slow because of the large number of files.
+### rayon = "1"
+#

@@ -5,7 +5,7 @@ edition = "2024"
 
 [[bin]]
 name = "check"
-path = "src/check.rs"
+path = "src/test.rs"
 
 [dependencies]
 sha2 = "0.10"
@@ -14,3 +14,4 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 ed25519-dalek = { version = "2", features = ["rand_core"] }
 base64 = "0.21"
+rayon = "1"

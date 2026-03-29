@@ -19,6 +19,7 @@ logika fordward proxy.
     "License": "SMF License",
 }
 
+
 def execute(options=None):
     lib = os.path.join(ROOT, "external", "source", "binary", "http_prox")
 
@@ -26,11 +27,7 @@ def execute(options=None):
     cmd = [lib]
 
     process = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        bufsize=1
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1
     )
     return process
 

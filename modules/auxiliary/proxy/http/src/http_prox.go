@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"net"
 	"io"
 	"log"
 	"net/http"
@@ -19,7 +17,7 @@ func proxyHandler(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "Gagal membaca request", http.StatusInternalServerError)
 		return
 	}
-
+	
 	// Menampilkan log secara rapi ke stdout
 	log.Printf("\n========== INCOMING PACKET ==========\n%s\n=====================================\n", string(requestDump))
 
@@ -29,7 +27,7 @@ func proxyHandler(w http.ResponseWriter, req *http.Request) {
 	req.RequestURI = ""
 
 	// 3. Eksekusi Request ke Destination Server
-	// Menggunakan custom client untuk mencegah auto-redirect.
+	// Menggunakan custom client untuk mencegah auto-redirect. 
 	// Proxy tidak boleh mengikuti redirect, melainkan harus mengembalikan response redirect tersebut ke client asal.
 	client := &http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
@@ -68,25 +66,19 @@ func copyHeaders(dst, src http.Header) {
 }
 
 func main() {
-	port := "0.0.0.0:7900" // Paksa ke IPv4 agar tidak bentrok dengan IPv6 sistem
+	port := ":7900" // Tentukan port proxy di sini
+	
+	log.Printf("Forward Proxy berjalan di port %s...", port)
+	log.Println("Menunggu paket masuk...")
 
-	// 1. BUAT LISTENER MANUAL (Langkah paling aman)
-	// Dengan menggunakan net.Listen secara terpisah, kita punya kontrol 
-	// lebih besar sebelum server HTTP mengambil alih.
-	l, err := net.Listen("tcp4", port)
-	if err != nil {
-		log.Fatalf("Gagal mengunci port %s: %v. Pastikan tidak ada zombie process!", port, err)
-	}
-
-	log.Printf("Proxy Berjalan di %s", l.Addr().String())
-
-	// 2. MASUKKAN KE SERVER
+	// Konfigurasi Server
 	server := &http.Server{
+		Addr:    port,
 		Handler: http.HandlerFunc(proxyHandler),
 	}
 
-	// Gunakan .Serve(l), bukan .ListenAndServe()
-	if err := server.Serve(l); err != nil {
-		log.Fatal(err)
+	// ListenAndServe akan otomatis memicu goroutine (go c.serve(connCtx)) untuk tiap koneksi TCP
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatalf("Fatal error pada proxy server: %v", err)
 	}
 }

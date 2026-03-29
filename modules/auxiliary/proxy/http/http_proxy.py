@@ -23,14 +23,16 @@ forward proxy logic.
 def execute(options=None):
     lib = os.path.join(ROOT, "external", "source", "binary", "http_prox")
 
-    # Run binary Go
-    cmd = [lib]
+    try:
+        # Run binary Go
+        cmd = [lib]
 
-    process = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1
-    )
-    return process
-
+        process = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1
+        )
+        return process
+    except Exception as e:
+        print(f"ERROR => {e}")
 
 if __name__ == "__main__":
     process = execute()

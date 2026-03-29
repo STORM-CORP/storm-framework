@@ -19,24 +19,18 @@ forward proxy logic.
     "License": "SMF License",
 }
 
-
 def execute(options):
     lib = os.path.join(ROOT, "external", "source", "binary", "http_prox")
 
-    try:
-        # Run binary Go
-        cmd = [lib]
+    cmd = [lib]
 
-        process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1
-        )
-        return process
-    except Exception as e:
-        print(f"ERROR => {e}")
-
-
-if __name__ == "__main__":
-    process = execute()
+    process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1
+    )
 
     try:
         for line in process.stdout:
@@ -46,4 +40,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         process.terminate()
         process.wait()
-        print("[*] Proxy berhasil dihentikan.")
+        print("[*] Proxy successfully stopped.")

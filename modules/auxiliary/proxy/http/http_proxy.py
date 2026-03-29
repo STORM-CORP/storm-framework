@@ -20,7 +20,7 @@ forward proxy logic.
 }
 
 
-def execute(options=None):
+def execute(options):
     lib = os.path.join(ROOT, "external", "source", "binary", "http_prox")
 
     try:

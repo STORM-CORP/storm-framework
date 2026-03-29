@@ -7,15 +7,15 @@ from rootmap import ROOT
 MOD_INFO = {
     "Name": "Forward proxy http",
     "Description": """
-Melakukan pengintaian terhadap trafik http
-membaca header dan body secara lengkap menggunakan
-logika fordward proxy.
+Perform surveillance on http traffic
+read the header and body in full using
+forward proxy logic.
 """,
     "Author": ["zxelzy"],
     "Action": [
-        ["Proxy", {"Description": "Baca header dan body"}],
+        ["Proxy", {"Description": "Reading headers and bodies"}],
     ],
-    "DefaultAction": "forward proxy",
+    "DefaultAction": "Forward Proxy",
     "License": "SMF License",
 }
 

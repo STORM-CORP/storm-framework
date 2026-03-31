@@ -7,7 +7,7 @@ def session(options):
     res_path = os.path.join(full_path, "res")
 
     os.makedirs(res_path, exist_ok=True)
-    cache_path = os.path.join(res_path, ".storm-session")
+    cache_path = os.path.join(res_path, ".storm-options")
     try:
         with open(cache_path, "w") as f:
             for key, value in options.items():
@@ -15,5 +15,5 @@ def session(options):
                 f.write(f"{key}={value}\n")
         return True
     except Exception as e:
-        print(f"[!] Error saving session: {e}")
+        print(f"[!] ERROR saving session => {e}")
         return False

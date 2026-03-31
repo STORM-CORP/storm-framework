@@ -16,6 +16,6 @@ def storm_ssl(method, url, **kwargs):
     try:
         return requests.request(method, url, **kwargs)
     except requests.exceptions.SSLError as e:
-        return f"SSL_ERROR: {e}"
+        return f"SSL ERROR => {e}"
     except Exception as e:
-        return f"NET_ERROR: {e}"
+        return f"NET ERROR => {e}"

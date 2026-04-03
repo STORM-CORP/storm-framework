@@ -20,7 +20,7 @@ DATA = f"""
 {C.ERROR}            "-._______________________.-"
 {C.ERROR}                 {C.HEADER}      V V V
 {C.HEADER}               --[ {C.SUCCESS}STORM FRAMEWORK {C.HEADER}]--
-{C.HEADER}    --[ {C.INPUT}Code Matrix: 01010011 01001101 01000110{C.HEADER}]--
+{C.HEADER}    --[ {C.INPUT}Code Matrix: 01010011 01001101 01000110{C.HEADER} ]--
 {C.SUCCESS}         [!] Security is just an illusion [!]
 
 """

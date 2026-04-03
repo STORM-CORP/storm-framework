@@ -24,7 +24,7 @@ def execute(options):
     interface = options.get("INTERFACE")
     # --- DYNAMIC PATH LOGIC ---
     # Internal path for Storm's innards
-    src_dir = os.path.join(ROOT, "external", "source", "binary")
+    src_dir = os.path.join(ROOT, "external", "source", "bin")
     binary = os.path.join(src_dir, "rtp_sniff")
     # Output path for User (Current Working Directory)
     output_pcm = os.path.join(os.getcwd(), "storm_capture.pcm")

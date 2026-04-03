@@ -1,8 +1,16 @@
+# -- https://github.com/StormWorld0/storm-framework 
+# -- SMF License 
 import app.utility.utils as utils
 from app.utility.colors import C
 
 
-# No comment while it's still stable
+# Command use to lock or use a module that you want to use.
+# here's an example as follows;
+# Command => use <val>
+# or
+# Command => use scan
+# in the input zone it will change to lock the scan so we know again
+# using what module.
 def execute(args, context):
     module_name = args[0].lower() if args else ""
     mod = utils.load_module_dynamically(module_name)

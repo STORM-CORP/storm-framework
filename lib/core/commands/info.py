@@ -67,7 +67,7 @@ def execute(args, context):
                 print(f"{C.HEADER}{'='*width}\n")
 
             except Exception as e:
-                print(f"{C.ERROR}[-] Failed to read: {e}")
+                print(f"{C.ERROR}[-] Failed to read => {e}")
 
         else:
             try:
@@ -116,7 +116,7 @@ def execute(args, context):
                 print()
 
             except Exception as e:
-                print(f"{C.ERROR}[-] Failed to read: {e}")
+                print(f"{C.ERROR}[-] Failed to read => {e}")
     else:
         print(f"{C.INPUT}[-] WARN => {query} > not found.")
 

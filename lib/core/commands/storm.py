@@ -1,9 +1,15 @@
+# -- https://github.com/StormWorld0/storm-framework 
+# -- SMF License 
 from app.utility.update import run_update as update
 from app.utility.verify import run_verif as verify
 from app.utility.restart import run_restart as restart
 from app.utility.colors import C
 
-
+# This command storm is used for several specific command values.
+# for example give this;
+# 1. Command => storm update > to update the Storm Framework.
+# 2. Command => storm verify > to re-verify by activating the integrity check.
+# 3. Command => storm restart > to restart storm if there are any strange bugs or errors after the update.
 def execute(args, context):
     cmd = args[0].lower() if args else ""
     if not cmd:

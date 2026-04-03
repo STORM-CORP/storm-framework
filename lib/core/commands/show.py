@@ -1,7 +1,8 @@
-# -- https://github.com/StormWorld0/storm-framework 
-# -- SMF License 
+# -- https://github.com/StormWorld0/storm-framework
+# -- SMF License
 import app.utility.utils as utils
 from app.utility.colors import C
+
 
 # The show command is used to display data in modules.
 # such as the following example;

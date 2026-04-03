@@ -5,7 +5,7 @@ from app.utility.colors import C
 from rootmap import ROOT
 
 
-def get_random_banner():
+def banner():
     banner_dir = os.path.join(ROOT, "lib", "ui", "banners")
     try:
         if not os.path.exists(banner_dir):

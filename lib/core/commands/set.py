@@ -18,7 +18,7 @@ def execute(args, context):
             options[var_name] = var_value
             print(f"{var_name} => {var_value}")
     else:
-        print(f"{C.INPUT}[!] Try: set <VARIABLE> <VALUE>")
+        print(f"{C.INPUT}[!] Try => set <VAR> <VALUE>")
 
     context["options"] = options
     return context

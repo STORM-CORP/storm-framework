@@ -1,12 +1,13 @@
 import os
-from app.banners.banner import get_random_banner
 import app.base.config_ui as ui
+
+from app.banners.uib import banner
 
 
 def execute(args, context):
     # Clean the screen according to the OS
     os.system("cls" if os.name == "nt" else "clear")
     # Redisplay tool identity
-    print(get_random_banner())
+    print(banner())
     ui.stormUI()
     return context

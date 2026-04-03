@@ -56,14 +56,16 @@ def main():
         START_INV = "\001"
         END_INV = "\002"
 
-        C_INPUT_INV = f"{START_INV}{C.INPUT}{END_INV}"
+        BLUE = f"{START_INV}{C.BLUE}{END_INV}"
+        CYAN = f"{START_INV}{C.MENU}{END_INV}"
+        YELLOW = f"{START_INV}{C.INPUT}{END_INV}"
         C_ERROR_INV = f"{START_INV}{C.ERROR}{END_INV}"
         C_RESET_INV = f"{START_INV}{C.RESET}{END_INV}"
 
         p_mod = current_module_name if current_module else "~"
         try:
-            print(f"{C_INPUT_INV}┌─(storm::framework){C_RESET_INV}-{C_ERROR_INV}[{p_mod}]{C_RESET_INV}")
-            promp = f"{C_INPUT_INV}└─➤ {C_RESET_INV}"
+            print(f"{CYAN}┌─({BLUE}storm{YELLOW}<⚡>{BLUE}framework{CYAN}){RESET}-{RED}[{p_mod}]{RESET}")
+            promp = f"{CYAN}└─{BLUE}➤ {C_RESET_INV}"
             user_input = input(promp).strip().split()
         except KeyboardInterrupt: return
         except EOFError: break

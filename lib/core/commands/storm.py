@@ -1,9 +1,10 @@
-# -- https://github.com/StormWorld0/storm-framework 
-# -- SMF License 
+# -- https://github.com/StormWorld0/storm-framework
+# -- SMF License
 from app.utility.update import run_update as update
 from app.utility.verify import run_verif as verify
 from app.utility.restart import run_restart as restart
 from app.utility.colors import C
+
 
 # This command storm is used for several specific command values.
 # for example give this;

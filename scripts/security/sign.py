@@ -3,7 +3,7 @@ import sys
 
 def run_sign():
     try:
-        from external.source.binary import signed
+        from external.source.bin import signed
 
         signed.storm_sign()
         return True

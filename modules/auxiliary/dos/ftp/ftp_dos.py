@@ -23,7 +23,7 @@ def execute(options):
     port = "21"
     threads = options.get("THREAD")
 
-    bindir = os.path.join(ROOT, "external", "source", "binary")
+    bindir = os.path.join(ROOT, "external", "source", "bin")
     bin_path = os.path.join(bindir, "ftp_flood")
 
     if not target:

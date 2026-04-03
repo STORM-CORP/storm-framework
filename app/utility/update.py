@@ -36,7 +36,7 @@ def run_update():
     # 4. Trigger Compiler ONLY IF needed
     try:
         from scripts.cpl import compiler
-        from external.source.binary import signed
+        from external.source.bin import signed
 
         compiler.main()
         signed.storm_sign()

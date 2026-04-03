@@ -59,13 +59,13 @@ def main():
         BLUE = f"{START_INV}{C.BLUE}{END_INV}"
         CYAN = f"{START_INV}{C.MENU}{END_INV}"
         YELLOW = f"{START_INV}{C.INPUT}{END_INV}"
-        C_ERROR_INV = f"{START_INV}{C.ERROR}{END_INV}"
-        C_RESET_INV = f"{START_INV}{C.RESET}{END_INV}"
+        RED = f"{START_INV}{C.ERROR}{END_INV}"
+        RESET = f"{START_INV}{C.RESET}{END_INV}"
 
         p_mod = current_module_name if current_module else "~"
         try:
             print(f"{CYAN}┌─({BLUE}storm{YELLOW}<⚡>{BLUE}framework{CYAN}){RESET}-{RED}[{p_mod}]{RESET}")
-            promp = f"{CYAN}└─{BLUE}➤ {C_RESET_INV}"
+            promp = f"{CYAN}└─{BLUE}➤ {RESET}"
             user_input = input(promp).strip().split()
         except KeyboardInterrupt: return
         except EOFError: break

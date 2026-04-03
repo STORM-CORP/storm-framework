@@ -49,6 +49,6 @@ def execute(args, context):
                 print(f"  - {mod}")
             print("")
         else:
-            print(f"{C.INPUT}[-] Category or option: {target_show} > not found.")
+            print(f"{C.INPUT}[-] Category or option => {target_show} > not found.")
 
     return context

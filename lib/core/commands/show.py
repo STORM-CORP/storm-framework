@@ -1,7 +1,13 @@
+# -- https://github.com/StormWorld0/storm-framework 
+# -- SMF License 
 import app.utility.utils as utils
 from app.utility.colors import C
 
-
+# The show command is used to display data in modules.
+# such as the following example;
+# 1. Command => show modules > will display the modules category.
+# 2. Command => show auxiliary > will display all contents in the auxiliary.
+# 3. Command => show options > will display global variables.
 def execute(args, context):
     target_show = args[0].lower() if args else ""
     current_module = context["current_module"]

@@ -7,7 +7,7 @@ from scripts.cpl.advcore import safe_mode
 
 def start_engine_build():
     os.chdir(ROOT)
-    cores = safe_mode
+    cores = safe_mode()
     print(f"[*] Storm Run compilation...")
 
     with StormSpin:

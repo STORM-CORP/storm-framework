@@ -8,7 +8,7 @@ from scripts.cpl.advcore import safe_mode
 def start_build():
     os.chdir(ROOT)
     cores = safe_mode()
-    print(f"[*] Storm Run compilation...")
+    print("[*] Storm Run compilation...")
 
     with StormSpin:
         cmd = ["make", f"-j{cores}"]
@@ -23,4 +23,4 @@ def start_build():
             print("[!] 'make' not found. Please install build-essential.")
 
 if __name__ == "__main__":
-    start_engine_build()
+    start_build()

@@ -1,13 +1,14 @@
 NAME     := ftp_flood
 OUT      := $(BIN_DIR)
 TARGET   := $(OUT)/$(NAME)
+SRC      := $(wildcard *.go)
 
+.PHONY: all clean
 all: $(TARGET)
 
-$(TARGET): *.go
+$(TARGET): $(SRC)
 	@mkdir -p $(OUT)
-	@echo "[*] Building Go Module: $(NAME)..."
-	@# Compile langsung menggunakan context dari root
-	go build -o $(TARGET) .
-	@chmod +x $(TARGET)
-	@touch $(TARGET)
+	@go build -o $(TARGET) .
+
+clean:
+	rm -rf $(OUT)

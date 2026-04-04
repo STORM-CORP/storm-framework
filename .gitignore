@@ -38,3 +38,4 @@ lib/core/database/signed_manifest.json
 
 # no ignore all folder
 !**/vendor/**
+!**/example/**

@@ -1,0 +1,15 @@
+NAME     := binary output name
+OUT      := $(BIN_DIR)
+TARGET   := $(OUT)/$(NAME)
+SOURCES  := $(wildcard *.c)
+
+.PHONY: all clean
+all: $(TARGET)
+
+$(TARGET): $(SOURCES)
+    @mkdir -p $(OUT)
+    @LIBS=$$(grep -q "pcap.h" $(SOURCES) && echo "-lpcap" || echo ""); \
+    gcc $(SOURCES) -o $(TARGET) $$LIBS
+
+clean:
+    rm -f $(TARGET)

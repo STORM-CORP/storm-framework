@@ -18,10 +18,10 @@ def start_build():
             # -j$(nproc) akan otomatis menggunakan semua core CPU kamu agar sangat cepat
             subprocess.run(cmd, check=True, capture_output=True)
             print("[✓] Storm Compilation successful")
-        except subprocess.CalledProcessError:
-            print("[!] Build process failed!")
+        except subprocess.CalledProcessError as e:
+            print(f"[!] Build failed => {e.stderr.decode()}")
         except FileNotFoundError:
-            print("[!] 'make' not found. Please install build-essential.")
+            print("[!] make > not found. Please install build-essential.")
 
 
 if __name__ == "__main__":

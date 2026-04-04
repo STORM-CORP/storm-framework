@@ -71,10 +71,10 @@ and run your binary module using python's subprocess.
 that's a reasonable solution for now to keep things running smoothly
 
 This is important if the module uses a compiled language
-you need to map the binary output path to: 
+you need to map the binary output path to:
 external/source/bin
 
-You can use the existing rootmap import with examples like: 
+You can use the existing rootmap import with examples like:
 os.path.join(ROOT, "external", "source", "bin", "(binary name)")
 
 Why is that? Because the default Storm compiler directs to that path as binary output

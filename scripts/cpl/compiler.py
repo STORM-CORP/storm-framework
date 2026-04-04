@@ -15,7 +15,7 @@ def start_build():
         try:
             # Menjalankan Master Makefile
             # -j$(nproc) akan otomatis menggunakan semua core CPU kamu agar sangat cepat
-            subprocess.run([cmd, check=True, capture_output=True])
+            subprocess.run([cmd], check=True, capture_output=True)
             print("[✓] Storm Compilation successful")
         except subprocess.CalledProcessError:
             print("[!] Build process failed!")

@@ -12,7 +12,7 @@ from app.utility.colors import C
 from app.utility.verify import *
 from app.banners.uib import banner
 
-from lib.core import handler as h
+from lib.core import handler as ex
 
 def main():
     check_critical_files()
@@ -53,14 +53,14 @@ def main():
     options = ldch.session(options)
 
     while True:
-        START_INV = "\001"
-        END_INV = "\002"
+        START = "\001"
+        END = "\002"
 
-        BLUE = f"{START_INV}{C.BLUE}{END_INV}"
-        CYAN = f"{START_INV}{C.MENU}{END_INV}"
-        YELLOW = f"{START_INV}{C.INPUT}{END_INV}"
-        RED = f"{START_INV}{C.ERROR}{END_INV}"
-        RESET = f"{START_INV}{C.RESET}{END_INV}"
+        BLUE = f"{START}{C.BLUE}{END}"
+        CYAN = f"{START}{C.MENU}{END}"
+        YELLOW = f"{START}{C.INPUT}{END}"
+        RED = f"{START}{C.ERROR}{END}"
+        RESET = f"{START}{C.RESET}{END}"
 
         p_mod = current_module_name if current_module else "~"
         try:
@@ -84,7 +84,7 @@ def main():
         }
 
         # HAND IT OVER TO THE FOREMAN (HANDLER)
-        new_context = h.execute(cmd, args, context)
+        new_context = ex.execute(cmd, args, context)
 
         if new_context:
             current_module = new_context["current_module"]
@@ -93,7 +93,7 @@ def main():
 
             if new_context.get("exit"): break
         else:
-            print(f"[-] Unknown Command: {cmd} > Run the {C.SUCCESS}help{C.RESET} command for more details.")
+            print(f"[-] Unknown Command: {cmd} => Run the {C.SUCCESS}help{C.RESET} command for more details.")
 
 if __name__ == "__main__":
     main()

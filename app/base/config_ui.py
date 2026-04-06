@@ -11,7 +11,7 @@ def show_about():
         f"{C.HEADER}=========================================================================="
     )
     print(f"{C.INPUT}      owner                     : Elzy")
-    print(f"{C.INPUT}      Contributor               : There isn't any yet")
+    print(f"{C.INPUT}      Contributor               : deepsharpwork")
     print(f"{C.INPUT}      Purpose                   : All-in-One Pentest Tools")
     print(f"{C.INPUT}      Version                   : {v.VERSION}")
     print(
@@ -73,6 +73,6 @@ def stormUI():
         print(f"{C.HEADER}+-- --=[ {C.INPUT}{line_text} {C.HEADER}]=--")
 
     print("")
-    print("The Storm Framework is a zxelzy Open Source Project")
+    print("The Storm Framework is a StormWorld0 Open Source Project")
     print(f"Run {C.SUCCESS}about{C.RESET} to view dev information.")
     print("")

@@ -83,6 +83,7 @@ def execute(options):
         21: "FTP",
         22: "SSH",
         23: "Telnet",
+        2323: "Alt Telnet",
         25: "SMTP",
         110: "POP3",
         143: "IMAP",
@@ -97,6 +98,7 @@ def execute(options):
         5061: "TCP/TLS",
         10000: "RTP",
         20000: "RTP Atl",
+        2000: "SCCP",
         16384: "VoIP",
         32767: "VoIP Alt",
         # === Web standard ===

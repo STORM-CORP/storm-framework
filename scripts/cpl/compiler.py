@@ -11,9 +11,7 @@ def start_build():
     cores = safe_mode()
 
     # Cache is saved
-    rust_cache = os.path.abspath(
-        os.path.join(ROOT, "lib/smf/core/cache/rust-session")
-    )
+    rust_cache = os.path.abspath(os.path.join(ROOT, "lib/smf/core/cache/rust-session"))
     os.makedirs(rust_cache, exist_ok=True)
 
     # Binary output is saved
@@ -35,7 +33,7 @@ def start_build():
             if "Makefile" in files:
                 if os.path.abspath(root) == os.path.abspath(ROOT):
                     continue
-                try: # Running make
+                try:  # Running make
                     cmd = ["make", "-C", root, f"-j{cores}"]
                     subprocess.run(cmd, check=True, capture_output=True)
                 except subprocess.CalledProcessError as e:
@@ -44,8 +42,9 @@ def start_build():
                 except FileNotFoundError as e:
                     print(f"[!] Make => {e}")
                     break
-                    
+
     print("[✓] Compilation successful.")
+
 
 if __name__ == "__main__":
     start_build()

@@ -4,7 +4,7 @@
 TOOL_NAME="storm"
 REPO_NAME="storm-framework"
 GITHUB_REPO="https://github.com/StormWorld0/$REPO_NAME.git"
-VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.py | grep "VERSION =" | cut -d '"' -f 2)
+VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.json | jq -r '.version')
 
 # Color
 GREEN='\033[92m'
@@ -45,7 +45,7 @@ if [ -d "/data/data/com.termux" ]; then
     INSTALL_DIR="$PREFIX/share/$REPO_NAME"
 
     NEEDS_SUDO=false
-    pkg install -y python git golang rust  build-essential libpcap clang ffmpeg openssl binutils pkg-config
+    pkg install -y jq python git golang rust  build-essential libpcap clang ffmpeg openssl binutils pkg-config
 else
     # Standard Linux Environment
     echo -e "${GREEN}[!] Environment detected: Standard Linux${NC}"
@@ -56,7 +56,7 @@ else
     INSTALL_DIR="/opt/$REPO_NAME"
 
     NEEDS_SUDO=true
-    sudo apt install -y python3-full git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
+    sudo apt install -y jq python3-full git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
 fi
 
 # -----------------------------------------------------------------------------

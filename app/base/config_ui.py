@@ -1,9 +1,12 @@
-import version as v
+import json
 import app.utility.utils as utils
 from app.utility.colors import C
 
 
 def show_about():
+    with open('version.json') as f:
+        VERSION = json.load(f)['version']
+        
     print(
         f"\n{C.HEADER}=========================================================================="
     )
@@ -13,7 +16,7 @@ def show_about():
     print(f"{C.INPUT}      owner                     : Elzy")
     print(f"{C.INPUT}      Contributor               : deepsharpwork")
     print(f"{C.INPUT}      Purpose                   : All-in-One Pentest Tools")
-    print(f"{C.INPUT}      Version                   : {v.VERSION}")
+    print(f"{C.INPUT}      Version                   : {VERSION}")
     print(
         f"{C.INPUT}      GitHub                    : github.com/StormWorld0/storm-framework"
     )

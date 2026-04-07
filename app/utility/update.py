@@ -1,4 +1,3 @@
-import json
 import sys
 import requests
 import subprocess
@@ -6,14 +5,12 @@ from app.utility.colors import C
 
 
 def run_update():
-    url = (
-        "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.json"
-    )
+    url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.json"
     try:
-        latest_version = requests.get(url).json()['version']
+        latest_version = requests.get(url).json()["version"]
     except:
         pass
-        
+
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)
 

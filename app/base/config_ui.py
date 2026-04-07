@@ -14,7 +14,7 @@ def show_about():
         f"{C.HEADER}=========================================================================="
     )
     print(f"{C.INPUT}      owner                     : エルジー")
-    print(f"{C.INPUT}      Contributor               : deepsharpwork")
+    print(f"{C.INPUT}      Contributor               : Deep Donald")
     print(f"{C.INPUT}      Purpose                   : All-in-One Pentest Tools")
     print(f"{C.INPUT}      Version                   : {VERSION}")
     print(

@@ -2,7 +2,7 @@
 name = "Storm-Framework"
 version = "3.6.1"
 authors = [
-    {name = "zxelzy", email = "elzyproot@protonmail.com"}
+    {name = "エルジー", email = "elzyproot@protonmail.com"}
 ]
 description = "Just a Storm Framework"
 readme = "README.md"

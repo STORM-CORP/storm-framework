@@ -1,10 +1,10 @@
 {
+    "main-repo": "storm-framework",
+    "version": "3.6.1"
     "author": [
         "エルジー": "elzyproot@protonmail.com"
     ],
     "contribution": [
         "Deep Donald": "albrexter@protonmail.com"
     ],
-    "main-repo": "storm-framework",
-    "version": "3.6.1"
 }

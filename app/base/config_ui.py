@@ -1,4 +1,4 @@
-import versi as v
+import version as v
 import app.utility.utils as utils
 from app.utility.colors import C
 

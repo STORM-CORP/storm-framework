@@ -32,6 +32,7 @@ def main():
     current_module = None
     current_module_name = ""
 
+    # Global options
     options = {
         "IP": "",
         "PORT": "",

@@ -1,10 +1,44 @@
 {
     "main-repo": "storm-framework",
-    "version": "3.6.1"
-    "author": [
+    "version": "3.6.1",
+    "author": {
         "エルジー": "elzyproot@protonmail.com"
-    ],
-    "contribution": [
-        "Deep Donald": "albrexter@protonmail.com"
-    ],
+    },
+    "contributors": [
+        {
+            "name": "Deep Donald",
+            "e-mail": "albrexter@protonmail.com",
+            "role": "tester"
+        },
+        {
+            "name": "andriana",
+            "e-mail": "andriana89@protonmail.com",
+            "role": "tester"
+        },
+        {
+            "name": "angel",
+            "e-mail": "angela289@protonmail.com",
+            "role": "tester"
+        },
+        {
+            "name": "zrvha",
+            "e-mail": "zarsita00@protonmail.com",
+            "role": "tester"
+        },
+        {
+            "name": "stvanva",
+            "e-mail": "vanvanando@protonmail.com",
+            "role": "tester"
+        },
+        {
+            "name": "zandev",
+            "e-mail": "zanaforml@protonmail.com",
+            "role": "tester"
+        },
+        {
+            "name": "avastars",
+            "e-mail": "skypharita@protonmail.com",
+            "role": "tester"
+        }
+    ]
 }

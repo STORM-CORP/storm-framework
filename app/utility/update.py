@@ -13,7 +13,7 @@ def run_update():
         response = requests.get(url, timeout=5)
         response.raise_for_status()
         match = re.search(r'VERSION\s*=\s*["\']([^"\']+)["\']', response.text)
-        
+
         if match:
             latest_version = match.group(1)
     except:

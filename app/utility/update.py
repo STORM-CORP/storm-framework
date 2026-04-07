@@ -1,3 +1,4 @@
+import re
 import sys
 import requests
 import subprocess
@@ -6,11 +7,15 @@ from app.utility.colors import C
 
 def run_update():
     url = (
-        "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.txt"
+        "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.py"
     )
     try:
         response = requests.get(url, timeout=5)
-        latest_version = response.text.strip()
+        response.raise_for_status()
+        match = re.search(r'VERSION\s*=\s*["\']([^"\']+)["\']', response.text)
+        
+        if match:
+            latest_version = match.group(1)
     except:
         pass
     # 1. Get the latest info without changing the locale first

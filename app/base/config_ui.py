@@ -4,9 +4,9 @@ from app.utility.colors import C
 
 
 def show_about():
-    with open('version.json') as f:
-        VERSION = json.load(f)['version']
-        
+    with open("version.json") as f:
+        VERSION = json.load(f)["version"]
+
     print(
         f"\n{C.HEADER}=========================================================================="
     )

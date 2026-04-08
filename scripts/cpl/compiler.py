@@ -11,7 +11,9 @@ def start_build():
     cores = safe_mode()
 
     # Cache is saved
-    rust_cache = os.path.abspath(os.path.join(ROOT, "lib/smf/core/sf/cache/rust-session"))
+    rust_cache = os.path.abspath(
+        os.path.join(ROOT, "lib/smf/core/sf/cache/rust-session")
+    )
     os.makedirs(rust_cache, exist_ok=True)
 
     # Binary output is saved

@@ -2,4 +2,4 @@
 replace-with = "vendored-sources"
 
 [source.vendored-sources]
-directory = "lib/smf/core/db/vendor"
+directory = "external/source/dep/vendor"

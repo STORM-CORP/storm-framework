@@ -1,5 +1,5 @@
 import crypt
-from app.utility.colors import C
+from apps.utility.colors import C
 
 MOD_INFO = {
     "Name": "Bruteforce hashing MD5-Crypt",

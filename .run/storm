@@ -4,13 +4,13 @@ import os
 import time
 import sys
 import readline  # noqa: F401
-import app.base.config_ui as ui
+import apps.base.config_ui as ui
 import lib.smf.core.sf.ldch as ldch
 
-from app.base.config_update import *
-from app.utility.colors import C
-from app.utility.verify import *
-from app.banners.uib import banner
+from apps.base.config_update import *
+from apps.utility.colors import C
+from apps.utility.verify import *
+from apps.banners.uib import banner
 
 from lib.core import handler as ex
 

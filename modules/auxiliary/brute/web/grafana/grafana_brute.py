@@ -1,7 +1,7 @@
 import requests
 import os
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
-from app.utility.colors import C
+from apps.utility.colors import C
 
 MOD_INFO = {
     "Name": "Grafana bruteforce login",

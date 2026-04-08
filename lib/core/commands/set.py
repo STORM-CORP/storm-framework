@@ -1,7 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-import app.utility.utils as utils
-from app.utility.colors import C
+import apps.utility.utils as utils
+from apps.utility.colors import C
 
 
 # The set command is used to save data to global variables and module variables.

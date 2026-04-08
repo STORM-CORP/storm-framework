@@ -1,6 +1,6 @@
 import importlib
 import os
-from app.utility.colors import C
+from apps.utility.colors import C
 
 
 def execute(cmd, args, context):

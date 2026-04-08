@@ -1,6 +1,6 @@
 import json
-import app.utility.utils as utils
-from app.utility.colors import C
+import apps.utility.utils as utils
+from apps.utility.colors import C
 
 
 def show_about():

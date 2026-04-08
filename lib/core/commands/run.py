@@ -1,7 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-from app.utility.colors import C
-import app.utility.utils as utils
+from apps.utility.colors import C
+import apps.utility.utils as utils
 
 
 # Run command to run a module that we want to execute

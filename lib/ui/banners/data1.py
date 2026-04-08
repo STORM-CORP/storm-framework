@@ -1,4 +1,4 @@
-from app.utility.colors import C
+from apps.utility.colors import C
 
 DATA = f"""
 

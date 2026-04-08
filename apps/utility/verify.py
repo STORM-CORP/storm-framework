@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-from app.utility.colors import C
+from apps.utility.colors import C
 
 
 def run_verif():

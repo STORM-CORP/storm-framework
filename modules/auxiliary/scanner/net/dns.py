@@ -2,7 +2,7 @@ import dns.resolver
 import dns.exception
 import socket
 import ipaddress
-from app.utility.colors import C
+from apps.utility.colors import C
 
 MOD_INFO = {
     "Name": "Scanning DNS Records",

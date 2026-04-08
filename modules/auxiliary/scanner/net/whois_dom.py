@@ -1,5 +1,5 @@
 import whoisdomain as whois
-from app.utility.colors import C
+from apps.utility.colors import C
 
 MOD_INFO = {
     "Name": "Searching for information",

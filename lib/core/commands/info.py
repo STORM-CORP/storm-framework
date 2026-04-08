@@ -3,7 +3,7 @@
 import os
 import importlib.util
 import textwrap
-from app.utility.colors import C
+from apps.utility.colors import C
 
 
 # For those who like CVE collections, this logic is definitely needed

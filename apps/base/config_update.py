@@ -1,6 +1,6 @@
 import requests
 import json
-from app.utility.colors import C
+from apps.utility.colors import C
 
 
 def check_update():

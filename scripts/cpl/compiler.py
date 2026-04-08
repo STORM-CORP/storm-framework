@@ -2,7 +2,7 @@ import os
 import subprocess
 
 from rootmap import ROOT
-from app.utility.spin import StormSpin
+from apps.utility.spin import StormSpin
 from scripts.cpl.advcore import safe_mode
 
 

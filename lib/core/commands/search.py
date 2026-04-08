@@ -1,6 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-from app.utility.search import search_modules
+from apps.utility.search import search_modules
 
 
 # Search command to search for the modules we want to search for

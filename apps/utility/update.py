@@ -1,7 +1,7 @@
 import sys
 import requests
 import subprocess
-from app.utility.colors import C
+from apps.utility.colors import C
 
 
 def run_update():

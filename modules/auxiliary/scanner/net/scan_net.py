@@ -1,5 +1,5 @@
 import socket
-from app.utility.colors import C
+from apps.utility.colors import C
 
 STATUS_OPEN = "✅"
 STATUS_CLOSED = "❌"

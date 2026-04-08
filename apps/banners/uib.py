@@ -1,7 +1,7 @@
 import os
 import random
 import importlib
-from app.utility.colors import C
+from apps.utility.colors import C
 from rootmap import ROOT
 
 

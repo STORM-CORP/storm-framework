@@ -11,7 +11,7 @@ from rootmap import ROOT  # noqa
 
 # This can also be used if you need color when printing the log.
 # If you are confused about what the colors are, you can check the file according to the path.
-from app.utility.colors import C  # noqa
+from apps.utility.colors import C  # noqa
 
 #
 # Apply MOD_INFO with this template in every module you create
@@ -100,6 +100,7 @@ def execute(options):
 # If you add a module in Rust, make sure you create a Cargo.toml file next to it
 # in the same folder as the module you created, the compiler will detect it later
 # Example of the contents of Cargo.toml
+
 """
 [package]
 name = "storm"
@@ -114,7 +115,7 @@ path = "sakura.rs" > this is your module name
 aes = "0.8"
 """
 
-# After that you can check the path lib/smf/core/db/Cargo.toml
+# After that you can check the path external/source/dep/Cargo.toml
 # and make sure the dependencies you need are there too
 # because it's where all the Rust dependencies for offline builds are located.
 

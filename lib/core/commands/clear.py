@@ -1,8 +1,8 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import os
-import app.base.config_ui as ui
-from app.banners.uib import banner
+import apps.base.config_ui as ui
+from apps.banners.uib import banner
 
 
 # The clear command is used to clear the interface line history

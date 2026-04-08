@@ -1,6 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-import app.base.config_ui as ui
+import apps.base.config_ui as ui
 
 
 # Display help to make it easier for users to see what commands are available.

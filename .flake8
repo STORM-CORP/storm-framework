@@ -2,6 +2,6 @@
 exclude =
     .git,
     __pycache__,
-    lib/smf/core/db/vendor,
+    external/source/dep/vendor,
     build,
     dist

@@ -2,7 +2,6 @@ import subprocess
 import os
 import sys
 
-from pathlib import Path
 from apps.utility.colors import C
 from rootmap import ROOT
 
@@ -44,15 +43,15 @@ def check_critical_files():
 
 def validate_binary_files():
     bin = os.path.join(ROOT, "external", "source", "bin")
-    bin_name = ['signed.so', 'check']
-    
+    bin_name = ["signed.so", "check"]
+
     found_map = {name: False for name in bin_name}
-    
+
     for root, dirs, files in os.walk(bin):
         for file in files:
             if file in found_map:
                 found_map[file] = True
-        
+
         if all(found_map.values()):
             break
 
@@ -60,5 +59,5 @@ def validate_binary_files():
     for file_name, is_found in found_map.items():
         if not is_found:
             raise RuntimeError(f"Missing Dependency: {file_name}")
-            
+
     sys.exit(1)

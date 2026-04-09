@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [[bin]]
-name = "check"
-path = "src/check.rs"
+name = "verified"
+path = "src/verified.rs"
 
 [dependencies]
 sha2 = "0.10"

@@ -1,4 +1,4 @@
-NAME     := check
+NAME     := verified
 OUT      := $(BIN_DIR)
 TARGET   := $(OUT)/$(NAME)
 

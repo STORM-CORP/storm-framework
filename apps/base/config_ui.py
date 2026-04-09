@@ -4,6 +4,7 @@ import apps.utility.utils as utils
 from apps.utility.colors import C
 from rootmap import ROOT
 
+
 def show_about():
     data = os.path.join(ROOT, "data", "data_version.json")
     with open(data) as f:

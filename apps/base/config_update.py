@@ -4,6 +4,7 @@ import os
 from apps.utility.colors import C
 from rootmap import ROOT
 
+
 def check_update():
     url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json"
     data = os.path.join(ROOT, "data", "data_version.json")

@@ -7,7 +7,7 @@ from rootmap import ROOT
 
 
 def run_verif():
-    lib = "external/source/bin/check"
+    lib = "external/source/bin/verified"
     if not os.path.exists(lib):
         print(f"[-] ERROR => Rust binary not found in {lib}")
         sys.exit(1)
@@ -31,7 +31,7 @@ def run_verif():
 def validate_binary_files():
     # Path to bin folder
     bin_dir = os.path.join(ROOT, "external", "source", "bin")
-    bin_names = ["signed.so", "check"]
+    bin_names = ["signed.so", "verified"]
 
     found_map = {name: False for name in bin_names}
     failed = False
@@ -57,6 +57,9 @@ def validate_binary_files():
 def check_critical_files():
     error = False
 
+    if validate_binary_files():
+        error = True
+        
     if not os.path.exists(".env"):
         print(f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}")
         print(
@@ -66,9 +69,6 @@ def check_critical_files():
             f"[*] Please run the installation/recovery script to regenerate your keys."
         )
         error = True
-
-    if validate_binary_files():
-        error = True
-
+        
     if error:
         sys.exit(1)

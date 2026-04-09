@@ -31,8 +31,8 @@ def run_verif():
 def validate_binary_files():
     # Path to bin folder
     bin_dir = os.path.join(ROOT, "external", "source", "bin")
-    bin_names = ['signed.so', 'check']
-    
+    bin_names = ["signed.so", "check"]
+
     found_map = {name: False for name in bin_names}
     failed = False
 
@@ -41,7 +41,7 @@ def validate_binary_files():
         for file in files:
             if file in found_map:
                 found_map[file] = True
-        
+
         if all(found_map.values()):
             break
 
@@ -50,18 +50,21 @@ def validate_binary_files():
         if not is_found:
             print(f"{C.ERROR}[!] Binary core missing => {file_name}{C.RESET}")
             failed = True
-            
-    return failed
 
+    return failed
 
 
 def check_critical_files():
     error = False
-    
+
     if not os.path.exists(".env"):
         print(f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}")
-        print(f"[*] Storm cannot verify the database signature without your unique keys.")
-        print(f"[*] Please run the installation/recovery script to regenerate your keys.")
+        print(
+            f"[*] Storm cannot verify the database signature without your unique keys."
+        )
+        print(
+            f"[*] Please run the installation/recovery script to regenerate your keys."
+        )
         error = True
 
     if validate_binary_files():
@@ -69,4 +72,3 @@ def check_critical_files():
 
     if error:
         sys.exit(1)
-

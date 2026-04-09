@@ -9,7 +9,7 @@ def run_update():
     try:
         latest_version = requests.get(url).json()["version"]
     except Exception as e:
-        print(f"ERROR => {e}")
+        print(f"ERROR UPDATE => {e}")
 
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)

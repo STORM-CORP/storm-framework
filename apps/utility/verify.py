@@ -40,24 +40,25 @@ def check_critical_files():
         )
 
         validate_binary_files()
-        sys.exit(1)
 
 
 def validate_binary_files():
-    """
-    Checking core binaries required for startup
-    """
-    files_bin = ["signed.so", "check"]
     bin = os.path.join(ROOT, "external", "source", "bin")
-    base_path = Path(bin)
+    bin_name = ['signed.so', 'check']
+    
+    found_map = {name: False for name in bin_name}
+    
+    for root, dirs, files in os.walk(bin):
+        for file in files:
+            if file in found_map:
+                found_map[file] = True
+        
+        if all(found_map.values()):
+            break
 
-    # Convert rglob generator to set for O(1) lookup efficiency
-    # We only take the file name to match.
-    found_files = {p.name for p in base_path.rglob("*") if p.is_file()}
-
-    for file_name in files_bin:
-        if file_name not in found_files:
-            # Stop execution and throw an error
-            raise FileNotFoundError(
-                f"{C.ERROR}[!] CRITICAL => Binary core missing => {file_name}"
-            )
+    # Cek akhir
+    for file_name, is_found in found_map.items():
+        if not is_found:
+            raise RuntimeError(f"Missing Dependency: {file_name}")
+            
+    sys.exit(1)

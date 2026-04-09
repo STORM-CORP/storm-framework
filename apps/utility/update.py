@@ -8,8 +8,8 @@ def run_update():
     url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json"
     try:
         latest_version = requests.get(url).json()["version"]
-    except:
-        pass
+    except Exception as e:
+        print(f"ERROR => {e}")
 
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)

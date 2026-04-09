@@ -5,7 +5,7 @@ from apps.utility.colors import C
 
 
 def run_update():
-    url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.json"
+    url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json"
     try:
         latest_version = requests.get(url).json()["version"]
     except:

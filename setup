@@ -4,7 +4,7 @@
 TOOL_NAME="storm"
 REPO_NAME="storm-framework"
 GITHUB_REPO="https://github.com/StormWorld0/$REPO_NAME.git"
-VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/version.json | jq -r '.version')
+VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json | jq -r '.version')
 
 # Color
 GREEN='\033[92m'

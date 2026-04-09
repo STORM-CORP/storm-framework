@@ -1,10 +1,12 @@
 import json
+import os
 import apps.utility.utils as utils
 from apps.utility.colors import C
-
+from rootmap import ROOT
 
 def show_about():
-    with open("version.json") as f:
+    data = os.path.join(ROOT, "data", "data_version.json")
+    with open(data) as f:
         VERSION = json.load(f)["version"]
 
     print(

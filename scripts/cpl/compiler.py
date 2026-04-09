@@ -27,25 +27,31 @@ def start_build():
     # Ignore folder list
     ignore_dirs = {".git", "bin", "__pycache__", "node_modules", "cache", "vendor"}
 
-    # Setup loading
-    with StormSpin():
-        # running loop
-        for root, dirs, files in os.walk("."):
-            dirs[:] = [d for d in dirs if d not in ignore_dirs]
-            if "Makefile" in files:
-                if os.path.abspath(root) == os.path.abspath(ROOT):
-                    continue
-                try:  # Running make
-                    cmd = ["make", "-C", root, f"-j{cores}"]
-                    subprocess.run(cmd, check=True, capture_output=True)
-                except subprocess.CalledProcessError as e:
-                    module = os.path.basename(root)
-                    print(f"[!] Build failed in {module} => {e.stderr.decode()}")
-                except FileNotFoundError as e:
-                    print(f"[!] Make => {e}")
-                    break
+    try:
+        # Setup loading
+        with StormSpin():
+            # running loop
+            for root, dirs, files in os.walk("."):
+                dirs[:] = [d for d in dirs if d not in ignore_dirs]
+                if "Makefile" in files:
+                    if os.path.abspath(root) == os.path.abspath(ROOT):
+                        continue
+                    try:  # Running make
+                        cmd = ["make", "-C", root, f"-j{cores}"]
+                        subprocess.run(cmd, check=True, capture_output=True)
+                    except subprocess.CalledProcessError as e:
+                        module = os.path.basename(root)
+                        print(f"[!] Build failed in {module} => {e.stderr.decode()}")
+                    except FileNotFoundError as e:
+                        print(f"[!] Make => {e}")
+                        break
 
-    print("[✓] Compilation successful.")
+        print("[✓] Compilation successful.")
+    except KeyboardInterrupt:
+        print("Compiler Stop. Reinstall to continue.")
+    except Exception as e:
+        print(f"ERROR COMPILER => {e}")
+        return
 
 
 if __name__ == "__main__":

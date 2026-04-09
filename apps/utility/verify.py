@@ -59,7 +59,7 @@ def check_critical_files():
 
     if validate_binary_files():
         error = True
-        
+
     if not os.path.exists(".env"):
         print(f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}")
         print(
@@ -69,6 +69,6 @@ def check_critical_files():
             f"[*] Please run the installation/recovery script to regenerate your keys."
         )
         error = True
-        
+
     if error:
         sys.exit(1)

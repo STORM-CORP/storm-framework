@@ -28,36 +28,45 @@ def run_verif():
         sys.exit(1)
 
 
-def check_critical_files():
-    if not os.path.exists(".env"):
-        print(f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}")
-        print(
-            f"[*] Storm cannot verify the database signature without your unique keys."
-        )
-        print(
-            f"[*] Please run the installation/recovery script to regenerate your keys."
-        )
-
-        validate_binary_files()
-
-
 def validate_binary_files():
-    bin = os.path.join(ROOT, "external", "source", "bin")
-    bin_name = ["signed.so", "check"]
+    # Path to bin folder
+    bin_dir = os.path.join(ROOT, "external", "source", "bin")
+    bin_names = ['signed.so', 'check']
+    
+    found_map = {name: False for name in bin_names}
+    failed = False
 
-    found_map = {name: False for name in bin_name}
-
-    for root, dirs, files in os.walk(bin):
+    # Loop to find binary
+    for root, dirs, files in os.walk(bin_dir):
         for file in files:
             if file in found_map:
                 found_map[file] = True
-
+        
         if all(found_map.values()):
             break
 
-    # Cek akhir
+    # Binary check loop
     for file_name, is_found in found_map.items():
         if not is_found:
-            raise RuntimeError(f"Missing Dependency: {file_name}")
+            print(f"{C.ERROR}[!] Binary core missing => {file_name}{C.RESET}")
+            failed = True
+            
+    return failed
 
-    sys.exit(1)
+
+
+def check_critical_files():
+    error = False
+    
+    if not os.path.exists(".env"):
+        print(f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}")
+        print(f"[*] Storm cannot verify the database signature without your unique keys.")
+        print(f"[*] Please run the installation/recovery script to regenerate your keys.")
+        error = True
+
+    if validate_binary_files():
+        error = True
+
+    if error:
+        sys.exit(1)
+

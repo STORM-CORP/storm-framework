@@ -19,4 +19,4 @@ def check_update():
             print(f"{C.SUCCESS}[-] Type => storm update")
             print()
     except Exception as e:
-        print(f"ERROR Check Update => {e}")
+        print(f"ERROR CHECK UPDATE => {e}")

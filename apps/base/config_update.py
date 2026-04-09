@@ -18,5 +18,5 @@ def check_update():
             print(f"{C.SUCCESS}[!] Update available => v{latest_version}")
             print(f"{C.SUCCESS}[-] Type => storm update")
             print()
-    except:
-        pass
+    except Exception as e:
+        print(f"ERROR => {e}")

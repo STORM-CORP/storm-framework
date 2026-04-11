@@ -12,10 +12,13 @@ from apps.utility.colors import C
 from apps.utility.verify import *
 from apps.banners.uib import banner
 
+from apps.utility.plugin import utils_plugin as upl
 from lib.core import handler as ex
 
 def main():
     check_critical_files()
+    engine = PluginEngine()
+    engine.start_load_plugin()
     run_verif()
     try:
         for i in range(6, 0, -1):

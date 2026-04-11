@@ -5,6 +5,7 @@ from apps.utility.spin import StormSpin
 from apps.utility.colors import C
 from rootmap import ROOT
 
+
 class PluginEngine:
     def __init__(self):
         self.plugin_dir = os.path.join(ROOT, "plugin")
@@ -12,6 +13,7 @@ class PluginEngine:
 
     def start_load_plugin(self):
         """Dijalankan sekali saat framework pertama kali dibuka"""
+
         try:
             with StormSpin():
                 for root, dirs, files in os.walk(self.plugin_dir):

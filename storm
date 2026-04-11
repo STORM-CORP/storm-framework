@@ -12,7 +12,6 @@ from apps.utility.colors import C
 from apps.utility.verify import *
 from apps.banners.uib import banner
 
-from apps.utility.plugin import utils_plugin as upl
 from lib.core import handler as ex
 
 def main():

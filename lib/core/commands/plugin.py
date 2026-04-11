@@ -3,6 +3,7 @@
 from apps.utility.plugin import utils_plugin as up
 from apps.utility.colors import C
 
+
 def execute(args, context):
     cmd = args[0].lower() if args else ""
 

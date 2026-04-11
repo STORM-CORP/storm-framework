@@ -26,7 +26,7 @@ class PluginEngine:
                             module = self._dynamic_import(name, path)
 
                             # 2. Tanya ke plugin: "Kamu mau auto-start ga?"
-                            if hasattr(module, 'plugin'):
+                            if hasattr(module, "plugin"):
                                 try:
                                     response = module.plugin({"event": "startup"})
                                 except Exception as e:

@@ -2,10 +2,11 @@ import os
 import importlib.util
 from rootmap import ROOT
 
+
 class PluginEngine:
     def __init__(self):
         self.plugin_dir = os.path.join(ROOT, "plugin")
-        self.registry = {} # Tempat simpan plugin yang sudah ter-load
+        self.registry = {}  # Tempat simpan plugin yang sudah ter-load
 
     def start_loader(self):
         """Dijalankan sekali saat framework pertama kali dibuka"""
@@ -13,13 +14,13 @@ class PluginEngine:
             for file in files:
                 if file.endswith(".py") and not file.startswith("__"):
                     path = os.path.join(root, file)
-                    name = file[:-3] # Contoh: 'port'
+                    name = file[:-3]  # Contoh: 'port'
 
                     # 1. Load filenya ke memori secara dinamis
                     module = self._dynamic_import(name, path)
 
                     # 2. Tanya ke plugin: "Kamu mau auto-start ga?"
-                    if hasattr(module, 'plugin'):
+                    if hasattr(module, "plugin"):
                         try:
                             response = module.plugin({"event": "startup"})
                         except Exception as e:

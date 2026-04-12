@@ -67,6 +67,14 @@ Use this command to run it.
 sudo storm
 ```
 
+### 3. Update
+
+Run this command to perform an external update.
+
+```bash
+sudo storm --update
+```
+
 ### 📖 Wiki
 If you need further explanation about Storm-Framework, don't forget to read at [wiki](https://github.com/StormWorld0/storm-framework/wiki)
 

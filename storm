@@ -17,7 +17,7 @@ def main():
     current_module_name = ""
 
     # Global options
-    options = ops.default_options(options)
+    options = ops.default_options()
 
     while True:
         START = "\001"

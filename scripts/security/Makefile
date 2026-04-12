@@ -1,5 +1,5 @@
 RAW_NAME := signed
-NAME     := signed.so
+NAME     := libsigned.so
 OUT      := $(BIN_DIR)
 TARGET   := $(OUT)/$(NAME)
 

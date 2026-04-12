@@ -17,8 +17,7 @@ from lib.core import handler as ex
 
 def main():
     check_critical_files()
-    engine = upl.PluginEngine()
-    engine.start_load_plugin()
+    upl.start_load_plugin()
     run_verif()
     try:
         for i in range(6, 0, -1):

@@ -22,7 +22,7 @@ def start_build():
 
     # context to Makefile
     os.environ["CARGO_TARGET_DIR"] = rust_cache
-    os.environ["BIN_DIR"] = bin_path
+    os.environ["OUT_DIR"] = bin_path
 
     # Ignore folder list
     ignore_dirs = {".git", "bin", "__pycache__", "node_modules", "cache", "vendor"}

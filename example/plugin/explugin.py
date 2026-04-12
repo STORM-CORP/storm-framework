@@ -2,6 +2,7 @@
 
 from apps.utility.plugin.utils_plugin import plugin
 
+
 def examples():
     # Ambil objek pluginnya
     func = plugin("plugin_name")

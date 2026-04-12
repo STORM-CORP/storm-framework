@@ -1,6 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-from apps.utility.plugin.utils_plugin import run_plugin
+from apps.utility.plugin.utils_plugin import PluginEngine
 from apps.utility.colors import C
 
 
@@ -13,6 +13,7 @@ def execute(args, context):
         return context
 
     else:
-        run_plugin(cmd)
+        up = PluginEngine()
+        up.run_plugin(cmd)
 
     return context

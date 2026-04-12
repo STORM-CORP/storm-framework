@@ -16,7 +16,7 @@ def execute(cmd, args, context):
         except KeyboardInterrupt:
             return context
         except Exception as e:
-            print(f"{C.ERROR}[-] ERROR => {cmd} > {e}")
+            print(f"{C.ERROR}[-] ERROR COMMAND => {cmd} > {e}")
             return context
 
     return None

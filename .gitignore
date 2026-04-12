@@ -18,6 +18,7 @@ __pycache__/
 !storm
 !LICENSE
 !check
+!smfupdate
 
 # logs & temp
 *.log

@@ -17,7 +17,7 @@ def start_build():
     os.makedirs(rust_cache, exist_ok=True)
 
     # Binary output is saved
-    bin_path = os.path.abspath(os.path.join(ROOT, "external/source/bin"))
+    bin_path = os.path.abspath(os.path.join(ROOT, "external/source/out"))
     os.makedirs(bin_path, exist_ok=True)
 
     # context to Makefile
@@ -25,7 +25,7 @@ def start_build():
     os.environ["OUT_DIR"] = bin_path
 
     # Ignore folder list
-    ignore_dirs = {".git", "bin", "__pycache__", "node_modules", "cache", "vendor"}
+    ignore_dirs = {".git", "__pycache__", "node_modules", "cache", "vendor"}
 
     try:
         # Setup loading

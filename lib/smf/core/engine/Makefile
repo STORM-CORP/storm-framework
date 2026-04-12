@@ -1,5 +1,5 @@
 NAME     := verified
-OUT      := $(BIN_DIR)
+OUT      := $(OUT_DIR)/core/integrity
 TARGET   := $(OUT)/$(NAME)
 
 CACHE    := $(CARGO_TARGET_DIR)

@@ -31,7 +31,7 @@ def run_verif():
 def validate_binary_files():
     # Path to bin folder
     bin_dir = os.path.join(ROOT, "external", "source", "out")
-    bin_names = ["signed.so", "verified"]
+    bin_names = ["libsigned.so", "verified"]
 
     found_map = {name: False for name in bin_names}
     failed = False

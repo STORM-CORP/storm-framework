@@ -2,7 +2,7 @@
 # -- SMF License
 import os
 import apps.base.config_ui as ui
-from apps.banners.uib import banner
+from apps.banners.uib import *
 
 
 # The clear command is used to clear the interface line history
@@ -13,6 +13,6 @@ def execute(args, context):
     # Clean the screen according to the OS
     os.system("cls" if os.name == "nt" else "clear")
     # Redisplay tool identity
-    print(banner())
+    print(banner_live())
     ui.stormUI()
     return context

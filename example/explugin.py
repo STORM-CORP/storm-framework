@@ -1,11 +1,12 @@
 # Lokasi: plugin/
 
 
-def plugin(context):
-    # Cek pesan dari Loader
-    if context.get("event") == "startup":
-        return {"auto_start": False}  # Kasih tau loader: "Jangan jalankan aku sekarang"
+from apps.utility.plugin.utils_plugin import get_plugin
 
-    if context.get("event") == "command":
-        print("[+] Plugin Port Scanner berjalan...")
-        # Logic penetration testing kamu di sini
+# Ambil objek pluginnya
+func = plugin("nama_plugin_kamu")
+
+if func:
+    # Sekarang kamu bisa akses apapun yang ada di dalam file plugin itu
+    func.fungsi_apapun() 
+    

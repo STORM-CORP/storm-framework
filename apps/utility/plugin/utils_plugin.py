@@ -74,7 +74,7 @@ def run_plugin(name_plugin: str, data: dict = None) -> None:
     # Gunakan walrus operator (:=) untuk lookup dan assignment efisien
     if module := _REGISTRY.get(name_plugin):
         try:
-            module.plugin(data or {"event": "command"})
+            module.plugin(data or {"event": "run"})
         except Exception as e:
             print(f"{C.ERROR}[!] PLUGIN ERROR => {name_plugin} > {e}")
     else:

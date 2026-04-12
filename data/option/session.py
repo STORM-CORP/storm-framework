@@ -3,7 +3,7 @@
 import lib.smf.core.sf.ldch as ldch
 
 def default_options():
-  options = {
+    options = {
         "IP": "",
         "PORT": "",
         "PASS": "",

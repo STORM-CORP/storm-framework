@@ -1,5 +1,5 @@
 NAME     := rtp_sniff
-OUT      := $(BIN_DIR)
+OUT      := $(OUT_DIR)/mod/aux/voip
 TARGET   := $(OUT)/$(NAME)
 SOURCES  := $(wildcard *.c)
 

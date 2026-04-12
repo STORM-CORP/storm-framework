@@ -6,7 +6,7 @@ from rootmap import ROOT
 
 
 def banner():
-    banner_dir = os.path.join(ROOT, "lib", "ui", "banners")
+    banner_dir = os.path.join(ROOT, "lib", "ui", "console")
     try:
         if not os.path.exists(banner_dir):
             return f"{C.SUCCESS}[!] Folder Not Found => {banner_dir}"

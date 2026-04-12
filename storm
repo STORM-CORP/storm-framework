@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import readline  # noqa: F401
 import lib.smf.core.sf.ldch as ldch
 

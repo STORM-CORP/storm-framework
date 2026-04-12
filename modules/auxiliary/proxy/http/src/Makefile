@@ -1,5 +1,5 @@
 NAME     := http_prox
-OUT      := $(BIN_DIR)
+OUT      := $(OUT_DIR)/mod/aux/proxy/http
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 

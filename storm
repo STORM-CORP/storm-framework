@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import readline  # noqa: F401
-import lib.smf.core.sf.ldch as ldch
+import data.option.session as ops
 
 from apps.utility.colors import C
 from lib.smf.core.booting.boot import *
@@ -17,25 +17,7 @@ def main():
     current_module_name = ""
 
     # Global options
-    options = {
-        "IP": "",
-        "PORT": "",
-        "PASS": "",
-        "URL": "",
-        "EMAIL": "",
-        "HASH": "",
-        "MESSAGE": "",
-        "USER": "",
-        "ID": "",
-        "COUNT": "",
-        "PATH": "",
-        "INTERFACE": "",
-        "THREAD": "",
-        "DOMAIN": "",
-        "HOSTNAME": "",
-        "MODULE": ""
-    }
-    options = ldch.session(options)
+    options = ops.default_options(options)
 
     while True:
         START = "\001"

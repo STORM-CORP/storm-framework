@@ -21,4 +21,4 @@ def default_options():
         "HOSTNAME": "",
         "MODULE": ""
     }
-    options = ldch.session(options)
+    return = ldch.session(options)

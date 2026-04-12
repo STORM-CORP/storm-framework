@@ -7,6 +7,8 @@ from apps.utility.colors import C
 from lib.smf.core.booting.boot import *
 from lib.core import handler as ex
 
+from lib.ui.banner import *
+
 def main():
     boot()
     banner()

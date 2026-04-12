@@ -9,20 +9,13 @@ import lib.smf.core.sf.ldch as ldch
 
 from apps.base.config_update import *
 from apps.utility.colors import C
-from apps.utility.verify import *
 from apps.banners.uib import banner
 
+from lib.smf.core.booting.boot import *
 from lib.core import handler as ex
 
 def main():
-    check_critical_files()
-    run_verif()
-    try:
-        for i in range(6, 0, -1):
-            sys.stdout.write(f"\r{C.SUCCESS}[*] Verification Success! Start Storm: [{i}] {C.RESET}")
-            sys.stdout.flush()
-            time.sleep(1)
-    except KeyboardInterrupt: return
+    boot()
 
     os.system('clear')
     print(banner())

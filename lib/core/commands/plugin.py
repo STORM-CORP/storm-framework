@@ -11,7 +11,7 @@ from apps.utility.colors import C
 # Simple example:
 # command => plugin example
 #
-# This manual logic only runs in the season when the storm is running
+# This manual logic only runs in the session when the storm is running
 # it will not be permanent if you (exit) the plugin automatically False
 # and you need to rerun it every time you run Storm.
 def execute(args, context):

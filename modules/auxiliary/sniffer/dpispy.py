@@ -28,7 +28,7 @@ def execute(options):
     bindir = os.path.join(ROOT, "external", "source", "out")
     out = os.path.join(bindir, "mod", "aux", "sniff")
     bin_path = os.path.join(out, "dpi_netspy")
-    
+
     if not os.path.isfile(bin_path):
         print(f"[!] ERROR: Binary not found {bin_path}.")
         return False

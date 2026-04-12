@@ -55,18 +55,9 @@ def start_load_plugins() -> None:
 
                 # 2. Validasi struktur plugin
                 plugin_func = getattr(module, "plugin", None)
-                if callable(plugin_func):
 
-                    # Eksekusi event startup
-                    response = plugin_func({"event": "startup"})
-
-                    # Simpan referensi ke memory registry
-                    _REGISTRY[plugin_name] = module
-
-                    # 3. Evaluasi auto-start secara aman
-                    # Memastikan response adalah mapping/dict sebelum memanggil .get()
-                    if isinstance(response, dict) and response.get("auto_start"):
-                        plugin_func({"event": "command"})
+                # Simpan referensi ke memory registry
+                _REGISTRY[plugin_name] = module
 
             except Exception as e:
                 print(f"{C.ERROR}[!] ERROR LOADING PLUGIN => {plugin_name} > {e}")
@@ -77,13 +68,13 @@ def start_load_plugins() -> None:
         print(f"{C.ERROR}[!] FATAL ERROR PLUGIN ENGINE => {e}")
 
 
-def run_plugin(name_plugin: str) -> None:
+def run_plugin(name_plugin: str, data: dict = None) -> None:
     """To run the plugin manually"""
 
     # Gunakan walrus operator (:=) untuk lookup dan assignment efisien
     if module := _REGISTRY.get(name_plugin):
         try:
-            module.plugin({"event": "command"})
+            module.plugin(data or {"event": "command"})
         except Exception as e:
             print(f"{C.ERROR}[!] PLUGIN ERROR => {name_plugin} > {e}")
     else:

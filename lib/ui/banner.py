@@ -2,13 +2,13 @@ import os
 import apps.base.config_ui as ui
 
 from apps.base.config_update import *
-from apps.banners.uib import banner
+from apps.banners.uib import banners
 
 
 def banner():
     try:
         os.system("clear")
-        print(banner())
+        print(banners())
         ui.stormUI()
         check_update()
     except ImportError as d:

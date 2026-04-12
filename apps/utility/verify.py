@@ -7,7 +7,7 @@ from rootmap import ROOT
 
 
 def run_verif():
-    lib = "external/source/bin/verified"
+    lib = "external/source/out/core/integrity/verified"
     if not os.path.exists(lib):
         print(f"[-] ERROR => Rust binary not found in {lib}")
         sys.exit(1)
@@ -30,7 +30,7 @@ def run_verif():
 
 def validate_binary_files():
     # Path to bin folder
-    bin_dir = os.path.join(ROOT, "external", "source", "bin")
+    bin_dir = os.path.join(ROOT, "external", "source", "out")
     bin_names = ["signed.so", "verified"]
 
     found_map = {name: False for name in bin_names}

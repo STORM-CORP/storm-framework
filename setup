@@ -168,7 +168,18 @@ WRAPPER_DST="$BIN_DIR/$TOOL_NAME"
 CREATE_WRAPPER="${SHEBANG_PATH}
 PROJECT_DIR=\"$INSTALL_DIR\"
 cd \"\$PROJECT_DIR\" || { echo \"[x] ERROR: Failed to access project directory.\"; exit 1; }
-exec ./storm \"\$@\""
+
+# Update storm
+if [ \"\$1\" == \"--update\" ]; then
+    exec ./smfupdate
+# Emergency
+elif [ ! -f \"./storm\" ]; then
+    echo \"[!] Storm core not found! Performing emergency repairs\"
+    exec ./smfupdate
+else
+    # Run storm
+    exec ./storm \"\$@\"
+fi
 
 write_to_file "$CREATE_WRAPPER" "$WRAPPER_DST" false
 

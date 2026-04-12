@@ -23,8 +23,9 @@ def execute(options):
     port = "21"
     threads = options.get("THREAD")
 
-    bindir = os.path.join(ROOT, "external", "source", "out", "mod", "dos", "ftp")
-    bin_path = os.path.join(bindir, "ftp_flood")
+    bindir = os.path.join(ROOT, "external", "source")
+    out_bin = os.path.join(bindir, "mod", "aux", "dos", "ftp")
+    bin_path = os.path.join(out_bin, "ftp_flood")
 
     if not target:
         print("[-] ERROR: TARGET is missing!")

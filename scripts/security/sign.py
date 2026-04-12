@@ -3,7 +3,7 @@ import sys
 
 def run_sign():
     try:
-        from external.source.bin import libsigned
+        from external.source.out.core.integrity import libsigned
 
         libsigned.storm_sign()
         return True

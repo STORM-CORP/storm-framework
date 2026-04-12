@@ -1,6 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-from apps.utility.plugin import utils_plugin as up
+from apps.utility.plugin.utils_plugin import up
 from apps.utility.colors import C
 
 

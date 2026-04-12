@@ -1,6 +1,7 @@
-import readline # noqa: F401
+import readline  # noqa: F401
 
 from colorama import Fore, Style, init
+
 init(autoreset=True)
 
 
@@ -14,6 +15,7 @@ class C:
     RESET = Style.RESET_ALL
 
     BLUE = Fore.BLUE + Style.BRIGHT
+
 
 class CC:
     START = "\001"

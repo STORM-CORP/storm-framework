@@ -60,4 +60,4 @@ class PluginEngine:
             # Jalankan dengan event 'command'
             module.plugin({"event": "command"})
         else:
-            print(f"{C.WARN}[-] Plugin => {name_plugin} > Not found")
+            print(f"{C.INPUT}[-] Plugin => {name_plugin} > Not found")

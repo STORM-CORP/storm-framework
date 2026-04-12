@@ -17,7 +17,7 @@ PLUGIN_DIR = Path(ROOT) / "plugin"
 
 def plugin(name: str):
     return _REGISTRY.get(name)
-    
+
 
 def _dynamic_import(name: str, path: Path) -> ModuleType:
     """Dynamically import modules into memory from absolute paths"""

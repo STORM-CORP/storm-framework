@@ -1,6 +1,7 @@
 # Lokasi: plugin/
 
 from apps.utility.plugin.utils_plugin import plugin
+
 # Ambil objek pluginnya
 func = plugin("nama_plugin_kamu")
 

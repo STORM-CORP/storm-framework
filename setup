@@ -179,7 +179,7 @@ elif [ ! -f \"./storm\" ]; then
 else
     # Run storm
     exec ./storm \"\$@\"
-fi
+fi"
 
 write_to_file "$CREATE_WRAPPER" "$WRAPPER_DST" false
 

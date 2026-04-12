@@ -5,7 +5,7 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 
-# Dictionary Warna Global
+# Global colors
 class C:
     HEADER = Fore.MAGENTA + Style.BRIGHT
     MENU = Fore.CYAN + Style.BRIGHT
@@ -17,6 +17,7 @@ class C:
     BLUE = Fore.BLUE + Style.BRIGHT
 
 
+# Global clean color
 class CC:
     START = "\001"
     END = "\002"

@@ -4,6 +4,7 @@
 # Use this import when you want to use the plugin
 from apps.utility.plugin.utils_plugin import plugin
 
+
 # This is an example or template of how to apply the plugin
 # to a logic module, feature, or whatever.
 def examples():
@@ -13,7 +14,6 @@ def examples():
     # Get function inside plugin
     if func:
         func.plugin_function()
-
 
 
 ######

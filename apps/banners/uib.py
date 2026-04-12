@@ -5,7 +5,7 @@ from apps.utility.colors import C
 from rootmap import ROOT
 
 
-def banner():
+def banner_live():
     banner_dir = os.path.join(ROOT, "lib", "ui", "console")
     try:
         if not os.path.exists(banner_dir):

@@ -1,6 +1,6 @@
 import importlib.util
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict
 from types import ModuleType
 
 # internal import
@@ -17,11 +17,11 @@ PLUGIN_DIR = Path(ROOT) / "plugin"
 
 def _dynamic_import(name: str, path: Path) -> ModuleType:
     """Dynamically import modules into memory from absolute paths"""
-    
+
     spec = importlib.util.spec_from_file_location(name, str(path))
     if spec is None or spec.loader is None:
         raise ImportError(f"Failed to create module spec for {name}")
-    
+
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -29,7 +29,7 @@ def _dynamic_import(name: str, path: Path) -> ModuleType:
 
 def start_load_plugins() -> None:
     """Runs once when the framework is first run"""
-    
+
     if not PLUGIN_DIR.exists() or not PLUGIN_DIR.is_dir():
         print(f"{C.ERROR}[!] ERROR => Invalid plugin directory > {PLUGIN_DIR}")
         return
@@ -43,7 +43,7 @@ def start_load_plugins() -> None:
 
             plugin_name = file_path.stem
 
-            # Isolasi try-except per plugin. 
+            # Isolasi try-except per plugin.
             # Jika 1 plugin error (syntax/import), framework tetap berjalan.
             try:
                 # 1. Load modul ke memori
@@ -52,7 +52,7 @@ def start_load_plugins() -> None:
                 # 2. Validasi struktur plugin
                 plugin_func = getattr(module, "plugin", None)
                 if callable(plugin_func):
-                    
+
                     # Eksekusi event startup
                     response = plugin_func({"event": "startup"})
 
@@ -63,7 +63,7 @@ def start_load_plugins() -> None:
                     # Memastikan response adalah mapping/dict sebelum memanggil .get()
                     if isinstance(response, dict) and response.get("auto_start"):
                         plugin_func({"event": "command"})
-                        
+
             except Exception as e:
                 print(f"{C.ERROR}[!] ERROR LOADING PLUGIN => {plugin_name} > {e}")
 
@@ -75,12 +75,12 @@ def start_load_plugins() -> None:
 
 def run_plugin(name_plugin: str) -> None:
     """To run the plugin manually"""
-    
+
     # Gunakan walrus operator (:=) untuk lookup dan assignment efisien
     if module := _REGISTRY.get(name_plugin):
         try:
             module.plugin({"event": "command"})
         except Exception as e:
-             print(f"{C.ERROR}[!] PLUGIN ERROR => {name_plugin} > {e}")
+            print(f"{C.ERROR}[!] PLUGIN ERROR => {name_plugin} > {e}")
     else:
         print(f"{C.INPUT}[-] plugin => {name_plugin} > Not found")

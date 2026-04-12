@@ -1,5 +1,5 @@
 NAME     := ftp_flood
-OUT      := $(BIN_DIR)
+OUT      := $(OUT_DIR)/mod/dos/ftp
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 

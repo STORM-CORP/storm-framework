@@ -27,7 +27,7 @@ def execute(options):
     src_dir = os.path.join(ROOT, "external", "source", "out")
     out = os.path.join(src_dir, "mod", "aux", "voip")
     binary = os.path.join(out, "rtp_sniff")
-    
+
     # Output path for User (Current Working Directory)
     output_pcm = os.path.join(os.getcwd(), "storm_capture.pcm")
     output_wav = os.path.join(os.getcwd(), "storm_capture.wav")

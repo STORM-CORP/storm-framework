@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+# -- https://github.com/StormWorld0/storm-framework
+# -- SMF License
+def main():
+
+    try:
+        from apps.utility.update import run_update as update
+
+        update()
+    except ImportError as d:
+        print(f"ERROR IMPORT UPDATE => {d}")
+    except Exception as e:
+        print(f"ERROR UPDATE => {e}")
+
+if __name__ == "__main__":
+    main()

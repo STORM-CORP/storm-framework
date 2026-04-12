@@ -3,6 +3,7 @@
 from apps.utility.plugin import utils_plugin as upl
 from apps.utility.colors import C
 
+
 # The plugin command is used to run the plugin manually
 # and here's how to use it
 # command => plugin <name_plugin>

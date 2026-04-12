@@ -27,8 +27,9 @@ def execute(options):
     port = str(options.get("PORT"))
     threads = str(options.get("THREAD"))
 
-    bindir = os.path.join(ROOT, "external", "source", "bin")
-    bin_path = os.path.join(bindir, "smtp_flood")
+    bindir = os.path.join(ROOT, "external", "source", "out")
+    out_bin = os.path.join(bindir, "mod", "aux", "dos", "smtp")
+    bin_path = os.path.join(out_dir, "smtp_flood")
     if not target:
         print("[-] Target is missing!")
         return

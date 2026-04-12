@@ -2,6 +2,7 @@
 # -- SMF License
 import lib.smf.core.sf.ldch as ldch
 
+
 def default_options():
     options = {
         "IP": "",
@@ -19,6 +20,6 @@ def default_options():
         "THREAD": "",
         "DOMAIN": "",
         "HOSTNAME": "",
-        "MODULE": ""
+        "MODULE": "",
     }
     return ldch.session(options)

@@ -14,7 +14,7 @@ def banner():
     except ImportError as d:
         print(f"ERROR BANNER IMPORT => {d}")
         return
-        
+
     except Exception as e:
         print(f"ERROR BANNER => {e}")
         return

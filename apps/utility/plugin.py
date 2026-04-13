@@ -1,6 +1,6 @@
 import importlib.util
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict
 from types import ModuleType
 
 # Asumsi impor dari struktur framework Anda
@@ -70,7 +70,7 @@ def run_plugin(name_plugin: str, data: dict = None) -> None:
         try:
             module.plugin(data or {"event": "run"})
         except Exception as e:
-             print(f"{C.ERROR}[!] ERROR SAAT MENJALANKAN PLUGIN '{name_plugin}' => {e}")
+            print(f"{C.ERROR}[!] ERROR SAAT MENJALANKAN PLUGIN '{name_plugin}' => {e}")
     else:
         print(f"{C.INPUT}[-] Plugin => {name_plugin} > Not found")
 

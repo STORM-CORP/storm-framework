@@ -116,12 +116,14 @@ def get_categories():
 
 
 module_cache = {}
+
+
 def get_modules_in_category(category):
     """Retrieves all .py files within a specified category"""
 
     if category in module_cache:
         return module_cache[category]
-        
+
     category_path = os.path.join(ROOT, "modules", category)
     modules_list = []
 
@@ -134,6 +136,6 @@ def get_modules_in_category(category):
                         os.path.join(root, file), os.path.join(ROOT, "modules")
                     )
                     modules_list.append(rel_path.replace(".py", ""))
-                    
+
     module_cache[category] = modules_list
     return modules_list

@@ -34,19 +34,10 @@ def run_update():
     # 4. Trigger Compiler ONLY IF needed
     try:
         from scripts.cpl import compiler
-
-        compiler.start_build()
-        return True
-    except ImportError as e:
-        print(f"[!] ERROR IMPORT => {e}", file=sys.stderr)
-        return False
-    except Exception as e:
-        print(f"[!] ERROR => {e}", file=sys.stderr)
-        return False
-
-    try:
         from external.source.out.core.integrity import libsigned
 
+        
+        compiler.start_build()
         libsigned.storm_sign()
         return True
     except ImportError as e:

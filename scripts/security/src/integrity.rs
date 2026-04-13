@@ -219,7 +219,7 @@ fn storm_sign(py: Python) -> PyResult<()> {
 }
 
 #[pymodule]
-fn signed(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn libsigned(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(storm_sign, m)?)?;
     Ok(())
 }

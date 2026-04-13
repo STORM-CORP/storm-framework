@@ -36,7 +36,6 @@ def run_update():
         from scripts.cpl import compiler
         from external.source.out.core.integrity import libsigned
 
-        
         compiler.start_build()
         libsigned.storm_sign()
         return True

@@ -1,8 +1,9 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-from apps.utility.colors import C
+import smf
+import sys
 import apps.utility.utils as utils
-
+from apps.utility.colors import C
 
 # Run command to run a module that we want to execute
 # The workflow is as below;
@@ -15,8 +16,8 @@ def execute(args, context):
     current_module = context["current_module"]
     options = context["options"]
     if not current_module:
-        print(f"{C.ERROR}[!] No modules selected. 'use <module>' first.")
-        print()
+        smf.printf(f"{C.ERROR}[!] No modules selected. 'use <module>' first.")
+        smf.printf()
         return context
     # Get the list of required variables from the selected module.
     required_vars = getattr(current_module, "REQUIRED_OPTIONS", {})
@@ -24,8 +25,8 @@ def execute(args, context):
         key for key in required_vars.keys() if not str(options.get(key, "")).strip()
     ]
     if missing:
-        print(f"{C.ERROR}[!] Failed to run. Variabel null.")
-        print("")
+        smf.printf(f"{C.ERROR}[!] Failed to run. Variabel null.")
+        smf.printf()
         return context
 
     try:
@@ -39,8 +40,8 @@ def execute(args, context):
         current_module.execute(options)
 
     except AttributeError as d:
-        print(f"{C.ERROR}[-] ERROR => {d}")
+        smf.printf(f"{C.ERROR}[-] ERROR =>", d, file=sys.stderr, flush=True)
     except Exception as e:
-        print(f"{C.ERROR}[-] Error during execution => {e}")
+        smf.printf(f"{C.ERROR}[-] Error during execution =>", e, file=sys.stderr, flush=True)
 
     return context

@@ -59,6 +59,6 @@ def execute(args, context):
                 smf.printf(f"  - {mod}")
             smf.printf()
         else:
-            smf.printf(f"[-] Category or option => {target_show} > not found.")
+            smf.printf(f"{C.INPUT}[-] WARN => {target_show} > not found.{C.RESET}")
 
     return context

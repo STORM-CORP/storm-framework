@@ -1,6 +1,5 @@
 import os
 import smf
-import sys
 from rootmap import ROOT
 
 

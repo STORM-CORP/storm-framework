@@ -69,7 +69,7 @@ smf.printd -> This is the stderr log
 """
 # Use the first one for production as the second one is better for debugging.
 # because the first one can catch errors better during production as in the example below:
-'''
+"""
 import smf
 import sys
 
@@ -82,17 +82,14 @@ except Exception as e:
     # The flush=True parameter ensures that Rust's I/O buffers are immediately flushed (OS-level flush),
     # so that the error log is written immediately before the application has the potential to crash.
     smf.printf("ERROR =>", e, file=sys.stderr, flush=True)
-'''
+"""
 # Why is this the best? Because Storm uses Rust for more efficient logging logic than C/C++.
 # and here are some other better recommendations:
-'''
+"""
 smf.printf("ERROR =>", error)
 smf.printf(f"ERROR => {error}")
-'''
+"""
 # You know that the first implementation will use rust native logging speed
 # and will send 2 objects directly to the logging logic for massive speed and incredible efficiency.
 #
 # Use the second implementation method if the resulting logs are small.
-
-
-

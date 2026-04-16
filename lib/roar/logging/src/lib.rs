@@ -10,7 +10,7 @@ use pyo3::types::PyTuple;
 #[pyfunction]
 // Gunakan Default parameter di level Rust untuk simplifikasi
 #[pyo3(signature = (*args, sep=" ", end="\n", file=None, flush=false))]
-fn printr(
+fn printf(
     py: Python<'_>,
     args: &PyTuple,
     sep: &str,
@@ -53,12 +53,12 @@ fn printd(
     // Gunakan eprintln! agar debug info masuk ke stderr, bukan stdout
     eprintln!("[DEBUG] Objects: {}, Flush: {}", args.len(), flush);
     
-    printr(py, args, sep, end, file, flush)
+    printf(py, args, sep, end, file, flush)
 }
 
 #[pymodule]
-fn storm(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(printr, m)?)?;
+fn smf(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(printf, m)?)?;
     m.add_function(wrap_pyfunction!(printd, m)?)?;
     Ok(())
 }

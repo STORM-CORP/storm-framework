@@ -5,7 +5,7 @@ from rootmap import ROOT
 
 def search_modules(query):
     modules_path = os.path.join(ROOT, "modules")
-    smf.printf(f"\n[*] Searching for => {query}")
+    smf.printf(f"\n[*] Searching for => {query}\n")
     smf.printf(f"{'Module Path':<35} {'Category'}")
     smf.printf(f"{'-'*35} {'-'*15}")
     count = 0

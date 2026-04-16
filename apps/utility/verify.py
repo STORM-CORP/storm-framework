@@ -53,6 +53,7 @@ def validate_binary_files():
 
     return failed
 
+
 def validate_binary_core():
     # Path to root
     bin_dir = os.path.abspath(ROOT)
@@ -89,7 +90,9 @@ def check_critical_files():
         error = True
 
     if not os.path.exists(".env"):
-        smf.printf(f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}")
+        smf.printf(
+            f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}"
+        )
         smf.printf(
             f"[*] Storm cannot verify the database signature without your unique keys."
         )

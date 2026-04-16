@@ -1,4 +1,5 @@
 import socket
+import smf
 
 MOD_INFO = {
     "Name": "Scanning Session Initiation Protocol",
@@ -36,10 +37,10 @@ def execute(options):
     try:
         sock.sendto(payload.encode(), (ip, port))
         data, addr = sock.recvfrom(2048)
-        print(f"[+] Response from {addr}: {data.decode()}")
+        smf.printf(f"[+] Response from {addr}: {data.decode()}")
     except KeyboardInterrupt:
         pass
     except Exception as e:
-        print(f"[-] No Response: {e}")
+        smf.printf(f"[-] No Response =>", e)
     finally:
         sock.close()

@@ -1,4 +1,5 @@
 import socket
+import smf
 from apps.utility.colors import C
 
 STATUS_OPEN = "✅"
@@ -149,7 +150,7 @@ def execute(options):
     }
     ports_to_check = port_names.keys()
 
-    print(f"{C.HEADER} SCANNING: PORT & VERSION in {target_ip}")
+    smf.printf(f"{C.HEADER} SCANNING: PORT & VERSION in {target_ip}")
     MAX_TOTAL_WIDTH = 30
     try:
         for port in ports_to_check:
@@ -171,10 +172,10 @@ def execute(options):
                     output_line += f" {C.MENU} | INFO: {banner}"
 
             output_line += f"{C.RESET}"
-            print(output_line)
+            smf.printf(output_line)
 
-        print(f"{C.HEADER} --- SCAN COMPLETE ---")
+        smf.printf(f"{C.HEADER} --- SCAN COMPLETE ---")
     except KeyboardInterrupt:
         return
     except KeyboardInterrupt:
-        print(f"\n{C.ERROR}[!] Scan stopped.{C.RESET}")
+        smf.printd(f"\n{C.ERROR}[!] Scan stopped.{C.RESET}")

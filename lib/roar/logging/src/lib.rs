@@ -10,7 +10,6 @@ use pyo3::prelude::*;
 use pyo3::types::PyTuple;
 
 #[pyfunction]
-// Gunakan Default parameter di level Rust untuk simplifikasi
 #[pyo3(signature = (*args, sep=" ", end="\n", file=None, flush=false))]
 fn printf(
     py: Python<'_>,
@@ -20,23 +19,18 @@ fn printf(
     file: Option<&PyAny>,
     flush: bool,
 ) -> PyResult<()> {
+    // 1. Konversi PyTuple ke Vec<&PyAny> (SANGAT PENTING)
+    let objects: Vec<&PyAny> = args.iter().collect();
     
-    // Optimasi: Jika file None, kita bisa memilih jalur 'Raw System Call' 
-    // daripada memanggil sys.stdout Python yang lambat.
-    let is_stdout = file.is_none();
-    
-    // Ambil handle file jika ada, jika tidak, biarkan None agar ditangani modul bawah
-    let file_handle = match file {
-        Some(f) => Some(f),
-        None => None, 
-    };
-
-    // Threshold 100 objek untuk parallel sudah masuk akal (cost vs benefit)
-    if args.len() > 100 {
-        // PERINGATAN: parallel_print harus menangani GIL secara internal
-        parallel::parallel_print(py, args, sep, end, file_handle, flush, is_stdout)?;
+    // 2. Thresholding
+    // Gunakan objects.len() karena args adalah PyTuple
+    if objects.len() > 100 {
+        // PERBAIKAN: Sesuaikan dengan signature parallel_print (6 argumen)
+        // Hapus 'args' dan 'is_stdout' karena info is_stdout sudah ada di dalam logic file.is_none()
+        parallel::parallel_print(py, &objects, sep, end, file, flush)?;
     } else {
-        core::core_print(py, args, sep, end, file_handle, flush, is_stdout)?;
+        // PERBAIKAN: Sesuaikan dengan signature core_print (6 argumen)
+        core::core_print(py, &objects, sep, end, file, flush)?;
     }
     
     Ok(())
@@ -52,9 +46,10 @@ fn printd(
     file: Option<&PyAny>,
     flush: bool,
 ) -> PyResult<()> {
-    // Gunakan eprintln! agar debug info masuk ke stderr, bukan stdout
-    eprintln!("[DEBUG] Objects: {}, Flush: {}", args.len(), flush);
+    // Menulis ke stderr secara langsung di Rust (Instant Debug)
+    eprintln!("[DEBUG] Printing {} objects via smf.printd", args.len());
     
+    // Delegasikan ke printf
     printf(py, args, sep, end, file, flush)
 }
 

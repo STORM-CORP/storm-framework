@@ -20,9 +20,13 @@ def start_build():
     bin_path = os.path.abspath(os.path.join(ROOT, "external/source/out"))
     os.makedirs(bin_path, exist_ok=True)
 
+    # Binary output root
+    root_path = os.path.abspath(ROOT)
+
     # context to Makefile
     os.environ["CARGO_TARGET_DIR"] = rust_cache
     os.environ["OUT_DIR"] = bin_path
+    os.environ["OUT_ROOT"] = root_path
 
     # Ignore folder list
     ignore_dirs = {".git", "__pycache__", "node_modules", "cache", "vendor"}

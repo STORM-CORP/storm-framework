@@ -1,5 +1,6 @@
 import socket
 import smf
+import sys
 from apps.utility.colors import C
 
 STATUS_OPEN = "✅"

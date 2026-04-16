@@ -1,6 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import os
+import smf
 import apps.base.config_ui as ui
 from apps.banners.uib import *
 
@@ -13,6 +14,6 @@ def execute(args, context):
     # Clean the screen according to the OS
     os.system("cls" if os.name == "nt" else "clear")
     # Redisplay tool identity
-    print(banner_live())
+    smf.printf(banner_live())
     ui.stormUI()
     return context

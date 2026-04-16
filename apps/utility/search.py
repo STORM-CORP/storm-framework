@@ -1,15 +1,17 @@
 import os
+import smf
+import sys
 from rootmap import ROOT
 
 
 def search_modules(query):
     modules_path = os.path.join(ROOT, "modules")
-    print(f"\n[*] Searching for => {query}")
-    print(f"{'Module Path':<35} {'Category'}")
-    print(f"{'-'*35} {'-'*15}")
+    smf.printf(f"\n[*] Searching for => {query}")
+    smf.printf(f"{'Module Path':<35} {'Category'}")
+    smf.printf(f"{'-'*35} {'-'*15}")
     count = 0
     if not os.path.exists(modules_path):
-        print(f"[-] Directory not found => {modules_path}")
+        smf.printf(f"[-] Directory not found => {modules_path}")
         return
     for root, dirs, files in os.walk(modules_path):
         for file in files:
@@ -22,11 +24,11 @@ def search_modules(query):
                     clean_path = rel_path.replace(".py", "")
                     category = rel_path.split(os.sep)[0]
 
-                    print(f"{clean_path:<35} {category}")
+                    smf.printf(f"{clean_path:<35} {category}")
 
     if count == 0:
-        print(f"[-] {query} => Not found.")
-        print("")
+        smf.printf(f"[-] {query} => Not found.")
+        smf.printf()
     else:
-        print(f"\n[*] Found {count} module.")
-        print("")
+        smf.printf(f"\n[*] Found {count} module.")
+        smf.print()

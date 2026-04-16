@@ -1,7 +1,6 @@
 import importlib
 import os
 import smf
-import sys
 from apps.utility.colors import C
 
 

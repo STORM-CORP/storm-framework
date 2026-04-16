@@ -1,5 +1,7 @@
 import subprocess
 import os
+import smf
+
 from rootmap import ROOT
 
 MOD_INFO = {
@@ -30,9 +32,9 @@ def execute(options):
     bin_path = os.path.join(out, "dpi_netspy")
 
     if not os.path.isfile(bin_path):
-        print(f"[!] ERROR: Binary not found {bin_path}.")
+        smf.printf(f"[!] ERROR: Binary not found {bin_path}.")
         return False
-    print(f"[*] Run Go-Sniffer on interface: {iface}")
+    smf.printf(f"[*] Run Go-Sniffer on interface: {iface}")
 
     try:
         # Calling a Go binary with interface arguments
@@ -47,11 +49,11 @@ def execute(options):
             line = proc.stdout.readline()
             if not line:
                 break
-            print(line.strip())
+            smf.printf(line.strip())
 
     except KeyboardInterrupt:
         proc.terminate()
     except Exception as e:
-        print(f"[!] ERROR: {e}")
+        smf.printf(f"[!] ERROR =>", e)
 
     return True

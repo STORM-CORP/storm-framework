@@ -1,14 +1,17 @@
 import os
 import smf
-from rootmap import ROOT
 
+from rootmap import ROOT
+from apps.utility.colors import C
 
 def search_modules(query):
     modules_path = os.path.join(ROOT, "modules")
-    smf.printf(f"\n[*] Searching for => {query}\n")
+    
+    smf.printf(f"{C.INPUT}\n[*] Searching for => {query}\n{C.RESET}")
     smf.printf(f"{'Module Path':<35} {'Category'}")
     smf.printf(f"{'-'*35} {'-'*15}")
     count = 0
+    
     if not os.path.exists(modules_path):
         smf.printf(f"[-] Directory not found => {modules_path}")
         return

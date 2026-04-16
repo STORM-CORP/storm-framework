@@ -76,7 +76,9 @@ def execute(args, context):
                 smf.printf()
 
             except Exception as e:
-                smf.printf(f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True)
+                smf.printf(
+                    f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True
+                )
 
         else:
             # To display information about a specific module
@@ -127,7 +129,9 @@ def execute(args, context):
                 smf.printf()
 
             except Exception as e:
-                smf.printf(f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True)
+                smf.printf(
+                    f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True
+                )
     else:
         smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.")
 

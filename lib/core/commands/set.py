@@ -16,14 +16,16 @@ def execute(args, context):
     if len(args) >= 2:
         var_name = args[0].upper()
         var_value = args[1]
-        
+
         if var_name not in options:
-            smf.printf(f"{C.ERROR}[-] ERROR => {var_name} > is not a valid options!{C.RESET}")
+            smf.printf(
+                f"{C.ERROR}[-] ERROR => {var_name} > is not a valid options!{C.RESET}"
+            )
             return context
-            
+
         if "PASS" in var_name:
             found_path = utils.resolve_path(var_value)
-            
+
             if found_path:
                 options[var_name] = found_path
                 smf.printf(f"{var_name} => {found_path}")

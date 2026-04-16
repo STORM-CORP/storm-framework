@@ -1,3 +1,5 @@
+import sys
+import smf
 from ipwhois import IPWhois
 from apps.utility.colors import C
 

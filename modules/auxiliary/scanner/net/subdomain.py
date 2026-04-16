@@ -84,7 +84,9 @@ def execute(options):
             except requests.exceptions.RequestException:
                 pass
             except Exception as e:
-                smf.printf(f"{C.ERROR}[!] ERROR on {url} =>", e, file=sys.stderr, flush=True)
+                smf.printf(
+                    f"{C.ERROR}[!] ERROR on {url} =>", e, file=sys.stderr, flush=True
+                )
                 continue
 
     smf.printf(f"{C.SUCCESS}\n[✓] Subdomain active: {found_count}")

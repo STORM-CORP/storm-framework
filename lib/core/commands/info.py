@@ -3,6 +3,9 @@
 import os
 import importlib.util
 import textwrap
+import smf
+import sys
+
 from apps.utility.colors import C
 
 
@@ -14,7 +17,7 @@ from apps.utility.colors import C
 def execute(args, context):
     query = args[0] if args else ""
     if not query:
-        print("{C.ERROR}[-] Enter file name to info!")
+        smf.printf("{C.ERROR}[-] Enter file name to info!")
         return context
 
     # This is a special logic to know where the CVE is located.
@@ -40,38 +43,40 @@ def execute(args, context):
                 info = mod.CVE_INFO
                 width = 55
 
-                print(f"\n{C.HEADER}{'='*width}")
-                print(f"{C.SUCCESS}{'STORM VULNERABILITY KNOWLEDGE BASE':^55}")
-                print(f"{C.HEADER}{'='*width}")
+                smf.printf()
+                smf.printf(f"\n{C.HEADER}{'='*width}")
+                smf.printf(f"{C.SUCCESS}{'STORM VULNERABILITY KNOWLEDGE BASE':^55}")
+                smf.printf(f"{C.HEADER}{'='*width}")
 
-                print(f"{C.SUCCESS}{'ID CVE':<13} : {info['cve']}")
-                print(f"{C.SUCCESS}{'NAME':<13} : {info['name']}")
-                print(f"{C.SUCCESS}{'LEVEL':<13} : {info['severity']}")
-                print(f"{C.SUCCESS}{'PUBLISHED':<13} : {info['published']}")
-                print(f"{C.SUCCESS}{'UPDATED':<13} : {info['updated']}")
-                print(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{C.SUCCESS}{'ID CVE':<13} : {info['cve']}")
+                smf.printf(f"{C.SUCCESS}{'NAME':<13} : {info['name']}")
+                smf.printf(f"{C.SUCCESS}{'LEVEL':<13} : {info['severity']}")
+                smf.printf(f"{C.SUCCESS}{'PUBLISHED':<13} : {info['published']}")
+                smf.printf(f"{C.SUCCESS}{'UPDATED':<13} : {info['updated']}")
+                smf.printf(f"{C.HEADER}{'-'*width}")
 
-                print(f"{C.SUCCESS}DESCRIPTION   :")
+                smf.printf(f"{C.SUCCESS}DESCRIPTION   :")
                 desc = textwrap.fill(
                     info["description"].strip(),
                     width=width - 2,
                     initial_indent=" ",
                     subsequent_indent=" ",
                 )
-                print(desc)
+                smf.printf(desc)
 
-                print(f"{C.HEADER}{'-'*width}")
-                print(f"{C.SUCCESS}REFERENCES    :")
+                smf.printf(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{C.SUCCESS}REFERENCES    :")
                 for link in info["URL"]:
-                    print(f" - {link}")
-                print(f"{C.HEADER}{'-'*width}")
+                    smf.printf(f" - {link}")
+                smf.printf(f"{C.HEADER}{'-'*width}")
 
-                print(f"{C.SUCCESS}{'SCANNER':<13} : {info['scanner']}")
-                print(f"{C.SUCCESS}{'EXPLOIT':<13} : {info['exploit']}")
-                print(f"{C.HEADER}{'='*width}\n")
+                smf.printf(f"{C.SUCCESS}{'SCANNER':<13} : {info['scanner']}")
+                smf.printf(f"{C.SUCCESS}{'EXPLOIT':<13} : {info['exploit']}")
+                smf.printf(f"{C.HEADER}{'='*width}\n")
+                smf.printf()
 
             except Exception as e:
-                print(f"{C.ERROR}[-] Failed to read => {e}")
+                smf.printf(f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True)
 
         else:
             # To display information about a specific module
@@ -86,44 +91,44 @@ def execute(args, context):
                 width = 55
                 label_w = 13
 
-                print()
-                print(f"{C.HEADER}{'='*width}")
-                print(f"{C.SUCCESS}{'STORM INFORMATION MODULES':^55}")
-                print(f"{C.HEADER}{'='*width}")
+                smf.printf()
+                smf.printf(f"{C.HEADER}{'='*width}")
+                smf.printf(f"{C.SUCCESS}{'STORM INFORMATION MODULES':^55}")
+                smf.printf(f"{C.HEADER}{'='*width}")
 
-                print(f"{C.SUCCESS}{'NAME':<13} : {info['Name']}")
-                print(f"{C.SUCCESS}DESCRIPTION   :")
+                smf.printf(f"{C.SUCCESS}{'NAME':<13} : {info['Name']}")
+                smf.printf(f"{C.SUCCESS}DESCRIPTION   :")
                 desc = textwrap.fill(
                     info["Description"].strip(),
                     width=width - 2,
                     initial_indent=" ",
                     subsequent_indent=" ",
                 )
-                print(desc)
+                smf.printf(desc)
 
-                print(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{C.HEADER}{'-'*width}")
                 authors = info.get("Author", [])
                 first_auth = authors[0] if authors else "Unknown"
-                print(f"{C.SUCCESS}{'AUTHOR':<{label_w}} : - {first_auth}")
+                smf.printf(f"{C.SUCCESS}{'AUTHOR':<{label_w}} : - {first_auth}")
                 for extra in authors[1:]:
-                    print(f"{C.SUCCESS}{' '*(label_w)} : - {extra}")
+                    smf.printf(f"{C.SUCCESS}{' '*(label_w)} : - {extra}")
 
-                print(f"{C.HEADER}{'-'*width}")
-                print(f"{C.SUCCESS}{'ACTION':<13}")
+                smf.printf(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{C.SUCCESS}{'ACTION':<13}")
                 for action in info.get("Action", []):
                     name = action[0]
                     desc = action[1].get("Description", "")
-                    print(f"{C.SUCCESS}  > {name:<9} : {desc}")
+                    smf.printf(f"{C.SUCCESS}  > {name:<9} : {desc}")
 
-                print(f"{C.HEADER}{'-'*width}")
-                print(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")
-                print(f"{C.SUCCESS}{'LICENSE':<13} : {info['License']}")
-                print(f"{C.HEADER}{'='*width}")
-                print()
+                smf.printf(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")
+                smf.printf(f"{C.SUCCESS}{'LICENSE':<13} : {info['License']}")
+                smf.printf(f"{C.HEADER}{'='*width}")
+                smf.printf()
 
             except Exception as e:
-                print(f"{C.ERROR}[-] Failed to read => {e}")
+                smf.printf(f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True)
     else:
-        print(f"{C.INPUT}[-] WARN => {query} > not found.")
+        smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.")
 
     return context

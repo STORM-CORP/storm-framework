@@ -14,16 +14,19 @@ pub fn parallel_print(
     file: Option<&PyAny>,
     flush: bool,
 ) -> PrintResult<()> {
-    
-    // 1. Inisialisasi Destinasi (Stdout atau Python File)
+
+    // Konversi slice menjadi Vec agar Rayon bisa memanggil into_par_iter() dengan pasti
+    let obj_vec: Vec<&PyAny> = objects.to_vec();
+
+    // Inisialisasi Destinasi (Stdout atau Python File)
     let dest = OutputDestination::from_py_object(file, py)?;
 
-    // 2. Gunakan Rayon untuk pemrosesan paralel yang aman
+    // Gunakan Rayon untuk pemrosesan paralel yang aman
     // Kita kumpulkan ke Vec<String> agar urutan tetap terjaga sesuai index asli
-    let formatted_strings: Vec<String> = objects
-        .par_iter() // Gunakan .par_iter() bukan .into_par_iter() untuk slice
+    let formatted_strings: Vec<String> = obj_vec
+        .into_par_iter() // Sekarang ini akan bekerja karena Vec memuaskan trait bounds
         .map(|obj| {
-            Python::with_gil(|py| {
+            Python::with_gil(|py_inner| {
                 // Gunakan .bind(py) karena kita di PyO3 0.21
                 match object_to_string(obj) {
                     Ok(s) => s,
@@ -33,10 +36,11 @@ pub fn parallel_print(
         })
         .collect(); // Rayon menjamin urutan hasil collect sesuai urutan input
 
-    // 3. Join strings di thread utama
-    let output = formatted_strings.join(sep) + end;
+    // Join strings di thread utama
+    let mut output = formatted_strings.join(sep);
+    output.push_str(end);
 
-    // 4. I/O Operation (Serial)
+    // I/O Operation (Serial)
     dest.write(&output)?;
     
     if flush {

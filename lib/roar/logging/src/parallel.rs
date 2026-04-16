@@ -8,14 +8,15 @@ use crate::errors::PrintResult;
 
 pub fn parallel_print(
     py: Python<'_>,
-    objects: &[&PyAny],
+    // Catatan: Jika memungkinkan, update signature eksternal ini menjadi &[Bound<'_, PyAny>] ke depannya.
+    objects: &[&PyAny], 
     sep: &str,
     end: &str,
     file: Option<&PyAny>,
     flush: bool,
 ) -> PrintResult<()> {
     
-    // 1. Ambil pointer mentah (as_ptr tidak butuh GIL di PyO3 0.21)
+    // 1. Ambil pointer mentah
     let ptrs: Vec<usize> = objects
         .iter()
         .map(|obj| obj.as_ptr() as usize)
@@ -29,18 +30,19 @@ pub fn parallel_print(
         .into_par_iter()
         .map(|ptr_addr| {
             Python::with_gil(|py_inner| {
-                // Menggunakan Bound API yang baru (0.21+)
-                // Kita buat biner pointer kembali menjadi Bound object
                 let ptr = ptr_addr as *mut pyo3::ffi::PyObject;
                 
-                // Gunakan unsafe secara minimal hanya untuk mengonversi pointer
+                // Menggunakan Bound API yang direkomendasikan di PyO3 0.21+
                 let bound_obj = unsafe { 
-                    py_inner.from_borrowed_ptr::<PyAny>(ptr) 
+                    pyo3::Bound::<PyAny>::from_borrowed_ptr(py_inner, ptr) 
                 };
 
-                // Panggil converter kita (pastikan object_to_string menerima &PyAny)
-                // Di PyO3 0.21, Bound<PyAny> bisa di-cast ke &PyAny dengan .as_ref()
-                match object_to_string(bound_obj.as_ref()) {
+                // JIKA object_to_string sudah menerima `&Bound<'_, PyAny>`:
+                // match object_to_string(&bound_obj) {
+                
+                // JIKA object_to_string MASIH menerima `&PyAny` (Legacy):
+                // Gunakan .as_gil_ref() sebagai jembatan sementara antar API
+                match object_to_string(bound_obj.as_gil_ref()) {
                     Ok(s) => s,
                     Err(_) => "ErrorRepresentation".to_string(),
                 }

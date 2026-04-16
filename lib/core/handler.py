@@ -1,5 +1,7 @@
 import importlib
 import os
+import smf
+import sys
 from apps.utility.colors import C
 
 
@@ -16,7 +18,7 @@ def execute(cmd, args, context):
         except KeyboardInterrupt:
             return context
         except Exception as e:
-            print(f"{C.ERROR}[-] ERROR COMMAND => {cmd} > {e}")
+            smf.printf(f"{C.ERROR}[-] ERROR COMMAND => {cmd} > {e}")
             return context
 
     return None

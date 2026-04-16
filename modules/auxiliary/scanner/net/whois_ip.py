@@ -20,9 +20,9 @@ REQUIRED_OPTIONS = {"IP": "(ex: x.x.x.x)"}
 def execute(options):
     target_ip = options.get("IP")
     if not target_ip:
-        print(f"{C.ERROR} ERROR: IP variable content 'set ip x.x.x.x'!")
+        smf.printf(f"{C.ERROR} ERROR: IP variable content 'set ip x.x.x.x'!")
         return
-    print(f"{C.HEADER}[ IP WHOIS/RDAP LOOKUP ]")
+    smf.printf(f"{C.HEADER}[ IP WHOIS/RDAP LOOKUP ]")
     try:
         obj = IPWhois(target_ip)
         results = obj.lookup_rdap()
@@ -36,17 +36,17 @@ def execute(options):
         unique_emails = ", ".join(list(set(emails))) if emails else "N/A"
 
         # Show Information
-        print(f"{C.MENU} ASN:            {C.RESET}{results.get('asn')}")
-        print(f"{C.MENU} CIDR:           {C.RESET}{results.get('asn_cidr')}")
-        print(f"{C.MENU} Country:        {C.RESET}{results.get('asn_country_code')}")
-        print(f"{C.MENU} ASN Description:{C.RESET}{results.get('asn_description')}")
-        print(
+        smf.printf(f"{C.MENU} ASN:            {C.RESET}{results.get('asn')}")
+        smf.printf(f"{C.MENU} CIDR:           {C.RESET}{results.get('asn_cidr')}")
+        smf.printf(f"{C.MENU} Country:        {C.RESET}{results.get('asn_country_code')}")
+        smf.printf(f"{C.MENU} ASN Description:{C.RESET}{results.get('asn_description')}")
+        smf.printf(
             f"{C.MENU} Network Name:   {C.RESET}{results.get('network', {}).get('name')}"
         )
-        print(f"{C.MENU} Abuse Emails:   {C.RESET}{unique_emails}")
+        smf.printf(f"{C.MENU} Abuse Emails:   {C.RESET}{unique_emails}")
 
     except KeyboardInterrupt:
         return
     except Exception as e:
-        print(f"{C.ERROR} ERROR: Failed to retrieve IP data.")
-        print(f"{C.ERROR} Detail: {e}")
+        smf.printf(f"{C.ERROR} ERROR: Failed to retrieve IP data.")
+        smf.printf(f"{C.ERROR} Detail =>", e, file=sys.stderr, flush=True)

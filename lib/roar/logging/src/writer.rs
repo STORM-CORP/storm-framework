@@ -1,3 +1,5 @@
+// -- https://github.com/StormWorld0/storm-framework
+// -- SMF License
 use pyo3::prelude::*;
 use std::io::{self, Write};
 use crate::errors::{PrintError, PrintResult};

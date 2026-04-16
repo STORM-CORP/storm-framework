@@ -16,24 +16,24 @@ def execute(args, context):
     current_module_name = context["current_module_name"]
     options = context["options"]
     if not target_show:
-        smf.printf(f"{C.ERROR}[!] No modules selected.")
+        smf.printf(f"{C.ERROR}[!] No modules selected.{C.RESET}")
         return context
 
     # 1. show modules
     if target_show == "modules":
         categories = utils.get_categories()
-        smf.printf(f"\n{C.HEADER}--- Categories ---")
+        smf.printf(f"\n{C.HEADER}--- Categories ---{C.RESET}")
 
         for cat in categories:
             smf.printf(f"  - {cat}")
 
-        smf.printf(f"\n{C.INPUT}[-] WARN => show <category_name> to see modules.")
+        smf.printf(f"\n{C.INPUT}[-] WARN => show <category_name> to see modules.{C.RESET}")
         smf.printf()
 
     # 2. show options
     elif target_show == "options":
         header_name = current_module_name if current_module else "GLOBAL"
-        smf.printf(f"\n{C.HEADER}MODULE OPTIONS ({header_name}):")
+        smf.printf(f"\n{C.HEADER}MODULE OPTIONS ({header_name}):{C.RESET}")
         smf.printf(f"{'Name':<12} {'Current Setting':<25} {'Description'}")
         smf.printf(f"{'-'*12} {'-'*25} {'-'*15}")
 
@@ -52,7 +52,7 @@ def execute(args, context):
     else:
         module_files = utils.get_modules_in_category(target_show)
         if module_files:
-            smf.printf(f"\n{C.HEADER}Modules in {target_show}:")
+            smf.printf(f"\n{C.HEADER}Modules in {target_show}:{C.RESET}")
             for mod in module_files:
                 smf.printf(f"  - {mod}")
             smf.printf()

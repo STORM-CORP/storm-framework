@@ -120,7 +120,9 @@ class PluginEngine:
                     updated_data = json.loads(process.stdout)
                     context.update(updated_data)
             except Exception as e:
-                smf.printf(f"[!] Binary Plugin Error [{os.path.basename(bin_path)}] =>", e)
+                smf.printf(
+                    f"[!] Binary Plugin Error [{os.path.basename(bin_path)}] =>", e
+                )
 
 
 # --- CONTOH INTEGRASI DI CORE STORM ---

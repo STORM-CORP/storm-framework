@@ -67,7 +67,9 @@ def execute(options):
                 smf.printf(f"{C.MENU}  Try: {word}{C.RESET}", end="\r")
 
                 if hashed_word == full_hash:
-                    smf.printf(f"{C.SUCCESS} [✓] SUCCESSFULLY FOUND U:{username} H:{word}")
+                    smf.printf(
+                        f"{C.SUCCESS} [✓] SUCCESSFULLY FOUND U:{username} H:{word}"
+                    )
                     smf.printf(
                         f"{C.SUCCESS} --------------------------------------------------"
                     )

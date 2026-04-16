@@ -1,5 +1,5 @@
 import sys
-
+import smf
 
 def run_sign():
     try:
@@ -8,14 +8,15 @@ def run_sign():
         libsigned.storm_sign()
         return True
     except ImportError as e:
-        print(
+        smf.printf(
             f"[!] Critical => Binary not found.",
             file=sys.stderr,
+            flush=True,
         )
-        print(f"[!] Detail => {e}", file=sys.stderr)
+        smf.printf(f"[!] Detail =>", e, file=sys.stderr, flush=True)
         return False
     except Exception as e:
-        print(f"[!] Runtime Error in Rust Binary => {e}", file=sys.stderr)
+        smf.printf(f"[!] Runtime Error in Rust Binary =>", e, file=sys.stderr, flush=True)
         return False
 
 

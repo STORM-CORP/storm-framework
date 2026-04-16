@@ -1,5 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
+import smf
 import apps.utility.utils as utils
 from apps.utility.colors import C
 
@@ -19,6 +20,6 @@ def execute(args, context):
         context["current_module"] = mod
         context["current_module_name"] = module_name
     else:
-        print(f"{C.INPUT}[-] WARN => {module_name} > Not found.")
+        smf.printf(f"{C.INPUT}[-] WARN => {module_name} > Not found.")
 
     return context

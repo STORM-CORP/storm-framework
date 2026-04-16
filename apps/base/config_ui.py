@@ -1,5 +1,6 @@
 import json
 import os
+import smf
 import apps.utility.utils as utils
 from apps.utility.colors import C
 from rootmap import ROOT
@@ -10,26 +11,25 @@ def show_about():
     with open(data) as f:
         VERSION = json.load(f)["version"]
 
-    print(
+    smf.printf(
         f"\n{C.HEADER}=========================================================================="
     )
-    print(
+    smf.printf(
         f"{C.HEADER}=========================================================================="
     )
-    print(f"{C.INPUT}      owner                     : エルジー")
-    print(f"{C.INPUT}      Contributor               : Deep Donald")
-    print(f"{C.INPUT}      Purpose                   : All-in-One Pentest Tools")
-    print(f"{C.INPUT}      Version                   : {VERSION}")
-    print(
+    smf.printf(f"{C.INPUT}      owner                     : エルジー")
+    smf.printf(f"{C.INPUT}      Purpose                   : All-in-One Pentest Tools")
+    smf.printf(f"{C.INPUT}      Version                   : {VERSION}")
+    smf.printf(
         f"{C.INPUT}      GitHub                    : github.com/StormWorld0/storm-framework"
     )
-    print(
+    smf.printf(
         f"{C.HEADER}==========================================================================\n"
     )
 
 
 def show_help():
-    print(f"""
+    smf.printf(f"""
 {C.HEADER}==========================================================================
 {C.SUCCESS}                             COMMAND GUIDE
 {C.HEADER}==========================================================================
@@ -76,9 +76,9 @@ def stormUI():
         line_text = " | ".join(row_items)
 
         # 4. Decorative print
-        print(f"{C.HEADER}+-- --=[ {C.INPUT}{line_text} {C.HEADER}]=--")
+        smf.printf(f"{C.HEADER}+-- --=[ {C.INPUT}{line_text} {C.HEADER}]=--")
 
-    print("")
-    print("The Storm Framework is a StormWorld0 Open Source Project")
-    print(f"Run {C.SUCCESS}about{C.RESET} to view dev information.")
-    print("")
+    smf.printf()
+    smf.printf("The Storm Framework is a StormWorld0 Open Source Project")
+    smf.printf(f"Run {C.SUCCESS}about{C.RESET} to view dev information.")
+    smf.printf()

@@ -1,5 +1,6 @@
 import requests
 import os
+import smf
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from apps.utility.colors import C
 
@@ -48,10 +49,10 @@ def execute(options):
     try:
         for user, passwd in DEFAULT_CREDS:
             if test_grafana(target_ip, port, user, passwd):
-                print(f"{C.SUCCESS}   LOGIN SUCCESS! (Grafana) -> U:{user} P:{passwd}")
+                smf.printf(f"{C.SUCCESS}   LOGIN SUCCESS! (Grafana) -> U:{user} P:{passwd}")
                 found_weak_creds = True
                 break
-            print(f"{C.MENU}   FAIL: {user}:{passwd}")
+            smf.printf(f"{C.MENU}   FAIL: {user}:{passwd}")
         if found_weak_creds:
             return
 
@@ -65,24 +66,24 @@ def execute(options):
                             if not passwd:
                                 continue
                             if test_grafana(target_ip, port, target_user, passwd):
-                                print(
+                                smf.printf(
                                     f"{C.SUCCESS}   LOGIN SUCCESS! (Grafana) -> U:{target_user} P:{passwd}"
                                 )
                                 return
-                            print(
+                            smf.printf(
                                 f"{C.MENU}  [>] Try: U:{target_user:<20} P:{passwd:<20}",
                                 end="\r",
                                 flush=True,
                             )
 
-                    print(f"{C.MENU} [!] Brute Force finish.")
+                    smf.printf(f"{C.MENU} [!] Brute Force finish.")
 
             except Exception as e:
-                print(f"{C.ERROR}\n [!] ERROR: {e}")
+                smf.printf(f"{C.ERROR}\n [!] ERROR: {e}")
         else:
-            print(f"\n{C.MENU} All attempts failed.")
+            smf.printf(f"\n{C.MENU} All attempts failed.")
 
     except KeyboardInterrupt:
         return
     except Exception as e:
-        print("{C.ERROR}[x] GLOBAL ERROR: {e}")
+        smf.printf("{C.ERROR}[x] GLOBAL ERROR =>", e)

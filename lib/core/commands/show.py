@@ -27,7 +27,9 @@ def execute(args, context):
         for cat in categories:
             smf.printf(f"  - {cat}")
 
-        smf.printf(f"\n{C.INPUT}[-] WARN => show <category_name> to see modules.{C.RESET}")
+        smf.printf(
+            f"\n{C.INPUT}[-] WARN => show <category_name> to see modules.{C.RESET}"
+        )
         smf.printf()
 
     # 2. show options

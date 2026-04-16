@@ -49,7 +49,9 @@ def execute(options):
     try:
         for user, passwd in DEFAULT_CREDS:
             if test_grafana(target_ip, port, user, passwd):
-                smf.printf(f"{C.SUCCESS}   LOGIN SUCCESS! (Grafana) -> U:{user} P:{passwd}")
+                smf.printf(
+                    f"{C.SUCCESS}   LOGIN SUCCESS! (Grafana) -> U:{user} P:{passwd}"
+                )
                 found_weak_creds = True
                 break
             smf.printf(f"{C.MENU}   FAIL: {user}:{passwd}")

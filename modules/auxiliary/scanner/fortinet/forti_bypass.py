@@ -1,4 +1,6 @@
 import urllib3
+import sys
+import smf
 from lib.smf.ssl.netssl import *
 
 MOD_INFO = {
@@ -35,16 +37,16 @@ def execute(options):
     try:
         res = storm_ssl("GET", url, headers=headers)
         if res.status_code == 200 and "version" in res.text.lower():
-            print(f"{'='*40}")
-            print(f"[!] VULNERABLE: {target}")
-            print(
+            smf.printf(f"{'='*40}")
+            smf.printf(f"[!] VULNERABLE: {target}")
+            smf.printf(
                 f"[+] System Info: {res.json().get('results', {}).get('version', 'N/A')}"
             )
-            print(f"{'='*40}")
+            smf.printf(f"{'='*40}")
         else:
-            print("[-] Target not vulnerable or patched.")
+            smf.printf("[-] Target not vulnerable or patched.")
 
     except KeyboardInterrupt:
         return
     except Exception as e:
-        print(f"[-] GLOBAL ERROR: {e}")
+        smf.printf(f"[-] GLOBAL ERROR =>", e, file=sys.stderr, flush=True)

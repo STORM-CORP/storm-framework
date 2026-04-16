@@ -85,7 +85,12 @@ def execute(options):
             except dns.exception.Timeout:
                 smf.printf(f"{C.ERROR}[!] Timeout: {record_type}")
             except Exception as e:
-                smf.printf(f"{C.ERROR}[!] ERROR {record_type} =>", e, file=sys.stderr, flush=True)
+                smf.printf(
+                    f"{C.ERROR}[!] ERROR {record_type} =>",
+                    e,
+                    file=sys.stderr,
+                    flush=True,
+                )
 
     except socket.gaierror:
         smf.printf(f"{C.ERROR}[!] ERROR: Domain not found.")

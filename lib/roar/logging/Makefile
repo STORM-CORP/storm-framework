@@ -1,6 +1,6 @@
 RAW_NAME := smf
 NAME     := smf.so
-OUT      := $(OUT_DIR)
+OUT      := $(OUT_ROOT)
 TARGET   := $(OUT)/$(NAME)
 
 CACHE    := $(CARGO_TARGET_DIR)

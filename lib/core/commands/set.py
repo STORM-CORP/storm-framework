@@ -22,12 +22,12 @@ def execute(args, context):
                 options[var_name] = found_path
                 smf.printf(f"{var_name} => {found_path}")
             else:
-                smf.printf(f"{C.INPUT}[-] WARN => {var_value} > not found!")
+                smf.printf(f"{C.INPUT}[-] WARN => {var_value} > not found!{C.RESET}")
         else:
             options[var_name] = var_value
             smf.printf(f"{var_name} => {var_value}")
     else:
-        smf.printf(f"{C.INPUT}[!] Try => set <VAR> <VALUE>")
+        smf.printf("[!] Try => set <VAR> <VALUE>")
 
     context["options"] = options
     return context

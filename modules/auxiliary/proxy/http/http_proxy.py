@@ -34,7 +34,7 @@ def execute(options):
 
     try:
         for line in process.stdout:
-            msf.printf(line, file=sys.stdout, flush=True, end="")
+            smf.printf(line, file=sys.stdout, flush=True, end="")
 
     except KeyboardInterrupt:
         process.terminate()

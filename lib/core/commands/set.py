@@ -1,6 +1,5 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-import sys
 import smf
 import apps.utility.utils as utils
 from apps.utility.colors import C

@@ -60,7 +60,9 @@ def execute(options):
                     smf.printf(f"{C.MENU}  [*] Testing user: {user}")
                     for pw in password:
                         if test_ftp(target_ip, port, user, pw):
-                            smf.printf(f"{C.SUCCESS}  [+] LOGIN SUCCESS! -> U:{user} P:{pw}")
+                            smf.printf(
+                                f"{C.SUCCESS}  [+] LOGIN SUCCESS! -> U:{user} P:{pw}"
+                            )
                             return
 
     except KeyboardInterrupt:

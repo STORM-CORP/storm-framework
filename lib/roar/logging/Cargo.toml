@@ -1,17 +1,21 @@
 [package]
-name = "printr"
+name = "storm"
 version = "0.1.0"
 edition = "2024"
 
 [lib]
-name = "printr"
+name = "storm"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.20", features = ["extension-module"] }
-rayon = "1.8"
-crossbeam = "0.8"
+# abi3-py37 memastikan biner Anda kompetibel dengan banyak versi Python
+pyo3 = { version = "0.20", features = ["extension-module", "abi3-py37"] }
+rayon = "1"
+
+# crossbeam dihapus karena kita sudah pakai Rayon .collect() untuk menjaga urutan
 
 [profile.release]
-lto = true
-codegen-units = 1
+lto = true            # Link-Time Optimization (optimasi lintas file .rs)
+codegen-units = 1     # Mengurangi paralelisasi kompilasi demi optimasi maksimal
+panic = "abort"       # Mengurangi ukuran biner & mempercepat eksekusi saat crash
+strip = true          # Menghapus simbol debug agar file .so lebih ringan

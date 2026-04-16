@@ -122,8 +122,13 @@ def execute(options):
     except KeyboardInterrupt:
         return
     except requests.exceptions.RequestException as e:
-        smf.printf(f"{C.ERROR}[x] ERROR WHILE CONNECTING TO {target_url} =>", e, file=sys.stderr, flush=True)
+        smf.printf(
+            f"{C.ERROR}[x] ERROR WHILE CONNECTING TO {target_url} =>",
+            e,
+            file=sys.stderr,
+            flush=True,
+        )
         print()
-    
+
     smf.printf(f"{C.HEADER} ---------------------------------------")
     print()

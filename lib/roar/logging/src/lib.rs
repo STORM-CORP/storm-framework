@@ -10,7 +10,7 @@ use pyo3::types::PyTuple;
 #[pyfunction]
 // Gunakan Default parameter di level Rust untuk simplifikasi
 #[pyo3(signature = (*args, sep=" ", end="\n", file=None, flush=false))]
-fn fast_print(
+fn printr(
     py: Python<'_>,
     args: &PyTuple,
     sep: &str,
@@ -42,7 +42,7 @@ fn fast_print(
 
 #[pyfunction]
 #[pyo3(signature = (*args, sep=" ", end="\n", file=None, flush=false))]
-fn debug_print(
+fn printd(
     py: Python<'_>,
     args: &PyTuple,
     sep: &str,
@@ -53,12 +53,12 @@ fn debug_print(
     // Gunakan eprintln! agar debug info masuk ke stderr, bukan stdout
     eprintln!("[DEBUG] Objects: {}, Flush: {}", args.len(), flush);
     
-    fast_print(py, args, sep, end, file, flush)
+    printr(py, args, sep, end, file, flush)
 }
 
 #[pymodule]
-fn rust_print(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(fast_print, m)?)?;
-    m.add_function(wrap_pyfunction!(debug_print, m)?)?;
+fn storm(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(printr, m)?)?;
+    m.add_function(wrap_pyfunction!(printd, m)?)?;
     Ok(())
 }

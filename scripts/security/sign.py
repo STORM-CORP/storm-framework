@@ -1,6 +1,7 @@
 import sys
 import smf
 
+
 def run_sign():
     try:
         from external.source.out.core.integrity import libsigned
@@ -16,7 +17,9 @@ def run_sign():
         smf.printf(f"[!] Detail =>", e, file=sys.stderr, flush=True)
         return False
     except Exception as e:
-        smf.printf(f"[!] Runtime Error in Rust Binary =>", e, file=sys.stderr, flush=True)
+        smf.printf(
+            f"[!] Runtime Error in Rust Binary =>", e, file=sys.stderr, flush=True
+        )
         return False
 
 

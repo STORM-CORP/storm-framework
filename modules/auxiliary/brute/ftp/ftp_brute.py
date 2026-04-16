@@ -1,5 +1,6 @@
 import ftplib
 import os
+import smf
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from apps.utility.colors import C
 

@@ -5,6 +5,7 @@ import sys
 import apps.utility.utils as utils
 from apps.utility.colors import C
 
+
 # Run command to run a module that we want to execute
 # The workflow is as below;
 # Command => use <module_name>
@@ -42,6 +43,8 @@ def execute(args, context):
     except AttributeError as d:
         smf.printf(f"{C.ERROR}[-] ERROR =>", d, file=sys.stderr, flush=True)
     except Exception as e:
-        smf.printf(f"{C.ERROR}[-] Error during execution =>", e, file=sys.stderr, flush=True)
+        smf.printf(
+            f"{C.ERROR}[-] Error during execution =>", e, file=sys.stderr, flush=True
+        )
 
     return context

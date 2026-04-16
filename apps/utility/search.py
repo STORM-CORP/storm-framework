@@ -30,4 +30,4 @@ def search_modules(query):
         smf.printf()
     else:
         smf.printf(f"\n[*] Found {count} module.")
-        smf.print()
+        smf.printf()

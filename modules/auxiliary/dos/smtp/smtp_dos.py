@@ -1,5 +1,6 @@
 import subprocess
 import os
+import smf
 from rootmap import ROOT
 
 MOD_INFO = {
@@ -31,7 +32,7 @@ def execute(options):
     out_dir = os.path.join(bindir, "mod", "aux", "dos", "smtp")
     bin_path = os.path.join(out_dir, "smtp_flood")
     if not target:
-        print("[-] Target is missing!")
+        smf.printf("[-] Target is missing!")
         return
 
     if not os.path.exists(bin_path):
@@ -40,13 +41,13 @@ def execute(options):
     if os.getuid() == 0:
         command = [bin_path, "-t", target, "-p", port, "-w", threads]
     else:
-        print("[!] This module requires root. Requesting sudo...")
+        smf.printf("[!] This module requires root. Requesting sudo...")
         command = ["sudo", bin_path, "-t", target, "-p", port, "-w", threads]
 
-    print(f"[*] Starting SMTP Flood on {target}")
+    smf.printf(f"[*] Starting SMTP Flood on {target}")
     try:
         process = subprocess.Popen(command, stdout=None, stderr=None)
         process.wait()
     except KeyboardInterrupt:
         process.terminate()
-        print("\n[!] SMTP Flood stopped.")
+        smf.printf("\n[!] SMTP Flood stopped.")

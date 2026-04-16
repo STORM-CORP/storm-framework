@@ -12,7 +12,7 @@ from apps.utility.search import search_modules
 def execute(args, context):
     query = args[0] if args else ""
     if not query:
-        smf.printf("{C.INPUT}[-] Enter file name to search!")
+        smf.printf(f"{C.INPUT}[-] Enter file name to search!")
     else:
         search_modules(query)
     return context

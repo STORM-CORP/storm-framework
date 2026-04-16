@@ -7,7 +7,6 @@ mod converters;
 mod errors;
 
 use pyo3::prelude::*;
-// Import PyModule dan PyTuple langsung agar kode lebih bersih
 use pyo3::types::{PyModule, PyTuple};
 
 #[pyfunction]
@@ -21,21 +20,19 @@ fn printf(
     flush: bool,
 ) -> PyResult<()> {
     
-    // 1. Konversi Iterator: Bound<'_, PyAny> -> &PyAny
-    // Menggunakan .into_gil_ref() untuk downcast ke tipe lama secara aman
-    let objects: Vec<&PyAny> = args
-        .iter()
-        .map(|bound_item| bound_item.into_gil_ref())
-        .collect();
-    
-    // 2. Mapping Option file: Option<&Bound> -> Option<&PyAny>
-    let legacy_file: Option<&PyAny> = file.map(|b| b.as_gil_ref());
+    // 1. PENGHAPUSAN SHIM: Pengumpulan Data Native
+    // args.iter() pada Bound<'_, PyTuple> secara otomatis memproduksi iterator
+    // dari Bound<'_, PyAny>. Kita langsung menampungnya di memori tanpa alokasi FFI tambahan.
+    let objects: Vec<Bound<'_, PyAny>> = args.iter().collect();
 
-    // 3. Routing Logic
+    // 2. Routing Logic (Deref Coercion)
+    // Variabel 'objects' adalah Vec<Bound>. Saat kita mem-passing '&objects',
+    // Rust secara otomatis melakukan deref coercion menjadi slice &[Bound<'_, PyAny>]
+    // Parameter 'file' juga di-passing as-is tanpa mapping as_gil_ref().
     if objects.len() > 100 {
-        parallel::parallel_print(py, &objects, sep, end, legacy_file, flush)?;
+        parallel::parallel_print(py, &objects, sep, end, file, flush)?;
     } else {
-        core::core_print(py, &objects, sep, end, legacy_file, flush)?;
+        core::core_print(py, &objects, sep, end, file, flush)?;
     }
     
     Ok(())
@@ -57,7 +54,6 @@ fn printd(
     printf(py, args, sep, end, file, flush)
 }
 
-// 4. Perbaikan inisialisasi modul (Pure Bound API)
 #[pymodule]
 fn smf(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(printf, m)?)?;

@@ -2,6 +2,8 @@ import dns.resolver
 import dns.exception
 import socket
 import ipaddress
+import smf
+import sys
 from apps.utility.colors import C
 
 MOD_INFO = {
@@ -65,29 +67,29 @@ def execute(options):
     resolver.timeout = 2.0
     resolver.lifetime = 3.0
 
-    print(f"{C.HEADER} DNS ENUMERATION For {target_domain}")
+    smf.printf(f"{C.HEADER} DNS ENUMERATION For {target_domain}")
     try:
         socket.gethostbyname(target_domain)
         for record_type in DNS_RECORDS:
             try:
                 answers = resolver.resolve(target_domain, record_type)
-                print(f"{C.MENU} \n[{record_type} Records]:")
+                smf.printf(f"{C.MENU} \n[{record_type} Records]:")
                 for rdata in answers:
                     if record_type == "TXT":
-                        print(f"{C.SUCCESS}  {SYM_SECURITY} {rdata}")
+                        smf.printf(f"{C.SUCCESS}  {SYM_SECURITY} {rdata}")
                     else:
-                        print(f"{C.MENU}  {SYM_INFO} {rdata}")
+                        smf.printf(f"{C.MENU}  {SYM_INFO} {rdata}")
 
             except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
                 continue
             except dns.exception.Timeout:
-                print(f"{C.ERROR}[!] Timeout: {record_type}")
+                smf.printf(f"{C.ERROR}[!] Timeout: {record_type}")
             except Exception as e:
-                print(f"{C.ERROR}[!] ERROR {record_type}: {e}")
+                smf.printf(f"{C.ERROR}[!] ERROR {record_type} =>", e, file=sys.stderr, flush=True)
 
     except socket.gaierror:
-        print(f"{C.ERROR}[!] ERROR: Domain not found.")
+        smf.printf(f"{C.ERROR}[!] ERROR: Domain not found.")
     except KeyboardInterrupt:
         return
     except Exception as e:
-        print(f"{C.ERROR}[!] Global ERROR: {e}")
+        smf.printf(f"{C.ERROR}[!] Global ERROR =>", e, file=sys.stderr, flush=True)

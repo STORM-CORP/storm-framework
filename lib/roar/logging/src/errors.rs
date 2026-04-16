@@ -1,3 +1,5 @@
+// -- https://github.com/StormWorld0/storm-framework
+// -- SMF License
 use pyo3::prelude::*;
 use pyo3::exceptions::{PyTypeError, PyValueError, PyOSError};
 use std::fmt;

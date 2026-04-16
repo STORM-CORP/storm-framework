@@ -7,7 +7,7 @@ def safe_mode():
 
     if term:
         workers = max(1, total_cores - 2)
-        print(f"[*] Linux detected > {workers}/{total_cores} cores")
+        print(f"[*] Linux detected > {total_cores} cores")
     else:
         workers = total_cores
         print(f"[*] Linux Standar detected > {workers} cores")

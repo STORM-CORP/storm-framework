@@ -1,5 +1,6 @@
 import subprocess
 import os
+import smf
 from rootmap import ROOT
 
 MOD_INFO = {
@@ -28,10 +29,10 @@ def execute(options):
     bin_path = os.path.join(out_bin, "ftp_flood")
 
     if not target:
-        print("[-] ERROR: TARGET is missing!")
+        smf.printf("[-] ERROR: TARGET is missing!")
         return
 
-    print(f"[*] Preparing DoS to {target}:{port}")
+    smf.printf(f"[*] Preparing DoS to {target}:{port}")
 
     try:
         process = subprocess.Popen(
@@ -40,12 +41,12 @@ def execute(options):
             stderr=None,
         )
 
-        print(f"[!] Attack ID: {process.pid}")
-        print("[!] Press Ctrl+C to stop the flood.")
+        smf.printf(f"[!] Attack ID: {process.pid}")
+        smf.printf("[!] Press Ctrl+C to stop the flood.")
 
         process.wait()
 
     except KeyboardInterrupt:
         process.terminate()
     except Exception as e:
-        print(f"[-] ERROR: {e}")
+        smf.printf("[-] ERROR =>", e)

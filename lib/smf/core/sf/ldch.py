@@ -1,4 +1,6 @@
 import os
+import smf
+import sys
 from rootmap import ROOT
 
 
@@ -23,7 +25,7 @@ def session(options):
             os.remove(cache_path)
             return options
         except Exception as e:
-            print(f"[!] ERROR loading session => {e}")
+            smf.printf(f"[!] ERROR loading session =>", e, file=sys.stderr, flush=True)
             return options
 
     return options

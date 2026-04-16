@@ -76,7 +76,7 @@ def stormUI():
         line_text = " | ".join(row_items)
 
         # 4. Decorative print
-        smf.printf(f"{C.HEADER}+-- --=[ {C.INPUT}{line_text} {C.HEADER}]=--")
+        smf.printf(f"{C.HEADER}+-- --=[ {C.INPUT}{line_text} {C.HEADER}]=--{C.RESET}")
 
     smf.printf()
     smf.printf("The Storm Framework is a StormWorld0 Open Source Project")

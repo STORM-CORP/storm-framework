@@ -1,4 +1,6 @@
 import requests
+import sys
+import smf
 from apps.utility.colors import C
 
 MOD_INFO = {
@@ -62,7 +64,7 @@ def execute(options):
     target_domain = (
         target_domain.replace("http://", "").replace("https://", "").strip("/")
     )
-    print(f"{C.HEADER} SUBDOMAIN ENUMERATION for {target_domain}")
+    smf.printf(f"{C.HEADER} SUBDOMAIN ENUMERATION for {target_domain}")
 
     found_count = 0
     PROTOCOLS = ["http", "https"]
@@ -73,7 +75,7 @@ def execute(options):
                 response = requests.head(url, timeout=3, allow_redirects=True)
                 status_code = response.status_code
                 if status_code < 400 or status_code == 403:
-                    print(
+                    smf.printf(
                         f"{C.SUCCESS}[✓] Subdomain Found: {url} - Status: {status_code}"
                     )
                     found_count += 1
@@ -82,9 +84,9 @@ def execute(options):
             except requests.exceptions.RequestException:
                 pass
             except Exception as e:
-                print(f"{C.ERROR}[!] ERROR on {url}: {e}{C.RESET}")
+                smf.printf(f"{C.ERROR}[!] ERROR on {url} =>", e, file=sys.stderr, flush=True)
                 continue
 
-    print(f"{C.SUCCESS}\n[✓] Subdomain active: {found_count}")
+    smf.printf(f"{C.SUCCESS}\n[✓] Subdomain active: {found_count}")
     if found_count == 0:
-        print(f"{C.ERROR} No active subdomains found with list: {found_count}")
+        smf.printf(f"{C.ERROR} No active subdomains found with list: {found_count}")

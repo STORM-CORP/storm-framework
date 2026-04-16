@@ -1,6 +1,7 @@
 ### MAINTENANCE ###
-
+###_____________###
 import os
+import smf
 import json
 import ctypes
 import inspect
@@ -28,7 +29,7 @@ class PluginEngine:
         Melakukan recursive scanning ke seluruh folder plugin.
         """
         if not os.path.exists(self.plugin_dir):
-            print(f"[!] Folder plugin tidak ditemukan di: {self.plugin_dir}")
+            smf.printf(f"[!] Folder plugin tidak ditemukan di: {self.plugin_dir}")
             return
 
         for root, dirs, files in os.walk(self.plugin_dir):
@@ -48,7 +49,7 @@ class PluginEngine:
                 elif os.access(file_path, os.X_OK) and not os.path.isdir(file_path):
                     self.binary_hooks.append(file_path)
 
-        print(
+        smf.printf(
             f"[*] Plugin Engine: {len(self.python_hooks)} Py-Hooks, "
             f"{len(self.shared_hooks)} Shared, {len(self.binary_hooks)} Binaries loaded."
         )
@@ -71,7 +72,7 @@ class PluginEngine:
                         self.python_hooks[name] = []
                     self.python_hooks[name].append(obj)
         except Exception as e:
-            print(f"[!] Gagal load plugin Python {file_path}: {e}")
+            smf.printf(f"[!] Gagal load plugin Python {file_path} =>", e)
 
     def run_plugin(self, event_name, context):
         """
@@ -88,7 +89,7 @@ class PluginEngine:
                     # Python bisa langsung merubah dict context karena pass-by-reference
                     func(context)
                 except Exception as e:
-                    print(f"[!] Python Plugin Error [{event_name}]: {e}")
+                    smf.printf(f"[!] Python Plugin Error [{event_name}] =>", e)
 
         # --- 2. EKSEKUSI SHARED LIBRARY (.so / .dll) ---
         for lib_path in self.shared_hooks:
@@ -119,7 +120,7 @@ class PluginEngine:
                     updated_data = json.loads(process.stdout)
                     context.update(updated_data)
             except Exception as e:
-                print(f"[!] Binary Plugin Error [{os.path.basename(bin_path)}]: {e}")
+                smf.printf(f"[!] Binary Plugin Error [{os.path.basename(bin_path)}] =>", e)
 
 
 # --- CONTOH INTEGRASI DI CORE STORM ---

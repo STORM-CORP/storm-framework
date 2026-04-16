@@ -1,5 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
+import sys
+import smf
 import apps.utility.utils as utils
 from apps.utility.colors import C
 
@@ -19,14 +21,14 @@ def execute(args, context):
             found_path = utils.resolve_path(var_value)
             if found_path:
                 options[var_name] = found_path
-                print(f"{var_name} => {found_path}")
+                smf.printf(f"{var_name} => {found_path}")
             else:
-                print(f"{C.INPUT}[-] WARN => {var_value} > not found!")
+                smf.printf(f"{C.INPUT}[-] WARN => {var_value} > not found!")
         else:
             options[var_name] = var_value
-            print(f"{var_name} => {var_value}")
+            smf.printf(f"{var_name} => {var_value}")
     else:
-        print(f"{C.INPUT}[!] Try => set <VAR> <VALUE>")
+        smf.printf(f"{C.INPUT}[!] Try => set <VAR> <VALUE>")
 
     context["options"] = options
     return context

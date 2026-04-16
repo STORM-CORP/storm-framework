@@ -1,7 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import smf
-from apps.utility.colors import C
 from apps.utility.search import search_modules
 
 

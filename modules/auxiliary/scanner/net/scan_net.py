@@ -176,6 +176,7 @@ def execute(options):
 
         smf.printf(f"{C.HEADER} --- SCAN COMPLETE ---")
     except KeyboardInterrupt:
+        smf.printf(f"\n{C.ERROR}[!] Scan stopped.{C.RESET}")
         return
-    except KeyboardInterrupt:
-        smf.printd(f"\n{C.ERROR}[!] Scan stopped.{C.RESET}")
+    except Exception as e:
+        smf.printf(f"{C.ERROR}[!] ERROR =>", e, file=sys.stderr, flush=True)

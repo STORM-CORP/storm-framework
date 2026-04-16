@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 # abi3-py37 memastikan biner Anda kompetibel dengan banyak versi Python
-pyo3 = { version = "0.20", features = ["extension-module", "abi3-py37"] }
+pyo3 = { version = "0.21", features = ["extension-module", "abi3-py37"] }
 rayon = "1"
 
 # crossbeam dihapus karena kita sudah pakai Rayon .collect() untuk menjaga urutan

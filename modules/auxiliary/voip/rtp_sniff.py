@@ -1,6 +1,7 @@
 import os
 import subprocess
 import shutil
+import smf
 from rootmap import ROOT
 
 MOD_INFO = {
@@ -32,28 +33,28 @@ def execute(options):
     output_pcm = os.path.join(os.getcwd(), "storm_capture.pcm")
     output_wav = os.path.join(os.getcwd(), "storm_capture.wav")
 
-    print(f"[*] Sniffing on {interface}")
-    print(f"[*] Output will be saved at: {os.getcwd()}")
-    print("[*] Press Ctrl+C to stop.")
+    smf.printf(f"[*] Sniffing on {interface}")
+    smf.printf(f"[*] Output will be saved at: {os.getcwd()}")
+    smf.printf("[*] Press Ctrl+C to stop.")
 
     try:
         # Run binary with arguments: interface and output_path
         subprocess.run(["sudo", binary, interface, output_pcm])
     except KeyboardInterrupt:
-        print("\n[*] Sniffing stopped by user.")
+        smf.printf("\n[*] Sniffing stopped by user.")
 
     # Automatic Conversion to WAV
     if os.path.exists(output_pcm):
         if shutil.which("ffmpeg"):
-            print("[*] Converting raw PCM to WAV...")
+            smf.printf("[*] Converting raw PCM to WAV...")
             # G.711 mu-law (standar VoIP)
             conv_cmd = f"ffmpeg -y -f u8 -ar 8000 -ac 1 -i {output_pcm} {output_wav} > /dev/null 2>&1"
             os.system(conv_cmd)
 
             if os.path.exists(output_wav):
                 os.remove(output_pcm)
-                print(f"[+] Success! Final Audio: {output_wav}")
+                smf.printf(f"[+] Success! Final Audio: {output_wav}")
             else:
-                print("[!] Conversion failed. Raw file kept at storm_capture.pcm")
+                smf.printf("[!] Conversion failed. Raw file kept at storm_capture.pcm")
         else:
-            print(f"[!] ffmpeg not found. Raw audio saved as: {output_pcm}")
+            smf.printf(f"[!] ffmpeg not found. Raw audio saved as: {output_pcm}")

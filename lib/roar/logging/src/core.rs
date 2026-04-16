@@ -14,7 +14,7 @@ pub fn core_print(
     flush: bool,
 ) -> PrintResult<()> {
     // 1. Inisialisasi destinasi (Stdout atau Python file object)
-    let mut dest = OutputDestination::from_py_object(file, _py)?;
+    let dest = OutputDestination::from_py_object(file, _py)?;
     
     // 2. Optimasi: Menulis langsung ke buffer (Streaming)
     // Daripada membuat Vec<String> dan melakukan .join() (yang mengalokasikan memori lagi),

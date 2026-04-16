@@ -1,4 +1,6 @@
 import os
+import sys
+import smf
 import importlib
 from rootmap import ROOT
 
@@ -46,7 +48,7 @@ def load_module_dynamically(module_name):
                 try:
                     return importlib.import_module(module_dots)
                 except Exception as e:
-                    print(f"[-] ERROR => {e}")
+                    smf.printf(f"[-] ERROR UTILS =>", e, file=sys.stderr, flush=True)
                     return None
 
     return None

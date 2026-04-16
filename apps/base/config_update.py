@@ -1,6 +1,8 @@
 import requests
 import json
 import os
+import smf
+
 from apps.utility.colors import C
 from rootmap import ROOT
 
@@ -14,9 +16,9 @@ def check_update():
             VERSION = json.load(f)["version"]
 
         if latest_version > VERSION:
-            print(f"{C.SUCCESS}[!] Current version => v{VERSION}")
-            print(f"{C.SUCCESS}[!] Update available => v{latest_version}")
-            print(f"{C.SUCCESS}[-] Type => storm update")
-            print()
+            smf.printf(f"{C.SUCCESS}[!] Current version => v{VERSION}")
+            smf.printf(f"{C.SUCCESS}[!] Update available => v{latest_version}")
+            smf.printf(f"{C.SUCCESS}[-] Type => storm update")
+            smf.printf()
     except Exception as e:
-        print(f"ERROR CHECK UPDATE => {e}")
+        smf.printf(f"ERROR CHECK UPDATE =>", e)

@@ -1,3 +1,5 @@
+// -- https://github.com/StormWorld0/storm-framework
+// -- SMF License
 use pyo3::prelude::*;
 use crate::converters::object_to_string;
 use crate::writer::OutputDestination;

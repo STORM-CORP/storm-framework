@@ -35,7 +35,7 @@ def execute(args, context):
             options[var_name] = var_value
             smf.printf(f"{var_name} => {var_value}")
     else:
-        smf.printf("[!] Try => set <VAR> <VALUE>")
+        smf.printf(f"{C.INPUT}[!] Try => set <VAR> <VALUE>{C.RESET}")
 
     context["options"] = options
     return context

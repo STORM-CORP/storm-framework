@@ -6,20 +6,23 @@ use crate::writer::OutputDestination;
 use crate::errors::PrintResult;
 
 pub fn core_print(
-    _py: Python<'_>, // Menambahkan akses ke token GIL
-    objects: &[&PyAny],
+    _py: Python<'_>,
+    // 1. UBAH: Slice berisi Bound objects, bukan legacy GIL references
+    objects: &[Bound<'_, PyAny>], 
     sep: &str,
     end: &str,
-    file: Option<&PyAny>, // Mengikuti perubahan signature di lib.rs
+    // 2. UBAH: Option yang membungkus reference ke Bound object
+    file: Option<&Bound<'_, PyAny>>, 
     flush: bool,
 ) -> PrintResult<()> {
     // 1. Inisialisasi destinasi (Stdout atau Python file object)
+    // Parameter 'file' sekarang bertipe Option<&Bound<'_, PyAny>>
     let dest = OutputDestination::from_py_object(file, _py)?;
     
     // 2. Optimasi: Menulis langsung ke buffer (Streaming)
-    // Daripada membuat Vec<String> dan melakukan .join() (yang mengalokasikan memori lagi),
-    // kita tulis satu per satu ke objek 'dest'.
     for (idx, obj) in objects.iter().enumerate() {
+        // Karena iterasi pada &[Bound<'_, PyAny>], variabel 'obj' di sini
+        // otomatis bertipe &Bound<'_, PyAny>.
         let s = object_to_string(obj)?;
         dest.write(&s)?;
         
@@ -39,4 +42,3 @@ pub fn core_print(
     
     Ok(())
 }
-

@@ -23,7 +23,7 @@ def main():
     while True:
         p_mod = current_module_name if current_module else "~"
         try:
-            smf.printf(f"{CC.CYAN}┌─({CC.BLUE}storm{CC.YELLOW}<⚡>{CC.BLUE}framework{CC.CYAN}){CC.RESET}-{CC.RED}[{p_mod}]{CC.RESET}")
+            print(f"{CC.CYAN}┌─({CC.BLUE}storm{CC.YELLOW}<⚡>{CC.BLUE}framework{CC.CYAN}){CC.RESET}-{CC.RED}[{p_mod}]{CC.RESET}")
             promp = f"{CC.CYAN}└─{CC.BLUE}➤ {CC.RESET}"
             user_input = input(promp).strip().split()
         except KeyboardInterrupt: return
@@ -52,7 +52,7 @@ def main():
 
             if new_context.get("exit"): break
         else:
-            smf.printf(f"[-] Unknown Command: {cmd} => Run the {C.SUCCESS}help{C.RESET} command for more details.")
+            smf.printf(f"[-] Unknown Command => {cmd} > Run the {C.SUCCESS}help{C.RESET} command for more details.")
 
 if __name__ == "__main__":
     main()

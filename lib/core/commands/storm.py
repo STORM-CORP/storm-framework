@@ -1,5 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
+import smf
+
 from apps.utility.update import run_update as update
 from apps.utility.verify import run_verif as verify
 from apps.utility.restart import run_restart as restart
@@ -14,7 +16,7 @@ from apps.utility.colors import C
 def execute(args, context):
     cmd = args[0].lower() if args else ""
     if not cmd:
-        print(f"{C.ERROR}[!] ERROR => Not module selected")
+        smf.printf(f"{C.ERROR}[!] ERROR => Not module selected")
         return context
 
     # I don't understand this update command, which sometimes happens when there is a big and sensitive update.
@@ -37,6 +39,6 @@ def execute(args, context):
     elif cmd == "restart":
         restart(context)
     else:
-        print(f"{C.INPUT}[-] WARN => {cmd} > Not found.")
+        smf.printf(f"{C.INPUT}[-] WARN => {cmd} > Not found.")
 
     return context

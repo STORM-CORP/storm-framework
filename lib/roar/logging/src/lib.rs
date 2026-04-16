@@ -1,3 +1,5 @@
+// -- https://github.com/StormWorld0/storm-framework
+// -- SMF License
 mod core;
 mod parallel;
 mod writer;

@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import os
+import smf
 
 from rootmap import ROOT
 
@@ -33,10 +34,9 @@ def execute(options):
 
     try:
         for line in process.stdout:
-            sys.stdout.write(line)
-            sys.stdout.flush()
+            msf.printf(line, file=sys.stdout, flush=True, end="")
 
     except KeyboardInterrupt:
         process.terminate()
         process.wait()
-        print("[*] Proxy successfully stopped.")
+        smf.printf("[*] Proxy successfully stopped.")

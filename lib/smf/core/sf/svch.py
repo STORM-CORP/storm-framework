@@ -1,4 +1,5 @@
 import os
+import smf
 from rootmap import ROOT
 
 
@@ -15,5 +16,5 @@ def session(options):
                 f.write(f"{key}={value}\n")
         return True
     except Exception as e:
-        print(f"[!] ERROR saving session => {e}")
+        smf.printf(f"[!] ERROR saving session =>", e, file=sys.stderr, flush=True)
         return False

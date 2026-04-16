@@ -1,3 +1,5 @@
+// -- https://github.com/StormWorld0/storm-framework
+// -- SMF License
 use pyo3::prelude::*;
 use rayon::prelude::*;
 use crate::converters::object_to_string;
@@ -19,11 +21,11 @@ pub fn parallel_print(
     // 2. Gunakan Rayon untuk pemrosesan paralel yang aman
     // Kita kumpulkan ke Vec<String> agar urutan tetap terjaga sesuai index asli
     let formatted_strings: Vec<String> = objects
-        .into_par_iter()
+        .par_iter() // Gunakan .par_iter() bukan .into_par_iter() untuk slice
         .map(|obj| {
-            // SANGAT PENTING: Mendapatkan akses GIL di setiap thread worker
             Python::with_gil(|py| {
-                match object_to_string(obj.bind(py)) {
+                // Gunakan .bind(py) karena kita di PyO3 0.21
+                match object_to_string(obj) {
                     Ok(s) => s,
                     Err(_) => "ErrorRepresentation".to_string(),
                 }

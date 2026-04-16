@@ -1,5 +1,6 @@
 import os
 import sys
+import smf
 import lib.smf.core.sf.svch as svch
 
 
@@ -12,5 +13,5 @@ def run_restart(context):
     try:
         os.execv(executable, args)
     except Exception as e:
-        print(f"[-] Restart failed => {e}")
+        smf.printf(f"[-] Restart failed =>", e, file=sys.stderr, flush=True)
         sys.exit(1)

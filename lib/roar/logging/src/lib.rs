@@ -7,30 +7,35 @@ mod converters;
 mod errors;
 
 use pyo3::prelude::*;
-use pyo3::types::PyTuple;
+// Import PyModule dan PyTuple langsung agar kode lebih bersih
+use pyo3::types::{PyModule, PyTuple};
 
 #[pyfunction]
 #[pyo3(signature = (*args, sep=" ", end="\n", file=None, flush=false))]
 fn printf(
     py: Python<'_>,
-    args: &PyTuple,
+    args: &Bound<'_, PyTuple>,
     sep: &str,
     end: &str,
-    file: Option<&PyAny>,
+    file: Option<&Bound<'_, PyAny>>,
     flush: bool,
 ) -> PyResult<()> {
-    // 1. Konversi PyTuple ke Vec<&PyAny> (SANGAT PENTING)
-    let objects: Vec<&PyAny> = args.iter().collect();
     
-    // 2. Thresholding
-    // Gunakan objects.len() karena args adalah PyTuple
+    // 1. Konversi Iterator: Bound<'_, PyAny> -> &PyAny
+    // Menggunakan .into_gil_ref() untuk downcast ke tipe lama secara aman
+    let objects: Vec<&PyAny> = args
+        .iter()
+        .map(|bound_item| bound_item.into_gil_ref())
+        .collect();
+    
+    // 2. Mapping Option file: Option<&Bound> -> Option<&PyAny>
+    let legacy_file: Option<&PyAny> = file.map(|b| b.as_gil_ref());
+
+    // 3. Routing Logic
     if objects.len() > 100 {
-        // PERBAIKAN: Sesuaikan dengan signature parallel_print (6 argumen)
-        // Hapus 'args' dan 'is_stdout' karena info is_stdout sudah ada di dalam logic file.is_none()
-        parallel::parallel_print(py, &objects, sep, end, file, flush)?;
+        parallel::parallel_print(py, &objects, sep, end, legacy_file, flush)?;
     } else {
-        // PERBAIKAN: Sesuaikan dengan signature core_print (6 argumen)
-        core::core_print(py, &objects, sep, end, file, flush)?;
+        core::core_print(py, &objects, sep, end, legacy_file, flush)?;
     }
     
     Ok(())
@@ -40,21 +45,21 @@ fn printf(
 #[pyo3(signature = (*args, sep=" ", end="\n", file=None, flush=false))]
 fn printd(
     py: Python<'_>,
-    args: &PyTuple,
+    args: &Bound<'_, PyTuple>,
     sep: &str,
     end: &str,
-    file: Option<&PyAny>,
+    file: Option<&Bound<'_, PyAny>>,
     flush: bool,
 ) -> PyResult<()> {
-    // Menulis ke stderr secara langsung di Rust (Instant Debug)
     eprintln!("[DEBUG] Printing {} objects via smf.printd", args.len());
     
-    // Delegasikan ke printf
+    // Delegasikan secara transparan
     printf(py, args, sep, end, file, flush)
 }
 
+// 4. Perbaikan inisialisasi modul (Pure Bound API)
 #[pymodule]
-fn smf(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn smf(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(printf, m)?)?;
     m.add_function(wrap_pyfunction!(printd, m)?)?;
     Ok(())

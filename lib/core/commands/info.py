@@ -44,7 +44,7 @@ def execute(args, context):
                 width = 55
 
                 smf.printf()
-                smf.printf(f"\n{C.HEADER}{'='*width}")
+                smf.printf(f"{C.HEADER}{'='*width}")
                 smf.printf(f"{C.SUCCESS}{'STORM VULNERABILITY KNOWLEDGE BASE':^55}")
                 smf.printf(f"{C.HEADER}{'='*width}")
 
@@ -72,7 +72,7 @@ def execute(args, context):
 
                 smf.printf(f"{C.SUCCESS}{'SCANNER':<13} : {info['scanner']}")
                 smf.printf(f"{C.SUCCESS}{'EXPLOIT':<13} : {info['exploit']}")
-                smf.printf(f"{C.HEADER}{'='*width}\n")
+                smf.printf(f"{C.HEADER}{'='*width}")
                 smf.printf()
 
             except Exception as e:

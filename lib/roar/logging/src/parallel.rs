@@ -15,8 +15,7 @@ pub fn parallel_print(
     flush: bool,
 ) -> PrintResult<()> {
     
-    // 1. Ambil pointer mentah dari objek agar Rayon tidak protes soal thread-safety
-    // Kita simpan sebagai usize (alamat memori)
+    // 1. Ambil pointer mentah (as_ptr tidak butuh GIL di PyO3 0.21)
     let ptrs: Vec<usize> = objects
         .iter()
         .map(|obj| obj.as_ptr() as usize)
@@ -25,27 +24,31 @@ pub fn parallel_print(
     // 2. Inisialisasi Destinasi
     let dest = OutputDestination::from_py_object(file, py)?;
 
-    // 3. Proses Paralel menggunakan Pointer
+    // 3. Proses Paralel
     let formatted_strings: Vec<String> = ptrs
         .into_par_iter()
         .map(|ptr_addr| {
             Python::with_gil(|py_inner| {
-                // Kembalikan pointer mentah menjadi objek PyAny yang valid
-                unsafe {
-                    let obj = py_inner.from_owned_ptr_or_err(ptr_addr as *mut pyo3::ffi::PyObject)
-                        .unwrap_or_else(|_| py_inner.None().into_bound());
-                    
-                    // Gunakan fungsi konversi kita (pastikan kompatibel dengan Bound API atau as_ref)
-                    match object_to_string(obj.as_ref()) {
-                        Ok(s) => s,
-                        Err(_) => "ErrorRepresentation".to_string(),
-                    }
+                // Menggunakan Bound API yang baru (0.21+)
+                // Kita buat biner pointer kembali menjadi Bound object
+                let ptr = ptr_addr as *mut pyo3::ffi::PyObject;
+                
+                // Gunakan unsafe secara minimal hanya untuk mengonversi pointer
+                let bound_obj = unsafe { 
+                    py_inner.from_borrowed_ptr::<PyAny>(ptr) 
+                };
+
+                // Panggil converter kita (pastikan object_to_string menerima &PyAny)
+                // Di PyO3 0.21, Bound<PyAny> bisa di-cast ke &PyAny dengan .as_ref()
+                match object_to_string(bound_obj.as_ref()) {
+                    Ok(s) => s,
+                    Err(_) => "ErrorRepresentation".to_string(),
                 }
             })
         })
         .collect();
 
-    // 4. Join dan Write
+    // 4. Output Logic
     let mut output = formatted_strings.join(sep);
     output.push_str(end);
 

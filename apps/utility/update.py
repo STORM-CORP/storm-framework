@@ -1,4 +1,5 @@
 import sys
+import smf
 import requests
 import subprocess
 from apps.utility.colors import C
@@ -9,7 +10,7 @@ def run_update():
     try:
         latest_version = requests.get(url).json()["version"]
     except Exception as e:
-        print(f"ERROR UPDATE => {e}")
+        smf.printf(f"ERROR VERSION UPDATE =>", e)
 
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)
@@ -27,7 +28,7 @@ def run_update():
     )
 
     if process.returncode == 0:
-        print(
+        smf.printf(
             f"{C.SUCCESS}\n[✓] System updated to version => {latest_version}{C.RESET}"
         )
 
@@ -40,8 +41,8 @@ def run_update():
         libsigned.storm_sign()
         return True
     except ImportError as e:
-        print(f"[!] ERROR IMPORT => {e}", file=sys.stderr)
+        smf.printf(f"[!] ERROR IMPORT =>", e, file=sys.stderr, flush=True)
         return False
     except Exception as e:
-        print(f"[!] ERROR => {e}", file=sys.stderr)
+        smf.printf(f"[!] ERROR =>", e, file=sys.stderr, flush=True)
         return False

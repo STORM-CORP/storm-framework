@@ -1,6 +1,7 @@
 import telnetlib3
 import asyncio
 import socket
+import smf
 import os
 from assets.wordlist.userpass import DEFAULT_CREDS, COMMON_USERS
 from apps.utility.colors import C
@@ -69,23 +70,23 @@ async def _execute_async(options):
     port = 23
     wordlist_path = options.get("PASS")
 
-    print(f"{C.HEADER}--- TELNET BRUTE FORCE: {target_ip} ---")
+    smf.printf(f"{C.HEADER}--- TELNET BRUTE FORCE: {target_ip} ---")
 
     # ---------------------------------------------
     # Stage 1: Kredensial Default
     # ---------------------------------------------
-    print(f"{C.MENU}  [*] Starting stage 1: Kredensial Default")
+    smf.printf(f"{C.MENU}  [*] Starting stage 1: Kredensial Default")
     found_weak_creds = False
 
     try:
         for user, passwd in DEFAULT_CREDS:
             if await test_telnet(target_ip, port, user, passwd):
-                print(
+                smf.printf(
                     f"{C.SUCCESS}  {SYM_SUCCESS} LOGIN SUCCESS! (Telnet) -> U:{user} P:{passwd}"
                 )
                 found_weak_creds = True
                 break
-            print(f"{C.MENU}  {SYM_FAILED} FAIL: {user}:{passwd}")
+            smf.printf(f"{C.MENU}  {SYM_FAILED} FAIL: {user}:{passwd}")
 
         if found_weak_creds:
             return
@@ -94,7 +95,7 @@ async def _execute_async(options):
         # Stage 2: Brute Force Wordlist
         # ---------------------------------------------
         if wordlist_path and os.path.exists(wordlist_path):
-            print(f"\n{C.MENU}  [*] Starting stage 2: Brute Force")
+            smf.printf(f"\n{C.MENU}  [*] Starting stage 2: Brute Force")
 
             try:
                 with open(wordlist_path, "r", encoding="latin-1") as f:
@@ -105,27 +106,27 @@ async def _execute_async(options):
                             if not passwd:
                                 continue
                             if await test_telnet(target_ip, port, target_user, passwd):
-                                print(
+                                smf.printf(
                                     f"{C.SUCCESS}  {SYM_SUCCESS} LOGIN SUCCESS! (Telnet) -> U:{target_user} P:{passwd}"
                                 )
                                 return
-                            print(
+                            smf.printf(
                                 f"{C.MENU}  [>] TRY: U:{target_user:<20} P:{passwd:<20}",
                                 end="\r",
                                 flush=True,
                             )
 
-                    print(f"{C.MENU} [!] Brute Force finish.")
+                    smf.printf(f"{C.MENU} [!] Brute Force finish.")
 
             except Exception as e:
-                print(f"{C.ERROR}\n[!] ERROR: {e}")
+                smf.printf(f"{C.ERROR}\n[!] ERROR: {e}")
         else:
-            print(f"\n{C.MENU}  {SYM_FAILED} All passwords are incorrect.")
+            smf.printf(f"\n{C.MENU}  {SYM_FAILED} All passwords are incorrect.")
 
     except KeyboardInterrupt:
         return
     except Exception as e:
-        print(f"{C.ERROR}[x] GLOBAL ERROR: {e}")
+        smf.printf(f"{C.ERROR}[x] GLOBAL ERROR =>", e)
 
 
 def execute(options):

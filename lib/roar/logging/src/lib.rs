@@ -29,11 +29,7 @@ fn printf(
     // Variabel 'objects' adalah Vec<Bound>. Saat kita mem-passing '&objects',
     // Rust secara otomatis melakukan deref coercion menjadi slice &[Bound<'_, PyAny>]
     // Parameter 'file' juga di-passing as-is tanpa mapping as_gil_ref().
-    if objects.len() > 100 {
-        parallel::parallel_print(py, &objects, sep, end, file, flush)?;
-    } else {
-        core::core_print(py, &objects, sep, end, file, flush)?;
-    }
+    core::core_print(py, &objects, sep, end, file, flush)?;
     
     Ok(())
 }

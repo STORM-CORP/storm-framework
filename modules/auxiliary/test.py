@@ -5,7 +5,7 @@ import smf
 
 def execute(options):
     # 1. Siapkan 10.000 data log raksasa
-    total_logs = 10_000
+    total_logs = 1_000_000
     print(f"Menyiapkan payload {total_logs} baris log...")
 
     # Kita buat list berisi 10.000 string
@@ -42,7 +42,7 @@ def execute(options):
     # HASIL ANALISIS
     # =======================================================
     print("\n" + "=" * 50)
-    print("🏆 HASIL BENCHMARK (10.000 DATA)")
+    print("🏆 HASIL BENCHMARK (1.000.000 DATA)")
     print("=" * 50)
     print(f"Python Bawaan : {time_py:.6f} detik")
     print(f"Storm Rust    : {time_rust:.6f} detik")

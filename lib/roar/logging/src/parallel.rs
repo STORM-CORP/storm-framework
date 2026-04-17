@@ -29,27 +29,28 @@ pub fn parallel_print(
     let dest = OutputDestination::from_py_object(file, py)?;
 
     // 3. Proses Paralel
-    let formatted_strings: Vec<String> = ptrs
-        .into_par_iter()
-        .map(|ptr_addr| {
-            // Setiap worker thread Rayon mengakuisisi GIL-nya sendiri
-            Python::with_gil(|py_inner| {
-                let ptr = ptr_addr as *mut pyo3::ffi::PyObject;
-                
-                // Rekonstruksi Bound object dari pointer C Python murni
-                let bound_obj = unsafe { 
-                    pyo3::Bound::<PyAny>::from_borrowed_ptr(py_inner, ptr) 
-                };
+    // 3. Proses Paralel (MEMPERBAIKI DEADLOCK)
+    // py.allow_threads akan MELEPASKAN GIL dari thread utama saat blok ini berjalan.
+    let formatted_strings: Vec<String> = py.allow_threads(|| {
+        ptrs.into_par_iter()
+            .map(|ptr_addr| {
+                // Karena GIL sudah dilepas oleh thread utama, 
+                // worker thread Rayon sekarang bisa memperebutkan/mengakuisisi GIL 
+                // secara bergantian untuk memproses pointer.
+                Python::with_gil(|py_inner| {
+                    let ptr = ptr_addr as *mut pyo3::ffi::PyObject;
+                    let bound_obj = unsafe { 
+                        pyo3::Bound::<PyAny>::from_borrowed_ptr(py_inner, ptr) 
+                    };
 
-                // 3. UPDATE: Sinkron dengan converters.rs
-                // Langsung melempar referensi &Bound, tanpa .as_gil_ref()
-                match object_to_string(&bound_obj) {
-                    Ok(s) => s,
-                    Err(_) => "ErrorRepresentation".to_string(),
-                }
+                    match object_to_string(&bound_obj) {
+                        Ok(s) => s,
+                        Err(_) => "ErrorRepresentation".to_string(),
+                    }
+                })
             })
-        })
-        .collect();
+            .collect()
+    });
 
     // 4. Output Logic
     let mut output = formatted_strings.join(sep);

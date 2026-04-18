@@ -1,5 +1,5 @@
 NAME     := binary output name
-OUT      := $(BIN_DIR)
+OUT      := $(OUT_DIR)/category name
 TARGET   := $(OUT)/$(NAME)
 
 CACHE    := $(CARGO_TARGET_DIR)

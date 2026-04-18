@@ -40,7 +40,7 @@ Pengembang (Developer) **TIDAK** bertanggung jawab atas segala kerusakan, kerugi
 
 ### 🛠️ Instalasi
 
-Pastikan Anda memiliki **Python 3.12.x** terinstal pada sistem Anda. Tool ini dioptimalkan untuk dijalankan di lingkungan **Kali Linux/Termux**.
+Pastikan Anda memiliki **Python 3.13.x** terinstal pada sistem Anda. Tool ini dioptimalkan untuk dijalankan di lingkungan **Kali Linux/Termux**.
 
 #### 1. Kloning Repositori & Instalasi Otomatis
 

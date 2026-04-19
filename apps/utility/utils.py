@@ -2,6 +2,8 @@ import os
 import sys
 import smf
 import importlib
+
+from typing import List
 from rootmap import ROOT
 from plugin.cache.utils_cache import StormSmartCache
 
@@ -121,4 +123,4 @@ def get_categories():
 def get_modules_in_category(category: str) -> List[str]:
     """Retrieves all .py files within a specified category"""
     scanner = StormSmartCache()
-    return scanner.get_modules_in_category(category)
+    return scanner.get_show_modules(category)

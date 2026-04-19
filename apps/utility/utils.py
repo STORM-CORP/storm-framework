@@ -117,8 +117,8 @@ def get_categories():
         if os.path.isdir(os.path.join(modules_path, d)) and d != "__pycache__"
     ]
 
+
 def get_modules_in_category(category: str) -> List[str]:
     """Retrieves all .py files within a specified category"""
     scanner = StormSmartCache()
     return scanner.get_modules_in_category(category)
-

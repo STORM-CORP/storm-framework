@@ -128,13 +128,3 @@ class StormSmartCache:
         # Fetchall mengembalikan list of tuples: [('exploits/test',), ('exploits/demo',)]
         return [row[0] for row in self.cursor.fetchall()]
 
-
-# ==========================================
-# IMPLEMENTASI & PENGGUNAAN DI FRAMEWORK
-# ==========================================
-
-# 1. Inisialisasi Global Scanner (Biasanya diletakkan saat Framework Booting/Startup)
-scanner = StormSmartScanner()
-
-# Jalankan sync satu kali di awal untuk memastikan data valid
-scanner.sync_modules()

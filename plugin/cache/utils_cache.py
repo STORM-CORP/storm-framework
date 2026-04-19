@@ -1,77 +1,120 @@
 import os
 import sqlite3
+from typing import List, Set, Tuple, Dict
 from rootmap import ROOT
-
 
 class StormSmartScanner:
     def __init__(self):
-        self.db = os.path.join(ROOT, "lib", "core", "sf", "cache", "storm_cache.db")
-        self.conn = sqlite3.connect(db)
+        self.db_path = os.path.join(ROOT, "lib", "core", "sf", "cache", "storm_cache.db")
+        self.modules_dir = os.path.join(ROOT, "modules") # Base path untuk kalkulasi relatif
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        
+        self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
         self.cursor = self.conn.cursor()
+        
+        self.cursor.execute("PRAGMA journal_mode=WAL;")
+        self.cursor.execute("PRAGMA synchronous=NORMAL;")
+        
         self._init_db()
 
     def _init_db(self):
+        # SKEMA BARU: Menambahkan kolom category dan module_name
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS module_cache (
                 path TEXT PRIMARY KEY,
-                mtime REAL
+                mtime REAL,
+                category TEXT,
+                module_name TEXT
             )
         """)
+        # OPTIMASI: Indexing pada kolom category agar query perintah `show` dieksekusi dalam hitungan mikrodetik
+        self.cursor.execute("CREATE INDEX IF NOT EXISTS idx_category ON module_cache(category)")
         self.conn.commit()
 
-    def sync_modules(self, target_dir):
-        # 1. Ambil state saat ini dari Database (Cache)
+    def _fast_scan(self, directory: str, db_state: Dict[str, float], current_disk_files: Set[str], to_upsert: List[Tuple[str, float, str, str]]):
+        try:
+            with os.scandir(directory) as it:
+                for entry in it:
+                    if entry.is_dir(follow_symlinks=False):
+                        self._fast_scan(entry.path, db_state, current_disk_files, to_upsert)
+                    
+                    elif entry.is_file(follow_symlinks=False):
+                        # FILTERING: Terapkan logika lama kamu di level scanner
+                        if entry.name.endswith(".py") and entry.name != "__init__.py":
+                            full_path = entry.path
+                            current_disk_files.add(full_path)
+                            mtime = entry.stat().st_mtime
+                            
+                            if full_path not in db_state or db_state[full_path] != mtime:
+                                # KALKULASI METADATA UNTUK DATABASE
+                                rel_path = os.path.relpath(full_path, self.modules_dir)
+                                # Pastikan format module_name menggunakan forward slash (standar framework)
+                                module_name = rel_path.replace(os.sep, "/").replace(".py", "")
+                                category = module_name.split("/")[0] if "/" in module_name else module_name
+                                
+                                to_upsert.append((full_path, mtime, category, module_name))
+                                print(f"[NEW/MODIFIED] Module: {module_name}")
+                                
+        except PermissionError:
+            print(f"[WARNING] Permission denied accessing: {directory}")
+
+    def sync_modules(self) -> None:
+        """Melakukan sinkronisasi disk dengan database cache."""
         self.cursor.execute("SELECT path, mtime FROM module_cache")
         db_state = {row[0]: row[1] for row in self.cursor.fetchall()}
+        
+        current_disk_files: Set[str] = set()
+        to_upsert: List[Tuple[str, float, str, str]] = []
+        
+        # Mulai scan dari root folder modules
+        self._fast_scan(self.modules_dir, db_state, current_disk_files, to_upsert)
 
-        current_disk_files = set()
-        to_upsert = []  # List untuk Insert/Update
-
-        # 2. Scanning Disk
-        for root, _, files in os.walk(target_dir):
-            for file in files:
-                full_path = os.path.join(root, file)
-                current_disk_files.add(full_path)
-
-                # Cek metadata (mtime)
-                mtime = os.path.getmtime(full_path)
-
-                # Logika Pintar: Hanya proses jika file baru atau berubah
-                if full_path not in db_state or db_state[full_path] != mtime:
-                    to_upsert.append((full_path, mtime))
-                    print(f"[NEW/MODIFIED] {file}")
-                else:
-                    # File sudah ada dan tidak berubah
-                    pass
-
-        # 3. Identifikasi file yang sudah dihapus secara fisik
         deleted_files = set(db_state.keys()) - current_disk_files
 
-        # 4. Eksekusi Batch ke SQLite (Sangat Cepat dengan Transaction)
         if to_upsert or deleted_files:
             with self.conn:
-                # Update atau Insert file baru/berubah
-                self.cursor.executemany(
-                    "INSERT OR REPLACE INTO module_cache (path, mtime) VALUES (?, ?)",
-                    to_upsert,
-                )
-
-                # Hapus file yang sudah tidak ada di disk
-                for path in deleted_files:
-                    print(f"[REMOVED] {os.path.basename(path)}")
-                    self.cursor.execute(
-                        "DELETE FROM module_cache WHERE path = ?", (path,)
+                if to_upsert:
+                    self.cursor.executemany(
+                        "INSERT OR REPLACE INTO module_cache (path, mtime, category, module_name) VALUES (?, ?, ?, ?)", 
+                        to_upsert
                     )
+                
+                if deleted_files:
+                    delete_payload = [(path,) for path in deleted_files]
+                    self.cursor.executemany(
+                        "DELETE FROM module_cache WHERE path = ?", 
+                        delete_payload
+                    )
+                    for path in deleted_files:
+                        print(f"[REMOVED] Module dari disk: {os.path.basename(path)}")
+            
+            print(f"Sync cache: {len(to_upsert)} updated, {len(deleted_files)} removed.")
 
-            print(
-                f"Sync selesai: {len(to_upsert)} updated, {len(deleted_files)} removed."
-            )
-        else:
-            print("Cache sudah up-to-date. Tidak ada I/O berat dilakukan.")
+    def get_modules_in_category(self, category: str) -> List[str]:
+        """
+        API untuk menggantikan fungsi lama.
+        Sangat cepat karena menggunakan SQL Index dan tidak menyentuh disk I/O.
+        """
+        self.cursor.execute("SELECT module_name FROM module_cache WHERE category = ?", (category,))
+        # Fetchall mengembalikan list of tuples: [('exploits/test',), ('exploits/demo',)]
+        return [row[0] for row in self.cursor.fetchall()]
 
-        return list(current_disk_files)
 
+# ==========================================
+# IMPLEMENTASI & PENGGUNAAN DI FRAMEWORK
+# ==========================================
 
-# Penggunaan di Storm Framework
+# 1. Inisialisasi Global Scanner (Biasanya diletakkan saat Framework Booting/Startup)
 scanner = StormSmartScanner()
-all_modules = scanner.sync_modules("./modules")
+
+# Jalankan sync satu kali di awal untuk memastikan data valid
+scanner.sync_modules()
+
+# 2. Fungsi Wrapper Baru untuk perintah `show`
+def get_modules_in_category(category: str) -> List[str]:
+    """
+    Fungsi ini sekarang sepenuhnya mendelegasikan tugas ke database cache.
+    Tidak ada lagi os.walk yang memblokir proses.
+    """
+    return scanner.get_modules_in_category(category)
+

@@ -4,7 +4,7 @@ from typing import List, Set, Tuple, Dict
 from rootmap import ROOT
 
 
-class StormSmartScanner:
+class StormSmartCache:
     def __init__(self):
         self.db_path = os.path.join(
             ROOT, "lib", "core", "sf", "cache", "storm_cache.db"
@@ -117,7 +117,7 @@ class StormSmartScanner:
                 f"Sync cache: {len(to_upsert)} updated, {len(deleted_files)} removed."
             )
 
-    def get_modules_in_category(self, category: str) -> List[str]:
+    def get_show_modules(self, category: str) -> List[str]:
         """
         API untuk menggantikan fungsi lama.
         Sangat cepat karena menggunakan SQL Index dan tidak menyentuh disk I/O.
@@ -138,12 +138,3 @@ scanner = StormSmartScanner()
 
 # Jalankan sync satu kali di awal untuk memastikan data valid
 scanner.sync_modules()
-
-
-# 2. Fungsi Wrapper Baru untuk perintah `show`
-def get_modules_in_category(category: str) -> List[str]:
-    """
-    Fungsi ini sekarang sepenuhnya mendelegasikan tugas ke database cache.
-    Tidak ada lagi os.walk yang memblokir proses.
-    """
-    return scanner.get_modules_in_category(category)

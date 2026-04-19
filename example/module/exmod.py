@@ -75,10 +75,10 @@ def execute(options):
 #
 # This is important if the module uses a compiled language
 # you need to map the binary output path to:
-# external/source/bin
+# external/source/out
 #
 # You can use the existing rootmap import with examples like:
-# os.path.join(ROOT, "external", "source", "bin", "(binary name)")
+# os.path.join(ROOT, "external", "source", "out", "(category name)", "(binary name)")
 #
 # Why is that? Because the default Storm compiler directs to that path as binary output
 # Also make sure you use a unique compiled language file name

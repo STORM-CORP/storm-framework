@@ -3,6 +3,7 @@ import sys
 import smf
 import importlib
 from rootmap import ROOT
+from plugin.cache.utils_cache import StormSmartCache
 
 # utils.py It all contains help logic to make it easier during repairs and updates.
 # This is included in the core category which cannot be modified.
@@ -116,28 +117,8 @@ def get_categories():
         if os.path.isdir(os.path.join(modules_path, d)) and d != "__pycache__"
     ]
 
-
-module_cache = {}
-
-
-def get_modules_in_category(category):
+def get_modules_in_category(category: str) -> List[str]:
     """Retrieves all .py files within a specified category"""
+    scanner = StormSmartCache()
+    return scanner.get_modules_in_category(category)
 
-    if category in module_cache:
-        return module_cache[category]
-
-    category_path = os.path.join(ROOT, "modules", category)
-    modules_list = []
-
-    if os.path.isdir(category_path):
-        for root, dirs, files in os.walk(category_path):
-            for file in files:
-                if file.endswith(".py") and file != "__init__.py":
-                    # Get the path relative to the root modules folder
-                    rel_path = os.path.relpath(
-                        os.path.join(root, file), os.path.join(ROOT, "modules")
-                    )
-                    modules_list.append(rel_path.replace(".py", ""))
-
-    module_cache[category] = modules_list
-    return modules_list

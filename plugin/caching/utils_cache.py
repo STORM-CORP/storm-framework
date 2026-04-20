@@ -10,9 +10,7 @@ from rootmap import ROOT
 
 class StormSmartCache:
     def __init__(self):
-        self.db_path = os.path.join(
-            ROOT, "lib", "sqlite", "cached", "cache.db"
-        )
+        self.db_path = os.path.join(ROOT, "lib", "sqlite", "cached", "cache.db")
         self.modules_dir = os.path.join(
             ROOT, "modules"
         )  # Base path untuk kalkulasi relatif

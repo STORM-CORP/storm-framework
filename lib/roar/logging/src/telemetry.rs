@@ -11,22 +11,21 @@ pub fn execute_telemetry(
     objects: &[Bound<'_, PyAny>],
 ) -> PrintResult<()> {
     
-    // 1. Ubah argumen objek menjadi string panjang
+    // 1. Ubah argumen objek menjadi string panjang (Butuh GIL)
     let mut messages = Vec::with_capacity(objects.len());
     for obj in objects {
         messages.push(object_to_string(obj)?);
     }
     let final_message = messages.join(" ");
 
-    // 2. Ekstrak Waktu Universal (Milidetik) secara Native di Rust
+    // 2. Ekstrak Waktu Universal secara Native di Rust
     let timestamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .unwrap()
         .as_secs_f64();
 
-    // 3. FFI Black Magic: Melacak Traceback (Caller)
-    // Kita panggil sys._getframe(1) milik Python untuk tahu persis 
-    // siapa yang memanggil fungsi printd ini.
+    // 3. FFI Traceback: Pelacakan Caller (Butuh GIL)
+    // Parameter call1((1,)) mengambil frame stack 1 level di atasnya.
     let caller_info = match py.import_bound("sys").and_then(|sys| sys.getattr("_getframe")) {
         Ok(getframe) => {
             if let Ok(frame) = getframe.call1((1,)) {
@@ -45,15 +44,20 @@ pub fn execute_telemetry(
         Err(_) => "SysModuleError".to_string(),
     };
 
-    // 4. Injeksi ke Database (TANPA GIL!)
-    // Kita lepaskan GIL agar tidak membuat aplikasi Python lag saat Rust 
-    // menulis data ke hard disk.
-    py.allow_threads(|| {
-        if let Ok(conn) = get_db_connection() {
-            let _ = insert_log(&conn, timestamp, level, &final_message, &caller_info);
-        }
+    // 4. Inisialisasi Database (Butuh GIL karena memanggil rootmap)
+    // Jika path tidak valid / OS menolak pembuatan folder, 
+    // error akan langsung dilempar ke Python via PrintResult (?)
+    let conn = get_db_connection(py)?;
+
+    // 5. Injeksi ke Database (TANPA GIL!)
+    // Perhatikan penambahan keyword `move`. Ini memerintahkan kompilator Rust 
+    // untuk memindahkan kepemilikan variabel `conn` ke dalam closure secara aman.
+    py.allow_threads(move || {
+        // Karena ini adalah ranah log, jika disk I/O gagal (misal disk penuh), 
+        // kita menggunakan `let _ =` untuk melakukan "silent fail" 
+        // agar tidak membuat aplikasi utama ikut crash.
+        let _ = insert_log(&conn, timestamp, level, &final_message, &caller_info);
     });
 
     Ok(())
 }
-

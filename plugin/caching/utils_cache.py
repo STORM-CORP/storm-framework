@@ -13,7 +13,7 @@ class StormSmartCache:
         self.db_path = os.path.join(ROOT, "lib", "sqlite", "cached", "cache.db")
         self.modules_dir = os.path.join(
             ROOT, "modules"
-        )  # Base path untuk kalkulasi relatif
+        )  # Base path for relative calculations
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
 
         self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
@@ -25,7 +25,7 @@ class StormSmartCache:
         self._init_db()
 
     def _init_db(self):
-        # SKEMA BARU: Menambahkan kolom category dan module_name
+        # NEW SCHEMA: Added category and module_name columns
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS module_cache (
                 path TEXT PRIMARY KEY,
@@ -34,8 +34,8 @@ class StormSmartCache:
                 module_name TEXT
             )
         """)
-        # OPTIMASI: Indexing pada kolom category agar query perintah `show`
-        #           dieksekusi dalam hitungan mikrodetik
+        # OPTIMIZATION: Indexing on the category column so that the `show` command query
+        #               executed in microseconds
         self.cursor.execute(
             "CREATE INDEX IF NOT EXISTS idx_category ON module_cache(category)"
         )
@@ -57,7 +57,7 @@ class StormSmartCache:
                         )
 
                     elif entry.is_file(follow_symlinks=False):
-                        # FILTERING: Terapkan logika lama kamu di level scanner
+                        # FILTERING: Apply filter logic to the orchestrator
                         if entry.name.endswith(".py") and entry.name != "__init__.py":
                             full_path = entry.path
                             current_disk_files.add(full_path)
@@ -67,10 +67,10 @@ class StormSmartCache:
                                 full_path not in db_state
                                 or db_state[full_path] != mtime
                             ):
-                                # KALKULASI METADATA UNTUK DATABASE
+                                # METADATA CALCULATION FOR DATABASE
                                 rel_path = os.path.relpath(full_path, self.modules_dir)
-                                # Pastikan format module_name menggunakan forward slash
-                                # (standar framework)
+                                # In module_name format always use forward slash
+                                # (standard framework)
                                 module_name = rel_path.replace(os.sep, "/").replace(
                                     ".py", ""
                                 )
@@ -88,14 +88,14 @@ class StormSmartCache:
             smf.printf(f"[WARNING] Permission denied accessing: {directory}")
 
     def sync_modules(self) -> None:
-        """Melakukan sinkronisasi disk dengan database cache."""
+        """Synchronize the disk with the cache database."""
         self.cursor.execute("SELECT path, mtime FROM module_cache")
         db_state = {row[0]: row[1] for row in self.cursor.fetchall()}
 
         current_disk_files: Set[str] = set()
         to_upsert: List[Tuple[str, float, str, str]] = []
 
-        # Mulai scan dari root folder modules
+        # Start scan from root folder modules
         self._fast_scan(self.modules_dir, db_state, current_disk_files, to_upsert)
 
         deleted_files = set(db_state.keys()) - current_disk_files
@@ -116,11 +116,11 @@ class StormSmartCache:
 
     def get_show_modules(self, category: str) -> List[str]:
         """
-        API untuk menggantikan fungsi lama.
-        Sangat cepat karena menggunakan SQL Index dan tidak menyentuh disk I/O.
+        An API to replace legacy functionality.
+        It's very fast because it uses SQL Indexes and doesn't involve disk I/O.
         """
         self.cursor.execute(
             "SELECT module_name FROM module_cache WHERE category = ?", (category,)
         )
-        # Fetchall mengembalikan list of tuples: [('exploits/test',), ('exploits/demo',)]
+        # Fetchall returns a list of tuples: [('exploits/test',), ('exploits/demo',)]
         return [row[0] for row in self.cursor.fetchall()]

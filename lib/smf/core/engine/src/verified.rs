@@ -76,7 +76,11 @@ fn main() {
     let mut untracked_files = Vec::new();
     let mut found_in_disk = HashSet::new();
 
-    let ignored_items = [".git", "__pycache__", ".pytest_cache", ".github", "storm.db", "signed_manifest.json", ".gitignore", ".env", "target", "res"];
+    let ignored_items = [
+        ".git", "__pycache__", ".pytest_cache", ".github", 
+        "cache", "storm.db", "signed_manifest.json", ".gitignore", 
+        ".env", "target", "res"
+    ];
 
     for entry in WalkDir::new(".").into_iter().filter_map(|e| e.ok()) {
         let path = entry.path();

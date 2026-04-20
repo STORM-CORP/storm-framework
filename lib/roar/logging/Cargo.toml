@@ -11,6 +11,7 @@ crate-type = ["cdylib"]
 # abi3-py37 memastikan biner Anda kompetibel dengan banyak versi Python
 pyo3 = { version = "0.21", features = ["extension-module", "abi3-py37"] }
 rayon = "1"
+rusqlite = { version = "0.31.0", features = ["bundled"] }
 
 # crossbeam dihapus karena kita sudah pakai Rayon .collect() untuk menjaga urutan
 

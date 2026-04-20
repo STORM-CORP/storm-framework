@@ -3,7 +3,7 @@ use pyo3::prelude::*;
 use rusqlite::Connection;
 use std::fs;
 use std::path::PathBuf;
-use crate::errors::PrintResult; // Menggunakan error handler terpusat kita
+use crate::errors::PrintResult;
 
 pub fn get_db_connection(py: Python<'_>) -> PrintResult<Connection> {
     // 1. Ekstrak Path dari Python (Butuh GIL Token)
@@ -38,7 +38,8 @@ pub fn get_db_connection(py: Python<'_>) -> PrintResult<Connection> {
              id INTEGER PRIMARY KEY AUTOINCREMENT,
              timestamp REAL,
              level TEXT,
-             message TEXT,
+             label TEXT,
+             payload TEXT,
              caller_info TEXT
          );"
     )?;
@@ -50,12 +51,13 @@ pub fn insert_log(
     conn: &Connection, 
     timestamp: f64, 
     level: &str, 
-    message: &str, 
+    label: &str, 
+    payload: &str, 
     caller_info: &str
 ) -> PrintResult<()> {
     conn.execute(
-        "INSERT INTO system_logs (timestamp, level, message, caller_info) VALUES (?1, ?2, ?3, ?4)",
-        (timestamp, level, message, caller_info),
+        "INSERT INTO system_logs (timestamp, level, label, payload, caller_info) VALUES (?1, ?2, ?3, ?4, ?5)",
+        (timestamp, level, label, payload, caller_info),
     )?;
     Ok(())
 }

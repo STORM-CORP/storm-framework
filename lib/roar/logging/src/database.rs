@@ -1,14 +1,27 @@
 // File: src/database.rs
 use rusqlite::{Connection, Result as SqlResult};
+use std::fs;
 use std::path::Path;
 
 pub fn get_db_connection() -> SqlResult<Connection> {
-    // Menyimpan log internal di folder tempat script dijalankan
-    let db_path = Path::new("storm_internal_debug.sqlite");
+    // 1. Tentukan nama folder khusus Anda (misal: "db" atau "storage/db")
+    let db_folder = "lib/sqlite/logging"; 
+    let db_name = "log.db";
     
-    let conn = Connection::open(db_path)?;
+    // 2. Buat Path lengkap (db/storm_debug.sqlite)
+    let folder_path = Path::new(db_folder);
+    let file_path = folder_path.join(db_name);
+
+    // 3. Logika Auto-Create Directory: Jika folder belum ada, buat sekarang.
+    if !folder_path.exists() {
+        // fs::create_dir_all memastikan seluruh struktur sub-folder tercipta (mkdir -p)
+        let _ = fs::create_dir_all(folder_path);
+    }
+
+    // 4. Buka koneksi ke path khusus tersebut
+    let conn = Connection::open(file_path)?;
     
-    // Optimasi mutakhir untuk logging kecepatan tinggi
+    // Optimasi WAL tetap kita jalankan untuk performa
     conn.execute_batch(
         "PRAGMA journal_mode = WAL;
          PRAGMA synchronous = NORMAL;

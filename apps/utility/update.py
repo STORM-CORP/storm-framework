@@ -1,4 +1,3 @@
-import sys
 import smf
 import requests
 import subprocess
@@ -9,7 +8,7 @@ def run_update():
     url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json"
     try:
         latest_version = requests.get(url).json()["version"]
-        
+
         smf.printd("Monitoring the version update retrieval process =>", url)
     except Exception as e:
         smf.printf("ERROR VERSION UPDATE =>", e)
@@ -40,8 +39,8 @@ def run_update():
         from scripts.cpl import compiler
 
         compiler.start_build()
-        from external.source.out.core.integrity import libsigned 
-        
+        from external.source.out.core.integrity import libsigned
+
         libsigned.storm_sign()
 
         return True

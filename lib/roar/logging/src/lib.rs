@@ -5,6 +5,8 @@ mod parallel;
 mod writer;
 mod converters;
 mod errors;
+mod database;
+mod telemetry;
 
 use pyo3::prelude::*;
 use pyo3::types::{PyModule, PyTuple};
@@ -35,19 +37,20 @@ fn printf(
 }
 
 #[pyfunction]
-#[pyo3(signature = (*args, sep=" ", end="\n", file=None, flush=false))]
+#[pyo3(signature = (level="DEBUG", *args))] // Default level "DEBUG", argumen objek menyusul
 fn printd(
     py: Python<'_>,
+    level: &str,
     args: &Bound<'_, PyTuple>,
-    sep: &str,
-    end: &str,
-    file: Option<&Bound<'_, PyAny>>,
-    flush: bool,
 ) -> PyResult<()> {
-    eprintln!("[DEBUG] Printing {} objects via smf.printd", args.len());
     
-    // Delegasikan secara transparan
-    printf(py, args, sep, end, file, flush)
+    // Ubah PyTuple iterator ke array Bound secara langsung
+    let objects: Vec<Bound<'_, PyAny>> = args.iter().collect();
+    
+    // Arahkan ke Telemetry Engine
+    telemetry::execute_telemetry(py, level, &objects)?;
+    
+    Ok(())
 }
 
 #[pymodule]

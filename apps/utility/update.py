@@ -35,19 +35,23 @@ def run_update():
     # 4. Trigger Compiler ONLY IF needed
     try:
         from scripts.cpl import compiler
+
         compiler.start_build()
 
         # Run the signing process in 'Clean Memory Space'
         cmd = [
-            sys.executable, "-c", 
-            "from external.source.out.core.integrity import libsigned; libsigned.storm_sign()"
+            sys.executable,
+            "-c",
+            "from external.source.out.core.integrity import libsigned; libsigned.storm_sign()",
         ]
         result = subprocess.run(cmd, capture_output=True, text=True)
-        
+
         if result.returncode != 0:
-            smf.printf(f"[!] SIGSEGV/ERROR detected in subprocess. Return code: {result.returncode}")
+            smf.printf(
+                f"[!] SIGSEGV/ERROR detected in subprocess. Return code: {result.returncode}"
+            )
             return False
-            
+
         return True
     except Exception as e:
         smf.printf(f"[!] ERROR =>", e, file=sys.stderr, flush=True)

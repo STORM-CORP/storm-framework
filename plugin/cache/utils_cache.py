@@ -69,7 +69,7 @@ class StormSmartCache:
                             ):
                                 # KALKULASI METADATA UNTUK DATABASE
                                 rel_path = os.path.relpath(full_path, self.modules_dir)
-                                # Pastikan format module_name menggunakan forward slash 
+                                # Pastikan format module_name menggunakan forward slash
                                 # (standar framework)
                                 module_name = rel_path.replace(os.sep, "/").replace(
                                     ".py", ""

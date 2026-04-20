@@ -3,6 +3,7 @@
 use pyo3::prelude::*;
 use pyo3::exceptions::{PyTypeError, PyValueError, PyOSError};
 use std::fmt;
+use rusqlite;
 
 #[derive(Debug)]
 pub enum PrintError {
@@ -10,15 +11,17 @@ pub enum PrintError {
     ValueError(String),
     IOError(std::io::Error), // Gunakan tipe asli std::io
     PythonError(PyErr),
+    SqliteError(rusqlite::Error),
 }
 
 impl fmt::Display for PrintError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
             PrintError::TypeError(msg) => write!(f, "Type Error: {}", msg),
             PrintError::ValueError(msg) => write!(f, "Value Error: {}", msg),
             PrintError::IOError(err) => write!(f, "I/O System Error: {}", err),
             PrintError::PythonError(err) => write!(f, "Python Internal Error: {}", err),
+            PrintError::SqliteError(err) => write!(f, "SQLite DB Error: {}", err),
         }
     }
 }
@@ -30,6 +33,13 @@ impl std::error::Error for PrintError {
             PrintError::IOError(err) => Some(err),
             _ => None,
         }
+    }
+}
+
+// Implementasi konversi dari rusqlite::Error
+impl From<rusqlite::Error> for PrintError {
+    fn from(err: rusqlite::Error) -> Self {
+        PrintError::SqliteError(err)
     }
 }
 

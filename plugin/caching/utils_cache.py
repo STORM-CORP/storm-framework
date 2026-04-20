@@ -115,7 +115,7 @@ class StormSmartCache:
                     self.cursor.executemany(
                         "DELETE FROM module_cache WHERE path = ?", delete_payload
                     )
-                    
+
     def get_show_modules(self, category: str) -> List[str]:
         """
         API untuk menggantikan fungsi lama.

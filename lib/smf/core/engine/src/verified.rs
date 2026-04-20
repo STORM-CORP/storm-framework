@@ -78,7 +78,7 @@ fn main() {
 
     let ignored_items = [
         ".git", "__pycache__", ".pytest_cache", ".github", 
-        "module-session", "storm.db", "signed_manifest.json", ".gitignore", 
+        "cached", "storm.db", "signed_manifest.json", ".gitignore", 
         ".env", "target", "res"
     ];
 

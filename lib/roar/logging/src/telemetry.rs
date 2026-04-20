@@ -11,21 +11,32 @@ pub fn execute_telemetry(
     objects: &[Bound<'_, PyAny>],
 ) -> PrintResult<()> {
     
-    // 1. Ubah argumen objek menjadi string panjang (Butuh GIL)
-    let mut messages = Vec::with_capacity(objects.len());
-    for obj in objects {
-        messages.push(object_to_string(obj)?);
-    }
-    let final_message = messages.join(" ");
+    // 1. LOGIKA PEMBELAHAN BLOK (Label vs Payload)
+    let label_str = if objects.is_empty() {
+        String::new() // Antisipasi jika user memanggil smf.printd() kosong
+    } else {
+        // Ekstrak argumen indeks [0] sebagai label
+        object_to_string(&objects[0])?
+    };
 
-    // 2. Ekstrak Waktu Universal secara Native di Rust
+    let payload_str = if objects.len() > 1 {
+        // Ambil dari indeks [1] sampai akhir array, lalu gabungkan
+        let mut payloads = Vec::with_capacity(objects.len() - 1);
+        for obj in &objects[1..] {
+            payloads.push(object_to_string(obj)?);
+        }
+        payloads.join(" ")
+    } else {
+        String::new() // Kosongkan jika tidak ada data tambahan
+    };
+
+    // 2. Ekstrak Waktu
     let timestamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .unwrap()
         .as_secs_f64();
 
-    // 3. FFI Traceback: Pelacakan Caller (Butuh GIL)
-    // Parameter call1((1,)) mengambil frame stack 1 level di atasnya.
+    // 3. FFI Traceback Caller
     let caller_info = match py.import_bound("sys").and_then(|sys| sys.getattr("_getframe")) {
         Ok(getframe) => {
             if let Ok(frame) = getframe.call1((1,)) {
@@ -45,19 +56,13 @@ pub fn execute_telemetry(
         Err(_) => "SysModuleError".to_string(),
     };
 
-    // 4. Inisialisasi Database (Butuh GIL karena memanggil rootmap)
-    // Jika path tidak valid / OS menolak pembuatan folder, 
-    // error akan langsung dilempar ke Python via PrintResult (?)
+    // 4. Inisialisasi Database (Butuh GIL)
     let conn = get_db_connection(py)?;
 
-    // 5. Injeksi ke Database (TANPA GIL!)
-    // Perhatikan penambahan keyword `move`. Ini memerintahkan kompilator Rust 
-    // untuk memindahkan kepemilikan variabel `conn` ke dalam closure secara aman.
+    // 5. Injeksi ke Database Terstruktur (Tanpa GIL)
     py.allow_threads(move || {
-        // Karena ini adalah ranah log, jika disk I/O gagal (misal disk penuh), 
-        // kita menggunakan `let _ =` untuk melakukan "silent fail" 
-        // agar tidak membuat aplikasi utama ikut crash.
-        let _ = insert_log(&conn, timestamp, level, &final_message, &caller_info);
+        // Masukkan label_str dan payload_str secara terpisah
+        let _ = insert_log(&conn, timestamp, level, &label_str, &payload_str, &caller_info);
     });
 
     Ok(())

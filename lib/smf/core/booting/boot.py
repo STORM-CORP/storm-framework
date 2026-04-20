@@ -7,6 +7,7 @@ from apps.utility.verify import *
 from apps.utility.colors import C
 from plugin.cache.utils_cache import StormSmartCache
 
+
 def boot():
     # Smart Cache func call
     sync = StormSmartCache()

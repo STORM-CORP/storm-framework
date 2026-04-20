@@ -33,7 +33,8 @@ pub fn execute_telemetry(
                 let lineno = frame.getattr("f_lineno");
                 
                 if let (Ok(f), Ok(l)) = (filename, lineno) {
-                    format!("{}:{}", f.to_string_lossy(), l.extract::<usize>().unwrap_or(0))
+                    let file_str = f.extract::<String>().unwrap_or_else(|_| "UnknownLocation".to_string());
+                    format!("{}:{}", file_str, l.extract::<usize>().unwrap_or(0))
                 } else {
                     "UnknownLocation".to_string()
                 }

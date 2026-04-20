@@ -1,7 +1,7 @@
 // -- https://github.com/StormWorld0/storm-framework
 // -- SMF License
 use pyo3::prelude::*;
-use pyo3::exceptions::{PyTypeError, PyValueError, PyOSError};
+use pyo3::exceptions::{PyTypeError, PyValueError, PyOSError, PyRuntimeError}; 
 use std::fmt;
 use rusqlite;
 
@@ -58,7 +58,7 @@ impl From<PyErr> for PrintError {
 }
 
 // Bagian Krusial: Konversi balik ke Python Exception
-impl From<PrintError> for PyErr {
+impl std::convert::From<PrintError> for PyErr {
     fn from(err: PrintError) -> PyErr {
         match err {
             PrintError::TypeError(msg) => PyTypeError::new_err(msg),
@@ -66,6 +66,7 @@ impl From<PrintError> for PyErr {
             // Mengonversi std::io::Error langsung ke PyOSError yang akurat
             PrintError::IOError(err) => PyOSError::new_err(err.to_string()),
             PrintError::PythonError(err) => err,
+            PrintError::SqliteError(err) => PyRuntimeError::new_err(format!("Internal SQLite Log Error: {}", err)),
         }
     }
 }

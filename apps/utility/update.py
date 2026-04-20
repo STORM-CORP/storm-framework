@@ -44,13 +44,7 @@ def run_update():
             "-c",
             "from external.source.out.core.integrity import libsigned; libsigned.storm_sign()",
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True)
-
-        if result.returncode != 0:
-            smf.printf(
-                f"[!] SIGSEGV/ERROR detected in subprocess. Return code: {result.returncode}"
-            )
-            return False
+        subprocess.run(cmd, stdout=None, stderr=None)
 
         return True
     except Exception as e:

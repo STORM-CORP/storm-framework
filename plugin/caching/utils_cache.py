@@ -2,6 +2,8 @@
 # -- SMF License
 import os
 import sqlite3
+import smf
+
 from typing import List, Set, Tuple, Dict
 from rootmap import ROOT
 
@@ -83,10 +85,9 @@ class StormSmartCache:
                                 to_upsert.append(
                                     (full_path, mtime, category, module_name)
                                 )
-                                print(f"[NEW/MODIFIED] Module: {module_name}")
 
         except PermissionError:
-            print(f"[WARNING] Permission denied accessing: {directory}")
+            smf.printf(f"[WARNING] Permission denied accessing: {directory}")
 
     def sync_modules(self) -> None:
         """Melakukan sinkronisasi disk dengan database cache."""
@@ -114,13 +115,7 @@ class StormSmartCache:
                     self.cursor.executemany(
                         "DELETE FROM module_cache WHERE path = ?", delete_payload
                     )
-                    for path in deleted_files:
-                        print(f"[REMOVED] Module dari disk: {os.path.basename(path)}")
-
-            print(
-                f"Sync cache: {len(to_upsert)} updated, {len(deleted_files)} removed."
-            )
-
+                    
     def get_show_modules(self, category: str) -> List[str]:
         """
         API untuk menggantikan fungsi lama.

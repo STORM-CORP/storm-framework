@@ -39,3 +39,4 @@ base64 = "0.21"
 
 pyo3 = { version = "0.21", features = ["extension-module", "abi3-py37"] }
 rayon = "1"
+rusqlite = { version = "0.31.0", features = ["bundled"] }

@@ -9,8 +9,11 @@ def run_update():
     url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json"
     try:
         latest_version = requests.get(url).json()["version"]
+        
+        smf.printd("Monitoring the version update retrieval process =>", url)
     except Exception as e:
-        smf.printf(f"ERROR VERSION UPDATE =>", e)
+        smf.printf("ERROR VERSION UPDATE =>", e)
+        smf.printf("ERROR VERSION UPDATE =>", e)
 
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)
@@ -37,16 +40,12 @@ def run_update():
         from scripts.cpl import compiler
 
         compiler.start_build()
-
-        # Run the signing process in 'Clean Memory Space'
-        cmd = [
-            sys.executable,
-            "-c",
-            "from external.source.out.core.integrity import libsigned; libsigned.storm_sign()",
-        ]
-        subprocess.run(cmd, stdout=None, stderr=None)
+        from external.source.out.core.integrity import libsigned 
+        
+        libsigned.storm_sign()
 
         return True
     except Exception as e:
-        smf.printf(f"[!] ERROR =>", e, level="CRITICAL")
+        smf.printd("[!] ERROR UPDATE =>", e)
+        smf.printf("[!] ERROR UPDATE =>", e)
         return False

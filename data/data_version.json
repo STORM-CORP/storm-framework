@@ -1,44 +1,46 @@
 {
     "main-repo": "storm-framework",
-    "version": "3.7.0",
+    "organization": "StormWorld0",
+    "version": "3.7.1",
     "author": {
-        "エルジー": "elzyproot@protonmail.com"
+        "Name": "エルジー"
+        "E-Mail": "elzyproot@protonmail.com"
     },
     "contributors": [
         {
-            "name": "Deep Donald",
-            "e-mail": "albrexter@protonmail.com",
-            "role": "tester"
+            "Name": "Deep Donald",
+            "E-Mail": "albrexter@protonmail.com",
+            "Role": "tester"
         },
         {
-            "name": "Andriana",
-            "e-mail": "andriana89@protonmail.com",
-            "role": "tester"
+            "Name": "Andriana",
+            "E-Mail": "andriana89@protonmail.com",
+            "Role": "tester"
         },
         {
-            "name": "Angel",
-            "e-mail": "angela289@protonmail.com",
-            "role": "tester"
+            "Name": "Angel",
+            "E-Mail": "angela289@protonmail.com",
+            "Role": "tester"
         },
         {
-            "name": "zrvha",
-            "e-mail": "zarsita00@protonmail.com",
-            "role": "tester"
+            "Name": "zrvha",
+            "E-Mail": "zarsita00@protonmail.com",
+            "Role": "tester"
         },
         {
-            "name": "stvanva",
-            "e-mail": "vanvanando@protonmail.com",
-            "role": "tester"
+            "Name": "stvanva",
+            "E-Mail": "vanvanando@protonmail.com",
+            "Role": "tester"
         },
         {
-            "name": "ZanDev",
-            "e-mail": "zanaforml@protonmail.com",
-            "role": "tester"
+            "Name": "ZanDev",
+            "E-Mail": "zanaforml@protonmail.com",
+            "Role": "tester"
         },
         {
-            "name": "AvaStars",
-            "e-mail": "skypharita@protonmail.com",
-            "role": "tester"
+            "Name": "AvaStars",
+            "E-Mail": "skypharita@protonmail.com",
+            "Role": "tester"
         }
     ]
 }

@@ -48,5 +48,5 @@ def run_update():
 
         return True
     except Exception as e:
-        smf.printf(f"[!] ERROR =>", e, file=sys.stderr, flush=True)
+        smf.printf(f"[!] ERROR =>", e, level="CRITICAL")
         return False

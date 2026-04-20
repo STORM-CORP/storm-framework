@@ -11,7 +11,7 @@ from rootmap import ROOT
 class StormSmartCache:
     def __init__(self):
         self.db_path = os.path.join(
-            ROOT, "lib", "smf", "core", "sf", "cache", "storm_cache.db"
+            ROOT, "lib", "smf", "core", "sf", "cache", "modules-session", "cache.db"
         )
         self.modules_dir = os.path.join(
             ROOT, "modules"

@@ -8,8 +8,6 @@ def run_update():
     url = "https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json"
     try:
         latest_version = requests.get(url).json()["version"]
-
-        smf.printd("Monitoring the version update retrieval process =>", url)
     except Exception as e:
         smf.printf("ERROR VERSION UPDATE =>", e)
         smf.printf("ERROR VERSION UPDATE =>", e)

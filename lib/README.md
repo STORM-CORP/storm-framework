@@ -8,5 +8,5 @@ there are several subfolders with different types and different data such as
 
 **ui**   == This is a gathering place for banners that UI needs.
 
-**sqlite** == This is the database location, but it is no longer used and plans to delete it.
+**sqlite** == This is the database location.
 

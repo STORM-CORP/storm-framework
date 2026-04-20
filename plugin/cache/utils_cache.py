@@ -1,3 +1,5 @@
+# -- https://github.com/StormWorld0/storm-framework
+# -- SMF License
 import os
 import sqlite3
 from typing import List, Set, Tuple, Dict
@@ -32,7 +34,8 @@ class StormSmartCache:
                 module_name TEXT
             )
         """)
-        # OPTIMASI: Indexing pada kolom category agar query perintah `show` dieksekusi dalam hitungan mikrodetik
+        # OPTIMASI: Indexing pada kolom category agar query perintah `show`
+        #           dieksekusi dalam hitungan mikrodetik
         self.cursor.execute(
             "CREATE INDEX IF NOT EXISTS idx_category ON module_cache(category)"
         )
@@ -66,7 +69,8 @@ class StormSmartCache:
                             ):
                                 # KALKULASI METADATA UNTUK DATABASE
                                 rel_path = os.path.relpath(full_path, self.modules_dir)
-                                # Pastikan format module_name menggunakan forward slash (standar framework)
+                                # Pastikan format module_name menggunakan forward slash 
+                                # (standar framework)
                                 module_name = rel_path.replace(os.sep, "/").replace(
                                     ".py", ""
                                 )

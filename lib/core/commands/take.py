@@ -3,6 +3,8 @@
 import smf
 from lib.smfdb_helpers.log_utils import extract_logs
 from apps.utility.colors import CC
+
+
 # This command is used to retrieve specific logs that are stored.
 # in the internal log database and differentiated using several log levels
 # for example:
@@ -40,10 +42,14 @@ def execute(args, context):
             extract_logs(val, output_file=output_filename)
         else:
             # If the user types: take backup, take system, etc.
-            smf.printf(f"{CC.YELLOW}[!] WARN => Unknown subcommand '{cmd}' for 'take'{CC.RESET}")
+            smf.printf(
+                f"{CC.YELLOW}[!] WARN => Unknown subcommand '{cmd}' for 'take'{CC.RESET}"
+            )
     else:
         # If the user just types "take" or "take log" without a level argument
-        smf.printf(f"{CC.YELLOW}[!] WARN => Syntax error. Usage: take log <level>{CC.RESET}")
+        smf.printf(
+            f"{CC.YELLOW}[!] WARN => Syntax error. Usage: take log <level>{CC.RESET}"
+        )
         # Log syntax errors to the log database
         smf.printd("CLI Syntax Error", args, level="DEBUG")
 

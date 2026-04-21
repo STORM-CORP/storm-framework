@@ -31,6 +31,7 @@ def start_build():
     # Ignore folder list
     ignore_dirs = {".git", "__pycache__", "node_modules", "cache", "vendor"}
 
+    print("[*] Run binary compilation.")
     try:
         # Setup loading
         with StormSpin():

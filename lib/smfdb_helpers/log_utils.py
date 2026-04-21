@@ -47,8 +47,13 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
             smf.printf(f"[!] No log level =>", level_query)
             return
 
+        home_dir = Path.home()
+        dump_folder = home_dir / "storm_logs"
+        dump_folder.mkdir(exist_ok=True)
+        final_output_path = dump_folder / output_file
+        
         # 5. Tulis ke file I/O
-        with open(output_file, "w", encoding="utf-8") as f:
+        with open(final_output_path, "w", encoding="utf-8") as f:
             # Header Laporan
             f.write("=" * 60 + "\n")
             f.write(f"  STORM FRAMEWORK - DIAGNOSTIC LOG REPORT\n")
@@ -78,10 +83,11 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
 
                 f.write("-" * 60 + "\n")
 
-        smf.printd("System log extracted by user", output_file, level="INFO")
+        smf.printd("System log extracted by user", final_output_path, level="INFO")
         smf.printf(
-            f"[+] Extraction Successful! {len(rows)} log lines => {level_query} > saved to => {output_file}"
+            f"[✓] Extraction Successful! {len(rows)} log lines => {level_query}"
         )
+        smf.printf("File saved to =>", final_output_path)
 
     except sqlite3.Error as e:
         smf.printf(f"[-] A Database Log I/O error occurred")

@@ -18,4 +18,5 @@ def session(options):
         return True
     except Exception as e:
         smf.printf(f"[!] ERROR saving session =>", e, file=sys.stderr, flush=True)
+        smf.printd("EXCEPTION WHEN SAVING SESSION OPTIONS", e, level="MEDIUM")
         return False

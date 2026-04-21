@@ -47,33 +47,25 @@ Developer **NO** responsible for any damage, loss, or illegal actions arising fr
 
 > **UNAUTHORIZED USE IS ILLEGAL. Use with caution and at your own risk.**
 
-### 🛠️ Installation
+## Installation
 
-Make sure you have Python 3.13.x installed on your system. This tool is optimized to run in the **Kali Linux/Termux** virtual environment.
+### Recommended installation
 
-#### 1. Repository Cloning & Automated Installation
+We recommend the standard installation provided [Storm installation.](https://github.com/StormWorld0/storm-framework/main/docs/installation.md)
 
-Use the command `curl` following to clone the repository and run the necessary installation scripts:
+## Using Storm
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setup | bash
-```
+To start using Storm:
 
-### 2. Run
+**beginning `sudo storm`:** This is the main interface for interacting with Storm.
 
-Use this command to run it.
+## Communication and Questions
 
-```bash
-sudo storm
-```
+For questions or suggestions, etc:
 
-### 3. Update
-
-Run this command to perform an external update.
-
-```bash
-sudo storm --update
-```
+- Join in place [GitHub discussion](https://github.com/StormWorld0/storm-framework/discussions) for support and others.
+- Send [GitHub issues](https://github.com/StormWorld0/storm-framework/issues) for bug reports and feature requests.
+- Follow [@elzyone](https://x.com/elzyone) for X or [@zxelzy](https://github.com/zxelzy) for github account.
 
 ### 📖 Wiki
 If you need further explanation about Storm-Framework, don't forget to read at [wiki](https://github.com/StormWorld0/storm-framework/wiki)

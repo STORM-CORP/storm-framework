@@ -119,7 +119,7 @@ if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Cannot access $INSTALL_DIR${NC}"; }
 fi
 
-echo -e "[*] Run binary compilation."
+# Compilation binary
 if $NEEDS_SUDO; then
     sudo "$PYTHON_CMD" -m scripts.cpl.compiler
 else

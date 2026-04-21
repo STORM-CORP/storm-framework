@@ -41,7 +41,7 @@ def show_help():
   show <name_categories>        : Displays the complete contents
 
 
-  take log <val>                : Take logs from internal database and save as txt
+  export log <val>              : Export logs from internal database and save as txt
   search <filename>             : To search for files
   about                         : Information Development
   info <cve_name>               : Complete CVE information

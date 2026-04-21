@@ -1,4 +1,3 @@
-import smf
 import requests
 import subprocess
 from apps.utility.colors import C
@@ -9,7 +8,7 @@ def run_update():
     try:
         latest_version = requests.get(url).json()["version"]
     except Exception as e:
-        smf.printf("ERROR VERSION UPDATE =>", e)
+        print(f"ERROR VERSION UPDATE => {e}")
 
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)
@@ -27,7 +26,7 @@ def run_update():
     )
 
     if process.returncode == 0:
-        smf.printf(
+        print(
             f"{C.SUCCESS}\n[✓] System updated to version => {latest_version}{C.RESET}"
         )
 
@@ -38,10 +37,10 @@ def run_update():
         compiler.start_build()
         return True
     except ImportError as e:
-        smf.printd("Error import compiler", e, level="INFO")
+        print(f"Error import compiler => {e}")
         return False
     except Exception as e:
-        smf.printd("Error when running the compiler", e, level="CRITICAL")
+        print(f"Error when running the compiler => {e}")
         return False
 
     # 5. Trigger Signed to all file
@@ -51,10 +50,10 @@ def run_update():
         run_sign()
         return True
     except ImportError as e:
-        smf.printd("Error import run_sign", e, level="INFO")
+        print(f"Error import => {e}")
         return False
     except Exception as e:
-        smf.printd("Error executing signature", e, level="CRITICAL")
+        print(f"Error executing signature => {e}")
         return False
 
 

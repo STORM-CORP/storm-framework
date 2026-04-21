@@ -25,7 +25,7 @@ def session(options):
             os.remove(cache_path)
             return options
         except Exception as e:
-            smf.printf(f"[!] ERROR loading session =>", e, file=sys.stderr, flush=True)
+            smf.printf(f"[!] ERROR loading session")
             smf.printd("ERROR LOADING SESSION OPTIONS", e, level="MEDIUM")
             return options
 

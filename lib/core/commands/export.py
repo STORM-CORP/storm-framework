@@ -43,12 +43,12 @@ def execute(args, context):
         else:
             # If the user types: take backup, take system, etc.
             smf.printf(
-                f"{CC.YELLOW}[!] WARN => Unknown subcommand '{cmd}' for 'take'{CC.RESET}"
+                f"{CC.YELLOW}[!] WARN => Unknown subcommand '{cmd}' for 'export'{CC.RESET}"
             )
     else:
         # If the user just types "take" or "take log" without a level argument
         smf.printf(
-            f"{CC.YELLOW}[!] WARN => Syntax error. Usage: take log <level>{CC.RESET}"
+            f"{CC.YELLOW}[!] WARN => Syntax error. Usage: export log <level>{CC.RESET}"
         )
         # Log syntax errors to the log database
         smf.printd("CLI Syntax Error", args, level="DEBUG")

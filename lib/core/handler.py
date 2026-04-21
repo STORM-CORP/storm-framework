@@ -17,7 +17,9 @@ def execute(cmd, args, context):
         except KeyboardInterrupt:
             return context
         except Exception as e:
-            smf.printf(f"{C.ERROR}[-] ERROR COMMAND => {cmd} > Check critical level in internal database")
+            smf.printf(
+                f"{C.ERROR}[-] ERROR COMMAND => {cmd} > Check critical level in internal database"
+            )
             smf.printd("ERROR WHEN EXECUTTING A COMMAND", cmd, e, level="CRITICAL")
             return context
 

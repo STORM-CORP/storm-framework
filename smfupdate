@@ -52,3 +52,6 @@ def update():
 
     except Exception as e:
         smf.printf("[!] ERROR UPDATE =>", e, file=sys.stderr, flush=True)
+
+if __name__ == "__main__":
+    update()

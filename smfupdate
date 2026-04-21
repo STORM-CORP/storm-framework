@@ -43,13 +43,23 @@ def update():
         from scripts.cpl import compiler
 
         compiler.start_build()
-
-        from external.source.out.core.integrity import libsigned
-
-        libsigned.storm_sign()
-
+    except ImportError as e:
+        smf.printd("Error import compiler", e, level="INFO")
+        return
     except Exception as e:
-        smf.printf("[!] ERROR UPDATE =>", e, file=sys.stderr, flush=True)
+        smf.printd("Error when running the compiler", e, level="CRITICAL")
+        return
+
+    try:
+        from scripts.security.sign import run_sign
+
+        run_sign()
+    except ImportError as e:
+        smf.printd("Error import run_sign", e, level="INFO")
+        return
+    except Exception as e:
+        smf.printd("Error executing signature", e, level="CRITICAL")
+        return
 
 if __name__ == "__main__":
     update()

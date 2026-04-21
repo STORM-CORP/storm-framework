@@ -75,8 +75,7 @@ fn storm_sign(py: Python) -> PyResult<()> {
     // 3. Setup Ignore Lists
     let ignored_dirs: HashSet<&str> = [
         ".git", "__pycache__", ".pytest_cache", ".github",
-        "storm.db", ".gitignore", ".env", "res", "target",
-        "cached",
+        "sqlite", ".gitignore", ".env", "res", "target",
     ]
     .iter()
     .cloned()

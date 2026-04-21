@@ -12,8 +12,8 @@ from apps.utility.colors import CC
 #
 # The commands that can be used are as follows!
 #
-# smf => take log debug
-# smf => take log info
+# smf => export log debug
+# smf => export log info
 # and so forth.
 #
 # If the log is successfully retrieved, by default the resulting log file will be saved in HOME.

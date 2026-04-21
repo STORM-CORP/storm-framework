@@ -40,7 +40,8 @@ keywords=["storm", "pentest", "cybersecurity", "security-research", "pentesting-
 
 "Documentation" = "https://github.com/StormWorld0/storm-framework/docs"
 "Installation" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/installation.md"
-"Logger" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/logger.md"
+"Logger Docs" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/logger.md"
+"Module Guide" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/MODULE_GUIDE.md"
 
 [tool.black]
 line-length = 88

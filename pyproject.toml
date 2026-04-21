@@ -33,9 +33,10 @@ dependencies = [
 keywords=["storm", "pentest", "cybersecurity", "security-research", "pentesting-tools"]
 
 [project.urls]
-"Homepage" = "https://github.com/StormWorld0/storm-framework"
+"Home page" = "https://github.com/StormWorld0/storm-framework"
+"Discussion" = "https://github.com/StormWorld0/storm-framework/discussions"
 "Bug Reports" = "https://github.com/StormWorld0/storm-framework/issues"
-"wiki old" = "https://github.com/StormWorld0/storm-framework/wiki"
+"wiki" = "https://github.com/StormWorld0/storm-framework/wiki"
 
 "Documentation" = "https://github.com/StormWorld0/storm-framework/docs"
 "Installation" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/installation.md"

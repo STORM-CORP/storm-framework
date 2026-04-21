@@ -1,6 +1,7 @@
 import json
 import os
 import smf
+
 import apps.utility.utils as utils
 from apps.utility.colors import C
 from rootmap import ROOT
@@ -39,6 +40,8 @@ def show_help():
   show modules                  : Displaying module categories
   show <name_categories>        : Displays the complete contents
 
+
+  take log <val>                : Take logs from internal database and save as txt
   search <filename>             : To search for files
   about                         : Information Development
   info <cve_name>               : Complete CVE information
@@ -46,12 +49,13 @@ def show_help():
   back                          : Back from current position
   clear                         : Clear command line
   exit                          : Exit the application
-{C.INPUT}
+
+  
   use <nama_modul>              : Selecting a module
   set <key> <val>               : Filling in the parameters
   run                           : Run the selected module
 
-{C.INPUT}
+
   storm update                  : Make updates if necessary
   storm verify                  : Used to check the signature of all files
   storm restart                 : To restart if you experience a bug or error

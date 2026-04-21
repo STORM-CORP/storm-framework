@@ -50,10 +50,9 @@ def main():
         smf.printf("Log Entry: Memory is stable.", file=f, flush=True)
         print("-> [Log successfully written to storm_log.txt]")
 
-    print("\n=== 5. Mode Debug (printd) ===")
-    # Calling printd which will print stderr via Rust `eprintln!` first
-    # before delegating execution back to `printf`.
-    smf.printd("Variable A", "Variabel B", "Variabel C")
+    print("\n=== 5. Debug Mode (printd) ===")
+    # Debug mode & system log monitoring
+    smf.printd("Variable A", err, e, level="DEBUG")
 
 
 if __name__ == "__main__":

@@ -20,12 +20,14 @@ def session(options):
                         if key in options:
                             options[key] = value
 
+            smf.printd("Key options by system cache", cache_path, level="INFO")
+
             # delete cache file
             os.remove(cache_path)
             return options
         except Exception as e:
             smf.printf(f"[!] ERROR loading session")
-            smf.printd("ERROR LOADING SESSION OPTIONS", e, level="MEDIUM")
+            smf.printd("ERROR LOADING SESSION OPTIONS", e, level="ERROR")
             return options
 
     return options

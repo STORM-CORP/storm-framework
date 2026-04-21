@@ -3,7 +3,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 
-import sys
 import smf
 import requests
 import subprocess

@@ -48,7 +48,7 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
 
         # Validasi jika data kosong
         if not rows:
-            smf.printf(f"{C.INPUT}[!] No log level =>", level_query)
+            smf.printf(f"[!] No log level =>", level_query)
             return
 
         # 5. Tulis ke file I/O
@@ -88,7 +88,7 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
 
     except sqlite3.Error as e:
         smf.printf(f"[-] A Database Log I/O error occurred")
-        smf.print("A Database Log I/O error occurred", e, level="INFO")
+        smf.printd("A Database Log I/O error occurred", e, level="INFO")
     except Exception as e:
         smf.printf(f"[-] Extraction failure occurred")
         smf.printd("Extraction failure occurred", e, level="HIGH")

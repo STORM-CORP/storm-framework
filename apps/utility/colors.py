@@ -22,6 +22,8 @@ class CC:
     START = "\001"
     END = "\002"
 
+    MAGENTA = f"{START}{C.HEADER}{END}"
+    GREEN = f"{START}{C.SUCCESS}{END}"
     BLUE = f"{START}{C.BLUE}{END}"
     CYAN = f"{START}{C.MENU}{END}"
     YELLOW = f"{START}{C.INPUT}{END}"

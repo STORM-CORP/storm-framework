@@ -26,7 +26,7 @@ def execute(args, context):
             valid_levels = {"DEBUG", "INFO", "WARN", "ERROR", "CRITICAL"}
             if val not in valid_levels:
                 smf.printf(
-                    f"{CC.RED}[!] ERROR => Unknown log level > {val}. Allowed => {', '.join(valid_levels){CC.RESET}}"
+                    f"{CC.RED}[!] ERROR => Unknown log level > {val}. Allowed => {', '.join(valid_levels)}{CC.RESET}"
                 )
                 # Monitor user typos
                 smf.printd("Invalid log extraction attempt", val, level="WARN")

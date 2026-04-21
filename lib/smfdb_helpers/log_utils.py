@@ -78,13 +78,14 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
 
                 f.write("-" * 60 + "\n")
 
+        smf.printd("System log extracted by user", output_file, level="INFO")
         smf.printf(
             f"[+] Extraction Successful! {len(rows)} log lines => {level_query} > saved to => {output_file}"
         )
 
     except sqlite3.Error as e:
         smf.printf(f"[-] A Database Log I/O error occurred")
-        smf.printd("A Database Log I/O error occurred", e, level="INFO")
+        smf.printd("A Database Log I/O error occurred", e, level="ERROR")
     except Exception as e:
         smf.printf(f"[-] Extraction failure occurred")
-        smf.printd("Extraction failure occurred", e, level="HIGH")
+        smf.printd("Extraction failure occurred", e, level="ERROR")

@@ -8,8 +8,7 @@ from scripts.cpl.advcore import safe_mode
 
 def start_build():
     os.chdir(ROOT)
-    cores = safe_mode()
-
+    
     # Cache is saved
     rust_cache = os.path.abspath(
         os.path.join(ROOT, "lib/smf/core/sf/cache/rust-session")
@@ -32,6 +31,8 @@ def start_build():
     ignore_dirs = {".git", "__pycache__", "node_modules", "cache", "vendor"}
 
     print("[*] Run binary compilation.")
+    
+    cores = safe_mode()
     try:
         # Setup loading
         with StormSpin():

@@ -1,12 +1,1 @@
-## A little explanation about Maps here
-in lib is the data content that needs to be loaded by storm because it is important
-there are several subfolders with different types and different data such as
-
-**core** == this is the gathering place for the core.
-
-**smf**  == This is where the cache and build cache are stored.
-
-**ui**   == This is a gathering place for banners that UI needs.
-
-**sqlite** == This is the database location.
-
+This is where all the Metasploit libraries and mixins are located. In general, any code that will be reused across multiple modules will be placed into a library or mixin which will then be placed under this folder.

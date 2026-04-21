@@ -18,6 +18,7 @@ def execute(cmd, args, context):
             return context
         except Exception as e:
             smf.printf(f"{C.ERROR}[-] ERROR COMMAND => {cmd} > {e}")
+            smf.printd("ERROR WHEN EXECUTTING A COMMAND", cmd, e, level="CRITICAL")
             return context
 
     return None

@@ -14,9 +14,11 @@ def banner():
         ui.stormUI()
         check_update()
     except ImportError as d:
-        smf.printf(f"ERROR BANNER IMPORT =>", d, file=sys.stderr, flush=True)
+        smf.printf("IMPORT BANNER ERROR =>", d, file=sys.stderr, flush=True)
+        smf.printd("IMPORT BANNER ERROR", d, level="INFO")
         return
 
     except Exception as e:
-        smf.printf(f"ERROR BANNER =>", e, file=sys.stderr, flush=True)
+        smf.printf("ERROR BANNER =>", e, file=sys.stderr, flush=True)
+        smf.printd("ERROR BANNER EXCEPTION", e, level="MEDIUM")
         return

@@ -29,9 +29,12 @@ pub fn get_db_connection(py: Python<'_>) -> PrintResult<Connection> {
     // 5. Buka Koneksi SQLite (Otomatis membuat file log.db jika belum ada)
     // ? operator di sini akan dilempar sebagai SqliteError ke PrintResult
     let conn = Connection::open(file_path)?;
+
+    // Hapus otomatis database dalam rentang waktu 7 hari
+    let retention_period_seconds = 7 * 24 * 60 * 60;
     
     // 6. Konfigurasi Mesin Database High-Performance
-    conn.execute_batch(
+    conn.execute_batch(&format!(
         "PRAGMA journal_mode = WAL;
          PRAGMA synchronous = NORMAL;
          CREATE TABLE IF NOT EXISTS system_logs (
@@ -41,8 +44,10 @@ pub fn get_db_connection(py: Python<'_>) -> PrintResult<Connection> {
              label TEXT,
              payload TEXT,
              caller_info TEXT
-         );"
-    )?;
+         );
+         DELETE FROM system_logs WHERE timestamp < (strftime('%s', 'now') - {});",
+         retention_period_seconds
+    ))?;
     
     Ok(conn)
 }

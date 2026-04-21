@@ -10,16 +10,14 @@ def run_sign():
         return True
     except ImportError as e:
         smf.printf(
-            f"[!] Critical => Binary not found.",
+            "[!] Critical => Binary not found.",
             file=sys.stderr,
             flush=True,
         )
-        smf.printf(f"[!] Detail =>", e, file=sys.stderr, flush=True)
+        smf.printd("[!] Import error libsigned binary not found", e, level="INFO")
         return False
     except Exception as e:
-        smf.printf(
-            f"[!] Runtime Error in Rust Binary =>", e, file=sys.stderr, flush=True
-        )
+        smf.printd("Error exception in libsigned", e, level="CRITICAL")
         return False
 
 

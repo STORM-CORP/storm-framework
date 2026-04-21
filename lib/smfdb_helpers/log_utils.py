@@ -85,7 +85,9 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
                 f.write("-" * 60 + "\n")
 
         smf.printd("System log extracted by user", final_output_path, level="INFO")
-        smf.printf(f"{CC.GREEN}[✓] Extraction Successful! {len(rows)} log lines => {level_query}{CC.RESET}")
+        smf.printf(
+            f"{CC.GREEN}[✓] Extraction Successful! {len(rows)} log lines => {level_query}{CC.RESET}"
+        )
         smf.printf(f"{CC.YELLOW}[!] File saved to =>{CC.RESET}", final_output_path)
 
     except sqlite3.Error as e:

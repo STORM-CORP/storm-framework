@@ -20,8 +20,6 @@ def session(options):
                         if key in options:
                             options[key] = value
 
-            smf.printd("Key options by system load cache", key, value, level="INFO")
-
             # delete cache file
             os.remove(cache_path)
             return options

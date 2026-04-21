@@ -31,7 +31,7 @@ def run_update():
             f"{C.SUCCESS}\n[✓] System updated to version => {latest_version}{C.RESET}"
         )
 
-    # 4. Trigger Compiler ONLY IF needed        
+    # 4. Trigger Compiler ONLY IF needed
     try:
         from scripts.cpl import compiler
 

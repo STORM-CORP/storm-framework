@@ -1,1 +1,1 @@
-This is where all the Metasploit libraries and mixins are located. In general, any code that will be reused across multiple modules will be placed into a library or mixin which will then be placed under this folder.
+This is where all the Storm libraries and mixins are located. In general, any code that will be reused across multiple modules will be placed into a library or mixin which will then be placed under this folder.

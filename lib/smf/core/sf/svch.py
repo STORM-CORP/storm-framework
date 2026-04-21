@@ -14,7 +14,7 @@ def session(options):
             for key, value in options.items():
                 # Save with KEY=VALUE format
                 f.write(f"{key}={value}\n")
-                
+
         return True
     except Exception as e:
         smf.printf(f"[!] ERROR saving session")

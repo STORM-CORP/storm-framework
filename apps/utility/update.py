@@ -10,7 +10,6 @@ def run_update():
         latest_version = requests.get(url).json()["version"]
     except Exception as e:
         smf.printf("ERROR VERSION UPDATE =>", e)
-        smf.printf("ERROR VERSION UPDATE =>", e)
 
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)
@@ -32,17 +31,32 @@ def run_update():
             f"{C.SUCCESS}\n[✓] System updated to version => {latest_version}{C.RESET}"
         )
 
-    # 4. Trigger Compiler ONLY IF needed
+    # 4. Trigger Compiler ONLY IF needed        
     try:
         from scripts.cpl import compiler
 
         compiler.start_build()
-        from external.source.out.core.integrity import libsigned
-
-        libsigned.storm_sign()
-
         return True
-    except Exception as e:
-        smf.printd("[!] ERROR UPDATE =>", e)
-        smf.printf("[!] ERROR UPDATE =>", e)
+    except ImportError as e:
+        smf.printd("Error import compiler", e, level="INFO")
         return False
+    except Exception as e:
+        smf.printd("Error when running the compiler", e, level="CRITICAL")
+        return False
+
+    # 5. Trigger Signed to all file
+    try:
+        from scripts.security.sign import run_sign
+
+        run_sign()
+        return True
+    except ImportError as e:
+        smf.printd("Error import run_sign", e, level="INFO")
+        return False
+    except Exception as e:
+        smf.printd("Error executing signature", e, level="CRITICAL")
+        return False
+
+
+if __name__ == "__main__":
+    run_update()

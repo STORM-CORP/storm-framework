@@ -51,7 +51,7 @@ Developer **NO** responsible for any damage, loss, or illegal actions arising fr
 
 ### Recommended installation
 
-We recommend the standard installation provided [Storm installation.](https://github.com/StormWorld0/storm-framework/main/docs/installation.md)
+We recommend the standard installation provided [Storm installation.](https://github.com/StormWorld0/storm-framework/blob/main/docs/installation.md)
 
 ## Using Storm
 

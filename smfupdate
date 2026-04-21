@@ -3,7 +3,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 
-import smf
 import requests
 import subprocess
 
@@ -15,7 +14,7 @@ def update():
     try:
         latest_version = requests.get(url).json()["version"]
     except Exception as e:
-        smf.printf(f"ERROR VERSION UPDATE =>", e)
+        print(f"ERROR VERSION UPDATE => {e}")
 
     # 1. Get the latest info without changing the locale first
     subprocess.run(["git", "fetch", "--all"], stdout=subprocess.DEVNULL)
@@ -33,7 +32,7 @@ def update():
     )
 
     if process.returncode == 0:
-        smf.printf(
+        print(
             f"{C.SUCCESS}\n[✓] System updated to version => {latest_version}{C.RESET}"
         )
 
@@ -43,10 +42,10 @@ def update():
 
         compiler.start_build()
     except ImportError as e:
-        smf.printd("Error import compiler", e, level="INFO")
+        print(f"Error import compiler => {e}")
         return
     except Exception as e:
-        smf.printd("Error when running the compiler", e, level="CRITICAL")
+        print(f"Error when running the compiler => {e}")
         return
 
     try:
@@ -54,10 +53,10 @@ def update():
 
         run_sign()
     except ImportError as e:
-        smf.printd("Error import run_sign", e, level="INFO")
+        print(f"Error import => {e}")
         return
     except Exception as e:
-        smf.printd("Error executing signature", e, level="CRITICAL")
+        print(f"Error executing signature => {e}")
         return
 
 if __name__ == "__main__":

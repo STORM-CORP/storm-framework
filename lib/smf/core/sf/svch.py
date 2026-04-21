@@ -14,8 +14,10 @@ def session(options):
             for key, value in options.items():
                 # Save with KEY=VALUE format
                 f.write(f"{key}={value}\n")
+
+        smf.printd("Fill in the cache options before saving.", key, value, level="INFO")
         return True
     except Exception as e:
         smf.printf(f"[!] ERROR saving session")
-        smf.printd("EXCEPTION WHEN SAVING SESSION OPTIONS", e, level="MEDIUM")
+        smf.printd("EXCEPTION WHEN SAVING SESSION OPTIONS", e, level="ERROR")
         return False

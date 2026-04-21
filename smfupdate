@@ -14,7 +14,6 @@ def update():
     try:
         latest_version = requests.get(url).json()["version"]
     except Exception as e:
-        smf.printd(f"ERROR VERSION UPDATE =>", e, level="LOW")
         smf.printf(f"ERROR VERSION UPDATE =>", e)
 
     # 1. Get the latest info without changing the locale first
@@ -52,5 +51,4 @@ def update():
         subprocess.run(cmd, stdout=None, stderr=None)
 
     except Exception as e:
-        smf.printd("[!] ERROR UPDATE =>", e, level="CRITICAL")
         smf.printf("[!] ERROR UPDATE =>", e, file=sys.stderr, flush=True)

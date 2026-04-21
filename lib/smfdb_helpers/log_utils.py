@@ -23,11 +23,7 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
     # 2. Normalisasi Input Level
     # User mungkin mengetik "critical", "CRITICAL", atau " medium "
     level_query = level_target.strip().upper()
-
-    # Mapping custom jika Anda punya level non-standar (opsional)
-    if level_query == "MEDIUM":
-        level_query = "WARN"  # Asumsi medium adalah Warning
-
+    
     try:
         # 3. Buka koneksi ke SQLite (Mode Read-Only lebih aman)
         # URI mode mencegah kita tidak sengaja mengunci database jika sedang dipakai Rust

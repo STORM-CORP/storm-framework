@@ -8,12 +8,14 @@ from lib.core import handler as ex
 from dataclasses import dataclass, field
 from apps.utility.colors import *
 
+
 @dataclass
 class Context:
     """
     Representasi dari State Eksekusi Framework.
     Context ini yang akan dibawa kemana-mana oleh Pipeline.
     """
+
     current_module: typing.Any = None
     current_module_name: str = ""
     options: dict = field(default_factory=ops.default_options)
@@ -25,12 +27,13 @@ class Context:
         Pipeline: Input -> Core (self) -> Handler -> Commands
         """
         # Melempar 'self' (objek context ini sendiri) ke handler.
-        # ex.execute sekarang tidak perlu mereturn dict baru, 
+        # ex.execute sekarang tidak perlu mereturn dict baru,
         # cukup modifikasi atribut objek context ini secara in-place.
         handled = ex.execute(cmd, args, self)
 
         if not handled:
             # Pindahkan logika error handling unknown command ke sini
             # agar main.py benar-benar bersih dari logika bisnis.
-            smf.printf(f"[-] Unknown Command => {cmd} > Run the {CC.SUCCESS}help{CC.RESET} command for more details.")
-          
+            smf.printf(
+                f"[-] Unknown Command => {cmd} > Run the {CC.SUCCESS}help{CC.RESET} command for more details."
+            )

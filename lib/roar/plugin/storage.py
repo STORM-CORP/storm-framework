@@ -2,6 +2,7 @@ import json
 import os
 import smf
 
+
 class PluginStateStore:
     def __init__(self, filepath="plugin_cache.json"):
         self.filepath = filepath
@@ -23,4 +24,3 @@ class PluginStateStore:
                 json.dump({"active_plugins": list(active_plugins_set)}, f, indent=4)
         except Exception as e:
             smf.printd("State Storage Save Error", e, level="ERROR")
-          

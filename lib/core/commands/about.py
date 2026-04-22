@@ -3,9 +3,9 @@
 import apps.base.config_ui as ui
 from lib.core.engine import Context
 
+
 # The about command is used to display developer information, etc.
 # to find out who the creator, contributor, version, etc.
 # This is useful for very specific information.
 def execute(args: list[str], ctx: "Context") -> None:
     ui.show_about()
-    

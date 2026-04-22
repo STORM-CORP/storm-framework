@@ -17,5 +17,5 @@ def execute(args, context):
 
     if cmd:
         plugin.load(cmd)
-        
+
     return context

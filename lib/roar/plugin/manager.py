@@ -33,17 +33,17 @@ class PluginManager:
             target_file = f"{plugin_name}.py"
             if target_file in files:
                 return os.path.join(root, target_file)
-            
+
             # Skenario 2: Berbasis direktori (namaplugin/__init__.py)
             if os.path.basename(root) == plugin_name and "__init__.py" in files:
                 return os.path.join(root, "__init__.py")
-                
+
         return None
 
     def boot(self):
         """Dijalankan saat framework start, me-load semua plugin yang tersimpan di cache."""
         smf.printd("Booting PluginManager", list(self.active_plugins), level="INFO")
-        
+
         # Iterasi dari copy (list) agar modifikasi pada set tidak memicu RuntimeError
         for p_name in list(self.active_plugins):
             self._load_module(p_name)
@@ -51,11 +51,13 @@ class PluginManager:
     def _load_module(self, plugin_name):
         try:
             smf.printd("Resolving module path", plugin_name, level="DEBUG")
-            
+
             # 1. Path Resolution
             plugin_path = self._resolve_plugin_path(plugin_name)
             if not plugin_path:
-                raise FileNotFoundError(f"Plugin '{plugin_name}' not found in {self.plugin_dir} or its subdirectories.")
+                raise FileNotFoundError(
+                    f"Plugin '{plugin_name}' not found in {self.plugin_dir} or its subdirectories."
+                )
 
             # 2. Low-level Module Specification loading (Mencegah sys.path pollution)
             spec = importlib.util.spec_from_file_location(plugin_name, plugin_path)
@@ -64,16 +66,18 @@ class PluginManager:
 
             # 3. Instance Module Memory Allocation
             module = importlib.util.module_from_spec(spec)
-            
+
             # 4. Daftarkan ke sys.modules (Dibutuhkan jika plugin melakukan relative import)
             sys.modules[plugin_name] = module
-            
+
             # 5. Eksekusi kode di dalam module (Compile AST to Bytecode)
             spec.loader.exec_module(module)
 
             # 6. Validasi Entry Point
             if not hasattr(module, "Plugin"):
-                raise AttributeError(f"Module '{plugin_name}' is missing the main 'Plugin' class.")
+                raise AttributeError(
+                    f"Module '{plugin_name}' is missing the main 'Plugin' class."
+                )
 
             # 7. Inisialisasi & Proxying
             instance = module.Plugin()
@@ -87,16 +91,16 @@ class PluginManager:
             # Passing native Exception object langsung ke Rust (tanpa str)
             smf.printd(f"Failed to load plugin [{plugin_name}]", e, level="CRITICAL")
             self.registry[plugin_name] = NullPlugin(plugin_name)
-            
+
             # Hapus dari sys.modules jika load gagal sebagian (Clean state)
             if plugin_name in sys.modules:
                 del sys.modules[plugin_name]
-                
+
             return False
 
     def load(self, plugin_name):
         """Command handler untuk me-load plugin baru."""
-        # Jika memuat ulang (reload), kita hapus dulu dari memori agar interpreter 
+        # Jika memuat ulang (reload), kita hapus dulu dari memori agar interpreter
         # dipaksa membaca file fisis terbaru (menggantikan importlib.reload)
         if plugin_name in sys.modules:
             del sys.modules[plugin_name]
@@ -126,7 +130,8 @@ class PluginManager:
     def get(self, plugin_name):
         """Dipanggil oleh caller untuk mendapatkan plugin."""
         if plugin_name not in self.registry:
-            smf.printd("Caller requested inactive/missing plugin", plugin_name, level="WARN")
+            smf.printd(
+                "Caller requested inactive/missing plugin", plugin_name, level="WARN"
+            )
             return NullPlugin(plugin_name)
         return self.registry[plugin_name]
-            

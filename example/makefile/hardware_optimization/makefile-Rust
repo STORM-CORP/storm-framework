@@ -1,0 +1,30 @@
+NAME     := binary output name
+OUT      := $(OUT_DIR)/category name
+TARGET   := $(OUT)/$(NAME)
+
+CACHE    := $(CARGO_TARGET_DIR)
+ifeq ($(CACHE),)
+    CACHE := target
+endif
+
+# --- Rust Hardware Optimization ---
+# Menggunakan RUSTFLAGS untuk menyuntikkan instruksi ke compiler (rustc)
+# target-cpu=native: Memberitahu LLVM untuk menggunakan semua fitur CPU lokal.
+# codegen-units=1: Meningkatkan optimasi antar unit kode (LTO-like).
+export RUSTFLAGS := -C target-cpu=native
+
+SRC      := $(shell find src -name "*.rs") Cargo.toml
+
+.PHONY: all clean
+all: $(TARGET)
+
+$(TARGET): $(SRC)
+	@mkdir -p $(OUT)
+	@# Menjalankan cargo dengan flag optimasi yang sudah di-export
+	@cargo build --release --offline
+	@cp $(CACHE)/release/$(NAME) $(TARGET)
+
+clean:
+	@cargo clean
+	@rm -f $(TARGET)
+

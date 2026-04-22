@@ -1,0 +1,33 @@
+RAW_NAME := name in [lib]
+NAME     := binary output name
+OUT      := $(OUT_DIR)/category name
+TARGET   := $(OUT)/$(NAME)
+
+CACHE    := $(CARGO_TARGET_DIR)
+ifeq ($(CACHE),)
+    CACHE := target
+endif
+
+# --- Rust Shared Object Optimization ---
+# 1. target-cpu=native: Optimasi instruksi spesifik hardware.
+# 2. relocation-model=pic: Memastikan Position Independent Code (wajib untuk .so).
+# 3. lto=yes: Mengaktifkan Link Time Optimization untuk performa lintas crate.
+export RUSTFLAGS := -C target-cpu=native -C lto=yes -C relocation-model=pic
+
+SRC      := $(shell find src -name "*.rs") Cargo.toml
+
+.PHONY: all clean
+
+all: $(TARGET)
+
+$(TARGET): $(SRC)
+	@mkdir -p $(OUT)
+	@cargo build --release --offline
+	@cp $(CACHE)/release/lib$(RAW_NAME).so $(TARGET)
+	@# Strip symbols untuk mengurangi ukuran file tanpa mengurangi performa
+	@strip --strip-unneeded $(TARGET)
+
+clean:
+	@cargo clean
+	@rm -f $(TARGET)
+

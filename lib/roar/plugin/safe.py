@@ -1,11 +1,13 @@
 import functools
 import smf
 
+
 class SilentAbsorber:
     """
     Objek 'Black Hole' (Universal Dummy).
     Mencegah crash dari TypeError (None is not callable) atau AttributeError berantai.
     """
+
     def __init__(self, plugin_name, attr_name):
         self._plugin_name = plugin_name
         self._attr_name = attr_name
@@ -52,13 +54,14 @@ class SafePluginProxy:
                     except Exception as e:
                         smf.printd(
                             f"Plugin Runtime Crash [{self._plugin_name}]",
-                            f"Method '{name}' failed: ", e,
+                            f"Method '{name}' failed: ",
+                            e,
                             level="ERROR",
                         )
-                        return None 
+                        return None
 
                 return safe_method_wrapper
-            
+
             # Jika atribut berupa properti statis (bukan method), kembalikan aslinya
             return attr
 
@@ -69,11 +72,9 @@ class SafePluginProxy:
                 level="WARN",
             )
             return SilentAbsorber(self._plugin_name, name)
-            
+
         except Exception as e:
-            smf.printd(
-                f"Unexpected Error [{self._plugin_name}]", e, level="CRITICAL"
-            )
+            smf.printd(f"Unexpected Error [{self._plugin_name}]", e, level="CRITICAL")
             return SilentAbsorber(self._plugin_name, name)
 
 

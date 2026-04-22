@@ -84,11 +84,12 @@ class PluginManager:
             safe_instance = SafePluginProxy(plugin_name, instance)
             self.registry[plugin_name] = safe_instance
 
+            smf.printf("Plugin loaded successfully =>", plugin_name)
             smf.printd("Plugin loaded successfully", plugin_name, level="INFO")
             return True
 
         except Exception as e:
-            # Passing native Exception object langsung ke Rust (tanpa str)
+            smf.printf("Failed to load plugin =>", plugin_name)
             smf.printd(f"Failed to load plugin [{plugin_name}]", e, level="CRITICAL")
             self.registry[plugin_name] = NullPlugin(plugin_name)
 
@@ -125,6 +126,7 @@ class PluginManager:
         if plugin_name in sys.modules:
             del sys.modules[plugin_name]
 
+        smf.printf("Plugin unloaded completely =>", plugin_name)
         smf.printd("Plugin unloaded completely", plugin_name, level="INFO")
 
     def get(self, plugin_name):

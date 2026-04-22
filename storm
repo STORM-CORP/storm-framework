@@ -2,26 +2,20 @@
 
 import smf
 import readline  # noqa: F401
-import data.option.session as ops
 
 from apps.utility.colors import *
 from lib.smf.core.booting.boot import *
-from lib.core import handler as ex
-
 from lib.ui.banner import *
+from lib.smf.core.console.engine import Context 
 
 def main():
     boot()
     banner()
+    core = Context()
 
-    current_module = None
-    current_module_name = ""
-
-    # Global options
-    options = ops.default_options()
-
-    while True:
-        p_mod = current_module_name if current_module else "~"
+    while not core.exit:
+        p_mod = core.current_module_name if core.current_module else "~"
+        
         try:
             print(f"{CC.CYAN}┌─({CC.BLUE}storm{CC.YELLOW}<⚡>{CC.BLUE}framework{CC.CYAN}){CC.RESET}-{CC.RED}[{p_mod}]{CC.RESET}")
             promp = f"{CC.CYAN}└─{CC.BLUE}➤ {CC.RESET}"
@@ -29,30 +23,15 @@ def main():
         except KeyboardInterrupt: return
         except EOFError: break
 
-        if not user_input: continue
+        if not user_input: 
+            continue
 
+        # parsing input
         cmd = user_input[0].lower()
         args = user_input[1:]
 
-        # Wrap all data into Context
-        context = {
-            "current_module": current_module,
-            "current_module_name": current_module_name,
-            "options": options,
-            "exit": False
-        }
-
-        # HAND IT OVER TO THE FOREMAN (HANDLER)
-        new_context = ex.execute(cmd, args, context)
-
-        if new_context:
-            current_module = new_context["current_module"]
-            current_module_name = new_context["current_module_name"]
-            options = new_context["options"]
-
-            if new_context.get("exit"): break
-        else:
-            smf.printf(f"[-] Unknown Command => {cmd} > Run the {C.SUCCESS}help{C.RESET} command for more details.")
+        # Send input data to the console
+        core.dispatch(cmd, args)
 
 if __name__ == "__main__":
     main()

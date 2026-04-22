@@ -5,6 +5,7 @@ from lib.smfdb_helpers.log_utils import extract_logs
 from apps.utility.colors import CC
 from lib.smf.core.console.engine import Context
 
+
 # This command is used to retrieve specific logs that are stored.
 # in the internal log database and differentiated using several log levels
 # for example:
@@ -32,8 +33,8 @@ def execute(args: list[str], ctx: Context) -> None:
                 )
                 # Monitor user typos
                 smf.printd("Invalid log extraction attempt", val, level="WARN")
-                
-                return 
+
+                return
 
             # Dynamic File Naming (Prevent Overwrite)
             # Example result: "log_CRITICAL.txt"

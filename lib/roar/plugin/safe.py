@@ -1,3 +1,5 @@
+# -- https://github.com/StormWorld0/storm-framework
+# -- SMF License
 import functools
 import smf
 

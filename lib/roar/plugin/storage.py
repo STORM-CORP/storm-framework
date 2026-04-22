@@ -5,10 +5,13 @@ import os
 import smf
 from rootmap import ROOT
 
+
 class PluginStateStore:
     def __init__(self):
         # Konstruksi path absolut
-        self.cachepath = os.path.join(ROOT, "lib", "smf", "core", "sf", "cache", "plugin-session")
+        self.cachepath = os.path.join(
+            ROOT, "lib", "smf", "core", "sf", "cache", "plugin-session"
+        )
         self.filepath = os.path.join(self.cachepath, "plugin_cache.json")
         os.makedirs(self.cachepath, exist_ok=True)
 
@@ -30,14 +33,13 @@ class PluginStateStore:
         try:
             # [KOREKSI 3]: Implementasi Atomic Write untuk mencegah korupsi data
             temp_filepath = f"{self.filepath}.tmp"
-            
+
             with open(temp_filepath, "w") as f:
                 json.dump({"active_plugins": list(active_plugins_set)}, f, indent=4)
-                
-            # OS-level atomic replace. Jika proses gagal sebelum baris ini, 
+
+            # OS-level atomic replace. Jika proses gagal sebelum baris ini,
             # file asli (plugin_cache.json) tidak akan rusak.
             os.replace(temp_filepath, self.filepath)
-            
+
         except Exception as e:
             smf.printd("State Storage Save Error", e, level="ERROR")
-            

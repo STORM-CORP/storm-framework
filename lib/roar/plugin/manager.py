@@ -8,6 +8,7 @@ import os
 from .storage import PluginStateStore
 from .safe import SafePluginProxy, NullPlugin
 
+
 class PluginManager:
     def __init__(self):
         self.plugin_dir = os.path.join(ROOT, "plugin")
@@ -29,7 +30,7 @@ class PluginManager:
     def _load_module(self, plugin_name):
         try:
             smf.printd("Loading module", plugin_name, level="DEBUG")
-            
+
             # Jika sudah ada di sys.modules, paksa reload agar kode terbaru terbaca
             if plugin_name in sys.modules:
                 module = importlib.reload(sys.modules[plugin_name])
@@ -37,19 +38,23 @@ class PluginManager:
                 module = importlib.import_module(plugin_name)
 
             # Asumsi: Setiap plugin memiliki class bernama 'Plugin' sebagai entry point
-            if not hasattr(module, 'Plugin'):
-                raise AttributeError(f"Module {plugin_name} is missing the main 'Plugin' class.")
+            if not hasattr(module, "Plugin"):
+                raise AttributeError(
+                    f"Module {plugin_name} is missing the main 'Plugin' class."
+                )
 
             instance = module.Plugin()
             safe_instance = SafePluginProxy(plugin_name, instance)
             self.registry[plugin_name] = safe_instance
-            
+
             smf.printd("Plugin loaded successfully", plugin_name, level="INFO")
             return True
 
         except Exception as e:
             # Isolasi kegagalan pada level load (SyntaxError, ImportError, dll)
-            smf.printd(f"Failed to load plugin [{plugin_name}]", str(e), level="CRITICAL")
+            smf.printd(
+                f"Failed to load plugin [{plugin_name}]", str(e), level="CRITICAL"
+            )
             # Tandai plugin ini di registry dengan NullPlugin
             self.registry[plugin_name] = NullPlugin(plugin_name)
             return False
@@ -75,7 +80,7 @@ class PluginManager:
         # Hapus referensi dari memory system agar bersih sepenuhnya
         if plugin_name in sys.modules:
             del sys.modules[plugin_name]
-            
+
         smf.printd("Plugin unloaded completely", plugin_name, level="INFO")
 
     def get(self, plugin_name):
@@ -84,4 +89,3 @@ class PluginManager:
             smf.printd("Caller requested inactive plugin", plugin_name, level="WARN")
             return NullPlugin(plugin_name)
         return self.registry[plugin_name]
-          

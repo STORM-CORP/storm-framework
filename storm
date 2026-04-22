@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import smf
 import readline  # noqa: F401
 
 from apps.utility.colors import *

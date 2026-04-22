@@ -8,6 +8,7 @@ from apps.utility.colors import C
 from plugin.caching.utils_cache import StormSmartCache
 from lib.roar.plugin.manager import PluginManager
 
+
 def boot():
     # Load plugin manager
     plugin = PluginManager()

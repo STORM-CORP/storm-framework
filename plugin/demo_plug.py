@@ -1,6 +1,7 @@
 # File: plugin/demo_plug.py
 import smf
 
+
 class Plugin:
     def __init__(self):
         # Dipanggil otomatis saat modul di-load oleh manager
@@ -15,6 +16,5 @@ class Plugin:
         """Fungsi cacat untuk menguji ketahanan framework (Fault Tolerance)."""
         smf.printd("DemoPlugin", "Executing dangerous operation...", level="WARN")
         # Ini akan memicu ZeroDivisionError
-        result = 100 / 0 
+        result = 100 / 0
         return result
-      

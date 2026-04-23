@@ -5,6 +5,7 @@ import smf
 from apps.utility.colors import CC
 from lib.smf.core.console.engine import Context
 
+
 # This command is used to turn off the plugin life cycle.
 # active, in the following way;
 #

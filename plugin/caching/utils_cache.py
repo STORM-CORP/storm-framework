@@ -74,7 +74,11 @@ class StormSmartCache:
                                 module_name = rel_path.replace(os.sep, "/").replace(
                                     ".py", ""
                                 )
-                                category = module_name.split("/")[-1]
+                                category = (
+                                    module_name.split("/")[0]
+                                    if "/" in module_name
+                                    else module_name
+                                )
 
                                 to_upsert.append(
                                     (full_path, mtime, category, module_name)

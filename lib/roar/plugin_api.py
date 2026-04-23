@@ -6,6 +6,7 @@ from .plugin import manager
 from .plugin import monitoring
 from .plugin import introspection
 
+
 class StormAPI:
     """
     Antarmuka tunggal untuk REPL.
@@ -25,7 +26,7 @@ class StormAPI:
         # ...lalu menyuntikkan data tersebut ke fungsi Monitoring.
         # Monitoring akan memprosesnya dan mengembalikan laporan.
         laporan = monitoring.get_status_map(folder_plugin, data_di_ram)
-        
+
         return laporan
 
     @staticmethod
@@ -39,7 +40,7 @@ class StormAPI:
 
         # Melemparkan instance plugin tersebut ke fungsi Introspection (Pisau Bedah)
         manifest = introspection.get_plugin_manifest(target_plugin)
-        
+
         return manifest
 
     @staticmethod

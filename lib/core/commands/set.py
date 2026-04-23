@@ -14,7 +14,7 @@ from lib.smf.core.console.engine import Context
 # a command like this will insert value data into the variable we implement.
 def execute(args: list[str], ctx: Context) -> None:
     options = ctx.options
-    
+
     if len(args) >= 2:
         var_name = args[0].upper()
         var_value = args[1]
@@ -23,7 +23,7 @@ def execute(args: list[str], ctx: Context) -> None:
             smf.printf(
                 f"{C.ERROR}[-] ERROR => {var_name} > is not a valid options!{C.RESET}"
             )
-            return 
+            return
 
         if "PASS" in var_name:
             found_path = utils.resolve_path(var_value)

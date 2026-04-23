@@ -79,7 +79,7 @@ fn main() {
     let ignored_items = [
         ".git", "__pycache__", ".pytest_cache", ".github", 
         "sqlite", "signed_manifest.json", ".gitignore", 
-        ".env", "target", "res"
+        ".env", "target", "res", "cache"
     ];
 
     for entry in WalkDir::new(".").into_iter().filter_map(|e| e.ok()) {

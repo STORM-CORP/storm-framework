@@ -8,8 +8,10 @@ from .safe import NullPlugin
 # Mengunci nilai string agar IDE bisa menangkap jika ada typo (contoh: "ACTIF")
 PluginStatus = Literal["ACTIVE", "INACTIVE", "CRASHED", "ORPHANED"]
 
+
 class PluginStatusReport(TypedDict):
     """Kontrak struktur data metrik plugin."""
+
     name: str
     status: PluginStatus
     is_package: bool
@@ -20,6 +22,7 @@ class MonitoringProvider(Protocol):
     Interface/Protocol untuk Type Checker.
     Menjamin class host memiliki attribute plugin_dir (berupa Path) dan registry.
     """
+
     plugin_dir: Path
     registry: Dict[str, Any]
 
@@ -49,7 +52,7 @@ class PluginMonitoring:
             if path.name == "__init__.py":
                 plugin_name = path.parent.name
                 available[plugin_name] = True
-            
+
             # Dukungan Arsitektur 2: Single File
             elif not path.name.startswith("__"):
                 plugin_name = path.stem
@@ -79,27 +82,26 @@ class PluginMonitoring:
                 else:
                     status = "ACTIVE"
 
-            status_report.append({
-                "name": p_name,
-                "status": status,
-                "is_package": is_package
-            })
+            status_report.append(
+                {"name": p_name, "status": status, "is_package": is_package}
+            )
 
         # Fase 2: Deteksi "Orphaned / Zombie Plugins"
         # Kasus dimana plugin ada di Memory, tapi filenya sudah dihapus dari Disk
         for p_name, instance in loaded_plugins.items():
             if p_name not in disk_plugins:
                 status: PluginStatus = "ORPHANED"
-                
+
                 # Walaupun orphaned, bisa jadi dia memang sudah crash
                 if isinstance(instance, NullPlugin):
                     status = "CRASHED"
 
-                status_report.append({
-                    "name": p_name,
-                    "status": status,
-                    "is_package": False # Tidak diketahui secara pasti karena file sudah hilang
-                })
+                status_report.append(
+                    {
+                        "name": p_name,
+                        "status": status,
+                        "is_package": False,  # Tidak diketahui secara pasti karena file sudah hilang
+                    }
+                )
 
         return status_report
-                

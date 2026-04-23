@@ -34,7 +34,7 @@ class PluginMonitoring:
 
     def list_available_on_disk(self: MonitoringProvider) -> Dict[str, bool]:
         """
-        Shallow Scan: Hanya memindai anak langsung (first-level children) 
+        Shallow Scan: Hanya memindai anak langsung (first-level children)
         dari folder plugin. Tidak menembus sub-folder secara rekursif.
         """
         available: Dict[str, bool] = {}
@@ -45,7 +45,7 @@ class PluginMonitoring:
         # [PERBAIKAN]: Menggunakan iterdir() menggantikan rglob()
         # Kompleksitas waktu turun drastis karena tidak ada penelusuran tree I/O
         for child in self.plugin_dir.iterdir():
-            
+
             # Filter 1: Abaikan file/folder tersembunyi (misal: .git, .vscode)
             # atau folder cache sistem python (__pycache__)
             if child.name.startswith(".") or child.name.startswith("__"):
@@ -57,7 +57,7 @@ class PluginMonitoring:
                 init_file = child / "__init__.py"
                 if init_file.exists():
                     available[child.name] = True
-            
+
             # Arsitektur 2: Single File
             # Syarat: Ia adalah file berekstensi .py di root folder plugin/
             elif child.is_file() and child.suffix == ".py":
@@ -66,7 +66,6 @@ class PluginMonitoring:
                     available[plugin_name] = False
 
         return available
-
 
     def get_status_map(self: MonitoringProvider) -> List[PluginStatusReport]:
         """

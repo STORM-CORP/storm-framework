@@ -14,23 +14,31 @@ class StormAPI:
     """
 
     @staticmethod
-    def show_plugins() -> List[dict]:
+    def load(plugin_name: str) -> bool:
+        return manager.load(plugin_name)
+        
+    @staticmethod
+    def unload(plugin_name: str) -> bool:
+        return manager.unload(plugin_name)
+        
+    @staticmethod
+    def monitor() -> List[dict]:
         """
         Perintah REPL: `show plugin`
         Menyambungkan manager ke monitoring.
         """
         # API mengambil 'State/Data' dari Manager...
-        folder_plugin = manager.PLUGIN_DIR
-        data_di_ram = manager.REGISTRY
+        pluginpath = manager.PLUGIN_DIR
+        data = manager.REGISTRY
 
         # ...lalu menyuntikkan data tersebut ke fungsi Monitoring.
         # Monitoring akan memprosesnya dan mengembalikan laporan.
-        laporan = monitoring.get_status_map(folder_plugin, data_di_ram)
+        laporan = monitoring.get_status_map(pluginpath, data)
 
         return laporan
 
     @staticmethod
-    def inspect_plugin(plugin_name: str) -> List[dict]:
+    def inspect(plugin_name: str) -> List[dict]:
         """
         Perintah REPL: `info <nama_plugin>`
         Menyambungkan manager ke introspection.
@@ -57,4 +65,4 @@ class StormAPI:
 
 
 # Expose instance untuk di-import oleh file CLI/Terminal Anda
-app = StormAPI()
+plugin = StormAPI()

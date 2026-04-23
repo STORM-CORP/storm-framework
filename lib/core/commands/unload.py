@@ -8,7 +8,6 @@ from lib.smf.core.console.engine import Context
 
 
 def execute(args: list[str], ctx: Context) -> None:
-    plugin = PluginManager()
 
     if not args:
         smf.printf(
@@ -17,4 +16,4 @@ def execute(args: list[str], ctx: Context) -> None:
         return
 
     cmd = args[0].lower
-    plugin.unload(cmd)
+    ctx.plugin.unload(cmd)

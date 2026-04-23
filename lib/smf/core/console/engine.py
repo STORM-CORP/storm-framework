@@ -23,7 +23,7 @@ class Context:
     exit: bool = False
 
     # Put core plugin into context
-    plugin: typing.Any = register
+    plugin: typing.Any = register.plugins
 
     def dispatch(self, cmd: str, args: list[str]) -> None:
         """

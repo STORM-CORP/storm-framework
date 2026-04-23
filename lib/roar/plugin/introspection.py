@@ -7,6 +7,7 @@ from .safe import NullPlugin
 
 class PluginMethodManifest(TypedDict):
     """Kontrak struktur data hasil introspeksi."""
+
     action: str
     parameters: str
     description: Optional[str]
@@ -41,11 +42,12 @@ def get_plugin_manifest(plugin_instance: Any) -> List[PluginMethodManifest]:
             clean_params = "(...)"
 
         # 5. Ekstraksi Metadata & Penyatuan Data
-        manifest.append({
-            "action": name,
-            "parameters": clean_params,
-            "description": inspect.getdoc(func)
-        })
+        manifest.append(
+            {
+                "action": name,
+                "parameters": clean_params,
+                "description": inspect.getdoc(func),
+            }
+        )
 
     return manifest
-    

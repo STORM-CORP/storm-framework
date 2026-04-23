@@ -18,21 +18,21 @@ from .introspection import PluginIntrospection
 
 class PluginManager(PluginMonitoring, PluginIntrospection):
     def __init__(self):
-        super().__init__() # Ensure parent classes are initialized
+        super().__init__()  # Ensure parent classes are initialized
         self.plugin_dir: Path = Path(ROOT) / "plugin"
         self.registry: Dict[str, Any] = {}
         self.store = PluginStateStore()
         self.active_plugins: Set[str] = self.store.load_active_plugins()
-        
+
         # Thread safety for state mutation (Crucial for Python 3.13 Free-Threading)
         self._lock = threading.RLock()
-        
+
         # O(1) Path Resolution Cache
         self._plugin_index: Dict[str, Path] = {}
 
         # Guaranteed existence of root plugin directory
         self.plugin_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Build index immediately upon initialization
         self._build_index()
 
@@ -42,21 +42,21 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         Builds a Hash Map for O(1) plugin path resolution.
         """
         self._plugin_index.clear()
-        
+
         # Use rglob for recursive searching (much faster and cleaner than os.walk)
         for path in self.plugin_dir.rglob("*.py"):
             # Ignore __pycache__ and hidden files
             if "__pycache__" in path.parts or path.name.startswith("."):
                 continue
-                
+
             # Architecture 1: Package Based (/pluginname/__init__.py)
             if path.name == "__init__.py":
                 plugin_name = path.parent.name
                 self._plugin_index[plugin_name] = path
-            
+
             # Architecture 2: Single File (/pluginname.py)
             else:
-                plugin_name = path.stem # removes the .py extension
+                plugin_name = path.stem  # removes the .py extension
                 # Prevent overwriting package-based with single-file of the same name
                 if plugin_name not in self._plugin_index:
                     self._plugin_index[plugin_name] = path
@@ -72,12 +72,13 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         """
         # Create a list of keys to avoid RuntimeError (dictionary changed size during iteration)
         keys_to_remove = [
-            k for k in sys.modules 
+            k
+            for k in sys.modules
             if k == plugin_name or k.startswith(f"{plugin_name}.")
         ]
         for k in keys_to_remove:
             del sys.modules[k]
-            
+
         # Clear import caches to ensure Python reads the newest physical file
         importlib.invalidate_caches()
 
@@ -103,7 +104,9 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
                     )
 
                 # Low-level Module Specification loading
-                spec = importlib.util.spec_from_file_location(plugin_name, str(plugin_path))
+                spec = importlib.util.spec_from_file_location(
+                    plugin_name, str(plugin_path)
+                )
                 if spec is None or spec.loader is None:
                     raise ImportError(f"Cannot create module spec for {plugin_path}")
 
@@ -132,7 +135,9 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
             except Exception as e:
                 smf.printf(f"Failed to load plugin =>", plugin_name)
-                smf.printd(f"Failed to load plugin [{plugin_name}]", str(e), level="CRITICAL")
+                smf.printd(
+                    f"Failed to load plugin [{plugin_name}]", str(e), level="CRITICAL"
+                )
                 self.registry[plugin_name] = NullPlugin(plugin_name)
 
                 # Purge from memory on partial fail (Clean state)
@@ -144,7 +149,7 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         with self._lock:
             # Rebuild index in case it's a newly added file
             self._build_index()
-            
+
             # Deep purge before load to guarantee fresh read
             self._purge_module_from_memory(plugin_name)
 
@@ -153,7 +158,8 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
                 self.active_plugins.add(plugin_name)
                 self.store.save_active_plugins(self.active_plugins)
                 smf.printf(
-                    f"{CC.GREEN}[✓] Plugin loaded successfully =>{CC.RESET}", plugin_name
+                    f"{CC.GREEN}[✓] Plugin loaded successfully =>{CC.RESET}",
+                    plugin_name,
                 )
             return success
 
@@ -166,14 +172,17 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
                 smf.printd("Plugin instance destroyed", plugin_name, level="DEBUG")
 
                 # 2. Update Persistence
-                self.active_plugins.discard(plugin_name) # discard() is safer than remove()
+                self.active_plugins.discard(
+                    plugin_name
+                )  # discard() is safer than remove()
                 self.store.save_active_plugins(self.active_plugins)
 
                 # 3. Hard Cleanup (Memory Cache Python)
                 self._purge_module_from_memory(plugin_name)
 
                 smf.printf(
-                    f"{CC.GREEN}[✓] Plugin unloaded completely =>{CC.RESET}", plugin_name
+                    f"{CC.GREEN}[✓] Plugin unloaded completely =>{CC.RESET}",
+                    plugin_name,
                 )
                 smf.printd("Unloaded", plugin_name, level="INFO")
                 return True
@@ -193,6 +202,6 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             return NullPlugin(plugin_name)
         return plugin
 
+
 # Plugin registration singleton
 registry = PluginManager()
-                

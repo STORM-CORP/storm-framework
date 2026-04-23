@@ -5,6 +5,7 @@ import smf
 from apps.utility.colors import CC
 from lib.smf.core.console.engine import Context
 
+
 def execute(args: list[str], ctx: Context) -> None:
 
     if not args:

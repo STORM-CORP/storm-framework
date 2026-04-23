@@ -115,7 +115,9 @@ class PluginManager(PluginMonitoring):
         if success:
             self.active_plugins.add(plugin_name)
             self.store.save_active_plugins(self.active_plugins)
-            smf.printf(f"{CC.GREEN}[✓] Plugin loaded successfully =>{CC.RESET}", plugin_name)
+            smf.printf(
+                f"{CC.GREEN}[✓] Plugin loaded successfully =>{CC.RESET}", plugin_name
+            )
         return success
 
     def unload(self, plugin_name):

@@ -2,7 +2,6 @@
 from lib.roar.plugin.manager import registry as plugin
 
 
-
 def example():
     # Ini untuk mangambil nama plugin yang ingin di gunakan.
     example = plugin.get("storm")

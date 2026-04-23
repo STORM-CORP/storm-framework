@@ -11,6 +11,7 @@ from lib.smf.core.console.engine import Context
 # 1. Command => show modules > will display the modules category.
 # 2. Command => show auxiliary > will display all contents in the auxiliary.
 # 3. Command => show options > will display global variables.
+# 4. Command => show plugin > will display all existing plugins.
 def execute(args: list[str], ctx: Context) -> None:
     target_show = args[0].lower() if args else ""
 
@@ -54,6 +55,7 @@ def execute(args: list[str], ctx: Context) -> None:
                 smf.printf(f"{k:<12} {val:<25} Global Variable")
         smf.printf()
 
+    # 3. show plugin
     elif target_show == "plugin":
         status_list = plugin.get_status_map()
 

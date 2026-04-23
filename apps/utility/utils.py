@@ -123,5 +123,5 @@ def get_categories():
 def get_modules_in_category(category: str) -> List[str]:
     """Retrieves all .py files within a specified category"""
     scanner = plugin.get("utils_cache")
-    
+
     return scanner.function(category)

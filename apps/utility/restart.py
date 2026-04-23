@@ -4,6 +4,7 @@ import smf
 import lib.smf.core.sf.svch as svch
 from lib.smf.core.console.engine import Context
 
+
 def run_restart(ctx: Context):
     # save old variables
     svch.session(ctx.options)

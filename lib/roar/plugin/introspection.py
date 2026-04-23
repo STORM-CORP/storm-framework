@@ -3,6 +3,7 @@
 import inspect
 from .safe import NullPlugin
 
+
 class PluginIntrospection:
     """
     Mixin class untuk memberikan kemampuan bedah plugin (Introspection).
@@ -15,7 +16,7 @@ class PluginIntrospection:
         """
         # 1. Ambil plugin (otomatis lewat proxy jika manager sudah di-mix)
         plugin = self.get(plugin_name)
-        
+
         # 2. Early Exit: Jika plugin tidak valid
         if isinstance(plugin, NullPlugin):
             return []
@@ -26,23 +27,18 @@ class PluginIntrospection:
         manifest = []
 
         # 4. Scanning methods
-        for name, func in inspect.getmembers(actual_instance, predicate=inspect.ismethod):
+        for name, func in inspect.getmembers(
+            actual_instance, predicate=inspect.ismethod
+        ):
             # Filter: Hanya fungsi publik (tanpa awalan _)
             if not name.startswith("_"):
                 try:
                     sig = inspect.signature(func)
                     # Cleaning: Hapus 'self' agar tampilan di REPL bersih
                     params = str(sig).replace("(self, ", "(").replace("(self)", "()")
-                    
-                    manifest.append({
-                        "action": name,
-                        "parameters": params
-                    })
+
+                    manifest.append({"action": name, "parameters": params})
                 except Exception:
-                    manifest.append({
-                        "action": name,
-                        "parameters": "(...)"
-                    })
-        
+                    manifest.append({"action": name, "parameters": "(...)"})
+
         return manifest
-          

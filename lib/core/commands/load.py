@@ -14,5 +14,5 @@ def execute(args: list[str], ctx: Context) -> None:
         )
         return
 
-    cmd = args[0].lower
+    cmd = args[0].lower()
     ctx.plugin.load(cmd)

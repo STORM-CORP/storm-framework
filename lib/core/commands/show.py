@@ -3,6 +3,7 @@
 import smf
 import apps.utility.utils as utils
 from apps.utility.colors import C
+from lib.smf.core.console.engine import Context
 
 
 # The show command is used to display data in modules.
@@ -10,14 +11,16 @@ from apps.utility.colors import C
 # 1. Command => show modules > will display the modules category.
 # 2. Command => show auxiliary > will display all contents in the auxiliary.
 # 3. Command => show options > will display global variables.
-def execute(args, context):
+def execute(args: list[str], ctx: Context) -> None:
     target_show = args[0].lower() if args else ""
-    current_module = context["current_module"]
-    current_module_name = context["current_module_name"]
-    options = context["options"]
+    
+    current_module = ctx.current_module
+    current_module_name = ctx.current_module_name
+    options = ctx.options
+    
     if not target_show:
         smf.printf(f"{C.ERROR}[!] No modules selected.{C.RESET}")
-        return context
+        return 
 
     # 1. show modules
     if target_show == "modules":
@@ -60,5 +63,3 @@ def execute(args, context):
             smf.printf()
         else:
             smf.printf(f"{C.INPUT}[-] WARN => {target_show} > not found.{C.RESET}")
-
-    return context

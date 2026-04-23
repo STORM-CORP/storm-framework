@@ -14,6 +14,7 @@ from .introspection import PluginIntrospection
 
 
 class PluginManager(PluginMonitoring, PluginIntrospection):
+
     def __init__(self):
         self.plugin_dir = os.path.join(ROOT, "plugin")
         self.registry = {}
@@ -23,6 +24,7 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         # Guaranteed existence of root plugin directory
         os.makedirs(self.plugin_dir, exist_ok=True)
 
+    
     def _resolve_plugin_path(self, plugin_name):
         """
         O(N) Directory Traversal.
@@ -43,18 +45,42 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
         return None
 
+    
+    def _trigger_hook(self, p_name: str, hook_name: str):
+        """
+        Mencari dan menjalankan fungsi lifecycle (hook) pada plugin jika tersedia.
+        """
+        plugin = self.get(p_name)
+    
+        # Mencari atribut fungsi berdasarkan nama (on_boot, on_shutdown, dll)
+        # Jika tidak ada, getattr akan memberikan None
+        hook = getattr(plugin, hook_name, None)
+
+        if callable(hook):
+            try:
+                smf.printd("Lifecycle", f"Executing {hook_name} for {p_name}", level="DEBUG")
+                hook() # Panggil tanpa argumen
+                return True
+            except Exception as e:
+                smf.printd("Lifecycle", f"Failed {hook_name} on {p_name}: {e}", level="ERROR")
+    
+        return False
+    
+
     def boot(self):
         """
-        Runs when the framework starts,
-        loads all plugins stored in the cache.
+        Standard boot sequence: Load -> Trigger on_boot.
         """
-        smf.printd("Booting PluginManager", list(self.active_plugins), level="INFO")
+        active_list = list(self.active_plugins)
+        smf.printd("Booting PluginManager", active_list, level="INFO")
 
-        # Iterate over copy(list) so that modifications
-        # to the set do not trigger a RuntimeError
-        for p_name in list(self.active_plugins):
-            self._load_module(p_name)
-
+        for p_name in active_list:
+            # Load plugin menggunakan public method agar aman (pake Proxy)
+            if self.load(p_name):
+                # Cukup panggil dispatcher untuk hook 'on_boot'
+                self._trigger_hook(p_name, "sync_modules")
+            
+    
     def _load_module(self, plugin_name):
         try:
             smf.printd("Resolving module path", plugin_name, level="DEBUG")
@@ -105,6 +131,7 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
             return False
 
+    
     def load(self, plugin_name):
         """Command handler to load new plugins."""
         # If we reload, we first delete it from memory so that the interpreter can
@@ -121,6 +148,7 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             )
         return success
 
+    
     def unload(self, plugin_name):
         """Command handler to explicitly disable plugins."""
 
@@ -153,6 +181,7 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             smf.printd("Unload failed plugin not found.", plugin_name, level="WARN")
             return False
 
+    
     def get(self, plugin_name):
         """Called by caller to get plugin."""
         if plugin_name not in self.registry:

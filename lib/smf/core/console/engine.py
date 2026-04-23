@@ -39,5 +39,5 @@ class Context:
             # Pindahkan logika error handling unknown command ke sini
             # agar main.py benar-benar bersih dari logika bisnis.
             smf.printf(
-                f"[-] Unknown Command => {cmd} > Run the {CC.SUCCESS}help{CC.RESET} command for more details."
+                f"[-] Unknown Command => {cmd} > Run the {CC.GREEN}help{CC.RESET} command for more details."
             )

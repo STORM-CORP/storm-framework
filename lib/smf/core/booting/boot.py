@@ -8,6 +8,7 @@ from apps.utility.colors import C
 from lib.roar.plugin.manager import registry as plugin
 from lib.roar.cache import cache_modules as cache
 
+
 def boot():
     # Check core startup security
     check_critical_files()

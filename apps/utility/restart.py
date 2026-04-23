@@ -2,11 +2,11 @@ import os
 import sys
 import smf
 import lib.smf.core.sf.svch as svch
+from lib.smf.core.console.engine import Context
 
-
-def run_restart(context):
+def run_restart(ctx: Context):
     # save old variables
-    svch.session(context["options"])
+    svch.session(ctx.options)
     # Restart the storm
     executable = sys.argv[0]
     args = sys.argv

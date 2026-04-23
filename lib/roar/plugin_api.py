@@ -16,11 +16,11 @@ class StormAPI:
     @staticmethod
     def load(plugin_name: str) -> bool:
         return manager.load(plugin_name)
-        
+
     @staticmethod
     def unload(plugin_name: str) -> bool:
         return manager.unload(plugin_name)
-        
+
     @staticmethod
     def monitor() -> List[dict]:
         """

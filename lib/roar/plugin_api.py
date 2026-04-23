@@ -1,6 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-from typing import Any, List
+from typing import Any, List, Dict
 
 from .plugin import manager
 from .plugin import monitoring

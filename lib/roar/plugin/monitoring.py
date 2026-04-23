@@ -7,8 +7,10 @@ from .safe import NullPlugin
 # 1. Strict Typing untuk Status
 PluginStatus = Literal["ACTIVE", "NON-ACTIVE", "CRASHED", "ORPHANED"]
 
+
 class PluginStatusReport(TypedDict):
     """Kontrak struktur data metrik plugin."""
+
     name: str
     status: PluginStatus
     is_package: bool
@@ -17,6 +19,7 @@ class PluginStatusReport(TypedDict):
 # ==========================================
 # ALAT BEDAH MONITORING (Pure Functions)
 # ==========================================
+
 
 def list_available_on_disk(plugin_dir: Path) -> Dict[str, bool]:
     """
@@ -51,7 +54,9 @@ def list_available_on_disk(plugin_dir: Path) -> Dict[str, bool]:
     return available
 
 
-def get_status_map(plugin_dir: Path, registry: Dict[str, Any]) -> List[PluginStatusReport]:
+def get_status_map(
+    plugin_dir: Path, registry: Dict[str, Any]
+) -> List[PluginStatusReport]:
     """
     Melakukan rekonsiliasi state antara Memory (RAM) vs Physical Disk.
     [Dependency Injection]: Manager harus memberikan Path dan Registry miliknya.
@@ -92,4 +97,3 @@ def get_status_map(plugin_dir: Path, registry: Dict[str, Any]) -> List[PluginSta
             )
 
     return status_report
-    

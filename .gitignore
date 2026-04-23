@@ -19,6 +19,8 @@ __pycache__/
 !LICENSE
 !check
 !smfupdate
+!Makefile
+!makefile*
 
 # logs & temp
 *.log

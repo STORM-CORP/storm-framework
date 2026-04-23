@@ -88,7 +88,7 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         for p_name in tuple(self.active_plugins):
             self._load_module(p_name)
 
-        def _load_module(self, plugin_name: str) -> bool:
+    def _load_module(self, plugin_name: str) -> bool:
         with self._lock:
             # [PERBAIKAN]: Cek eksistensi file SEBELUM masuk ke blok eksekusi yang rawan crash.
             # Jika file tidak ada, langsung tolak tanpa menyentuh registry.

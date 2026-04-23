@@ -76,6 +76,7 @@ fn storm_sign(py: Python) -> PyResult<()> {
     let ignored_dirs: HashSet<&str> = [
         ".git", "__pycache__", ".pytest_cache", ".github",
         "sqlite", ".gitignore", ".env", "res", "target",
+        "cache",
     ]
     .iter()
     .cloned()

@@ -138,5 +138,6 @@ class PluginManager:
             return NullPlugin(plugin_name)
         return self.registry[plugin_name]
 
+
 # Plugin registration
 registry = PluginManager()

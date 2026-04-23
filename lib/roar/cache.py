@@ -125,5 +125,6 @@ class StormSmartCache:
         # Fetchall returns a list of tuples: [('exploits/test',), ('exploits/demo',)]
         return [row[0] for row in self.cursor.fetchall()]
 
+
 # Global register
 cache_modules = StormSmartCache()

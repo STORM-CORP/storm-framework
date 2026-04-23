@@ -4,7 +4,9 @@ import smf
 
 from apps.utility.colors import C
 
-
+if TYPE_CHECKING:
+    from lib.smf.core.console.engine import Context
+    
 def execute(cmd: str, args: list[str], ctx: "Context") -> bool:
     """
     Central function to search for and execute command files.

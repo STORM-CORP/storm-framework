@@ -10,6 +10,7 @@ from .storage import PluginStateStore
 from .safe import SafePluginProxy, NullPlugin
 from .monitoring import PluginMonitoring
 
+
 class PluginManager(PluginMonitoring):
     def __init__(self):
         self.plugin_dir = os.path.join(ROOT, "plugin")

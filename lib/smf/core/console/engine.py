@@ -4,10 +4,10 @@ import typing
 import smf
 import data.option.session as ops
 
-from lib.core import handler as ex
-from dataclasses import dataclass, field
 from apps.utility.colors import *
+from lib.core import handler as ex
 from lib.roar.plugin.manager import registry
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -22,6 +22,7 @@ class Context:
     options: dict = field(default_factory=ops.default_options)
     exit: bool = False
 
+    # Put core plugin into context
     plugin: typing.Any = registry
 
     def dispatch(self, cmd: str, args: list[str]) -> None:

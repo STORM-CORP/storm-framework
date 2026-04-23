@@ -8,9 +8,9 @@ import os
 from rootmap import ROOT
 from .storage import PluginStateStore
 from .safe import SafePluginProxy, NullPlugin
+from .monitoring import PluginMonitoring
 
-
-class PluginManager:
+class PluginManager(PluginMonitoring):
     def __init__(self):
         self.plugin_dir = os.path.join(ROOT, "plugin")
         self.registry = {}

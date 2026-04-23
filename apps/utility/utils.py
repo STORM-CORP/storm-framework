@@ -5,7 +5,7 @@ import importlib
 
 from typing import List
 from rootmap import ROOT
-from plugin.caching.utils_cache import StormSmartCache
+from lib.roar.plugin.manager import registry as plugin
 
 # utils.py It all contains help logic to make it easier during repairs and updates.
 # This is included in the core category which cannot be modified.
@@ -122,5 +122,6 @@ def get_categories():
 
 def get_modules_in_category(category: str) -> List[str]:
     """Retrieves all .py files within a specified category"""
-    scanner = StormSmartCache()
-    return scanner.get_show_modules(category)
+    scanner = plugin.get("utils_cache")
+    
+    return scanner.function(category)

@@ -1,7 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import smf
-from .roar.manager import PluginManager
+from .plugin.manager import PluginManager
 
 
 class StormFrameworkPlugin:

@@ -15,6 +15,7 @@ class C:
     RESET = Style.RESET_ALL
 
     BLUE = Fore.BLUE + Style.BRIGHT
+    WHITE = Fore.WHITE + Style.BRIGHT
 
 
 # Global clean color
@@ -22,6 +23,7 @@ class CC:
     START = "\001"
     END = "\002"
 
+    WHITE = f"{START}{C.WHITE}{END}"
     MAGENTA = f"{START}{C.HEADER}{END}"
     GREEN = f"{START}{C.SUCCESS}{END}"
     BLUE = f"{START}{C.BLUE}{END}"

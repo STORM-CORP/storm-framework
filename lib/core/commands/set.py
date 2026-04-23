@@ -3,6 +3,7 @@
 import smf
 import apps.utility.utils as utils
 from apps.utility.colors import C
+from lib.smf.core.console.engine import Context
 
 
 # The set command is used to save data to global variables and module variables.
@@ -11,8 +12,9 @@ from apps.utility.colors import C
 # or
 # Command => set ip 192.168.1.0
 # a command like this will insert value data into the variable we implement.
-def execute(args, context):
-    options = context["options"]
+def execute(args: list[str], ctx: Context) -> None:
+    options = ctx.options
+    
     if len(args) >= 2:
         var_name = args[0].upper()
         var_value = args[1]
@@ -21,7 +23,7 @@ def execute(args, context):
             smf.printf(
                 f"{C.ERROR}[-] ERROR => {var_name} > is not a valid options!{C.RESET}"
             )
-            return context
+            return 
 
         if "PASS" in var_name:
             found_path = utils.resolve_path(var_value)
@@ -36,6 +38,3 @@ def execute(args, context):
             smf.printf(f"{var_name} => {var_value}")
     else:
         smf.printf(f"{C.INPUT}[!] Try => set <VAR> <VALUE>{C.RESET}")
-
-    context["options"] = options
-    return context

@@ -5,7 +5,7 @@ from typing import List, Dict, Any, TypedDict, Literal
 from .safe import NullPlugin
 
 # 1. Strict Typing untuk Status
-PluginStatus = Literal["ACTIVE", "NON-ACTIVE", "CRASHED", "ORPHANED"]
+PluginStatus = Literal["ACTIVE", "INACTIVE", "CRASHED", "ORPHANED"]
 
 
 class PluginStatusReport(TypedDict):

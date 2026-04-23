@@ -27,7 +27,7 @@ def execute(args: list[str], ctx: Context) -> None:
     if cmd == "update":
         status = update()
         if status == True:
-            restart(ctx.Context)
+            restart(Context)
 
     # This verify calls an integrity check to ensure there have been no code modifications.
     # when executing the code, and if it detects an injection file without a clear identity
@@ -39,7 +39,7 @@ def execute(args: list[str], ctx: Context) -> None:
     # This is good if we experience a bug or error failure when we are ready to execute.
     # by storing old variable data, it is very profitable and speeds up the time
     elif cmd == "restart":
-        restart(ctx.Context)
+        restart(Context)
     else:
         smf.printf(f"{C.INPUT}[-] WARN => {cmd} > Not found.")
 

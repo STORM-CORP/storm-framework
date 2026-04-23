@@ -6,6 +6,7 @@ import apps.utility.utils as utils
 from apps.utility.colors import C
 from lib.smf.core.console.engine import Context
 
+
 # Run command to run a module that we want to execute
 # The workflow is as below;
 # Command => use <module_name>
@@ -16,22 +17,22 @@ from lib.smf.core.console.engine import Context
 def execute(args: list[str], ctx: Context) -> None:
     current_module = ctx.current_module
     options = ctx.options
-    
+
     if not current_module:
         smf.printf(f"{C.ERROR}[!] No modules selected. 'use <module>' first.")
         smf.printf()
-        return 
-        
+        return
+
     # Get the list of required variables from the selected module.
     required_vars = getattr(current_module, "REQUIRED_OPTIONS", {})
     missing = [
         key for key in required_vars.keys() if not str(options.get(key, "")).strip()
     ]
-    
+
     if missing:
         smf.printf(f"{C.ERROR}[!] Failed to run. Variabel null.")
         smf.printf()
-        return 
+        return
 
     try:
         # Automatically check if there is a PASS (Wordlist) so that the path is correct

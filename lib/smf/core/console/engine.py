@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from apps.utility.colors import *
 from lib.roar.plugin.manager import registry
 
+
 @dataclass
 class Context:
     """

@@ -114,7 +114,7 @@ class Plugin:
                         "DELETE FROM module_cache WHERE path = ?", delete_payload
                     )
 
-    def get_show_modules(self, category: str) -> List[str]:
+    def execute(self, category: str) -> List[str]:
         """
         An API to replace legacy functionality.
         It's very fast because it uses SQL Indexes and doesn't involve disk I/O.

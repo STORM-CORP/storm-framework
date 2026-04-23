@@ -8,7 +8,7 @@ from typing import List, Set, Tuple, Dict
 from rootmap import ROOT
 
 
-class Plugin:
+class StormSmartCache:
     def __init__(self):
         self.db_path = os.path.join(ROOT, "lib", "sqlite", "cached", "cache.db")
         self.modules_dir = os.path.join(

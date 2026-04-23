@@ -32,34 +32,41 @@ class PluginMonitoring:
     Mixin class untuk memberikan observability pada PluginManager.
     """
 
-    def list_available_on_disk(self: MonitoringProvider) -> Dict[str, bool]:
-        """
-        Scans plugin folder efficiently.
-        Mengembalikan dictionary O(1) lookup: {plugin_name: is_package_bool}
-        """
-        available: Dict[str, bool] = {}
+        def list_available_on_disk(self: MonitoringProvider) -> Dict[str, bool]:
+            """
+            Shallow Scan: Hanya memindai anak langsung (first-level children) 
+            dari folder plugin. Tidak menembus sub-folder secara rekursif.
+            """
+            available: Dict[str, bool] = {}
 
-        if not getattr(self, "plugin_dir", None) or not self.plugin_dir.exists():
+            if not getattr(self, "plugin_dir", None) or not self.plugin_dir.exists():
+                return available
+
+            # [PERBAIKAN]: Menggunakan iterdir() menggantikan rglob()
+            # Kompleksitas waktu turun drastis karena tidak ada penelusuran tree I/O
+            for child in self.plugin_dir.iterdir():
+            
+                # Filter 1: Abaikan file/folder tersembunyi (misal: .git, .vscode)
+                # atau folder cache sistem python (__pycache__)
+                if child.name.startswith(".") or child.name.startswith("__"):
+                    continue
+
+                # Arsitektur 1: Package Based
+                # Syarat: Ia adalah folder, dan DI DALAMNYA terdapat __init__.py
+                if child.is_dir():
+                    init_file = child / "__init__.py"
+                    if init_file.exists():
+                        available[child.name] = True
+            
+                # Arsitektur 2: Single File
+                # Syarat: Ia adalah file berekstensi .py di root folder plugin/
+                elif child.is_file() and child.suffix == ".py":
+                    plugin_name = child.stem
+                    if plugin_name not in available:
+                        available[plugin_name] = False
+
             return available
 
-        # Iterasi efisien menggunakan rglob (mencakup sub-direktori)
-        for path in self.plugin_dir.rglob("*.py"):
-            # Abaikan cache atau file tersembunyi
-            if "__pycache__" in path.parts or path.name.startswith("."):
-                continue
-
-            # Dukungan Arsitektur 1: Package Based
-            if path.name == "__init__.py":
-                plugin_name = path.parent.name
-                available[plugin_name] = True
-
-            # Dukungan Arsitektur 2: Single File
-            elif not path.name.startswith("__"):
-                plugin_name = path.stem
-                if plugin_name not in available:
-                    available[plugin_name] = False
-
-        return available
 
     def get_status_map(self: MonitoringProvider) -> List[PluginStatusReport]:
         """

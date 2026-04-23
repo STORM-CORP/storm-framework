@@ -14,12 +14,20 @@ class StormAPI:
     """
 
     @staticmethod
+    def boot() -> None:
+        return manager.boot()
+        
+    @staticmethod
     def load(plugin_name: str) -> bool:
         return manager.load(plugin_name)
 
     @staticmethod
     def unload(plugin_name: str) -> bool:
         return manager.unload(plugin_name)
+
+    @staticmethod
+    def broadcast(event_name: str, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+        return manager.broadcast(event_name, *args, **kwargs)
 
     @staticmethod
     def monitor() -> List[dict]:

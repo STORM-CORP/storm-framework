@@ -27,5 +27,5 @@ def session(options):
             smf.printf(f"[!] ERROR loading session")
             smf.printd("ERROR LOADING SESSION OPTIONS", e, level="ERROR")
             return options
-            
+
     return options

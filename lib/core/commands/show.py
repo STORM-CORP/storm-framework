@@ -58,7 +58,9 @@ def execute(args: list[str], ctx: Context) -> None:
         status_list = plugin.get_status_map()
 
         if not status_list:
-            smf.printf(f"{CC.WARN}[!] No plugins found in {manager.plugin_dir}{CC.RESET}")
+            smf.printf(
+                f"{CC.WARN}[!] No plugins found in {manager.plugin_dir}{CC.RESET}"
+            )
             return
 
         # Header Tabel
@@ -66,8 +68,8 @@ def execute(args: list[str], ctx: Context) -> None:
         smf.printf(f"{CC.CYAN}{'-' * 36}{CC.RESET}")
 
         for item in status_list:
-            name = item['name']
-            status = item['status']
+            name = item["name"]
+            status = item["status"]
 
             # Pewarnaan Status
             color = CC.WHITE
@@ -79,9 +81,8 @@ def execute(args: list[str], ctx: Context) -> None:
                 color = CC.YELLOW
 
             smf.printf(f"{name:<25} {color}{status:<10}{CC.RESET}")
-        
+
         smf.printf(f"{CC.CYAN}{'-' * 36}{CC.RESET}\n")
-    
 
     # 4. show <category_name>
     else:

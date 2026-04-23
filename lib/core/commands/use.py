@@ -19,7 +19,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
     current_module = ctx.current_module
     current_module_name = ctx.current_module_name
-    
+
     if mod:
         current_module["current_module"] = mod
         current_module_name["current_module_name"] = module_name

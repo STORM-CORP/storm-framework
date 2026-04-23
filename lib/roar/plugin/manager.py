@@ -80,6 +80,34 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         # Clear import caches to ensure Python reads the newest physical file
         importlib.invalidate_caches()
 
+    def broadcast(self, event_name: str, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+        """
+        Mengirim sinyal/event ke seluruh plugin yang sedang aktif (di-load) di RAM.
+        Framework tidak peduli plugin apa yang sedang menyala, ia hanya berteriak.
+        """
+        results: Dict[str, Any] = {}
+
+        # Iterasi seluruh plugin yang saat ini ada di registry
+        for plugin_name, safe_proxy in self.registry.items():
+            
+            # Cek apakah plugin ini punya 'antena' untuk mendengarkan event ini
+            # getattr akan otomatis menembus SafePluginProxy
+            event_hook = getattr(safe_proxy, event_name, None)
+            
+            # Jika punya dan berupa fungsi, eksekusi!
+            if callable(event_hook):
+                try:
+                    smf.printd(f"Triggering Hook", f"{plugin_name}.{event_name}()", level="DEBUG")
+                    
+                    # Simpan hasil eksekusi (jika plugin mengembalikan data)
+                    results[plugin_name] = event_hook(*args, **kwargs)
+                except Exception as e:
+                    smf.printd(f"Broadcast Failed on [{plugin_name}]", str(e), level="ERROR")
+                    results[plugin_name] = None
+
+        return results
+        
+
     def boot(self) -> None:
         """Runs when the framework starts, loads all stored plugins."""
         smf.printd("Booting PluginManager", list(self.active_plugins), level="INFO")

@@ -44,43 +44,20 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
         return None
 
-    def _trigger_hook(self, p_name: str, hook_name: str):
-        """
-        Mencari dan menjalankan fungsi lifecycle (hook) pada plugin jika tersedia.
-        """
-        plugin = self.get(p_name)
-
-        # Mencari atribut fungsi berdasarkan nama (on_boot, on_shutdown, dll)
-        # Jika tidak ada, getattr akan memberikan None
-        hook = getattr(plugin, hook_name, None)
-
-        if callable(hook):
-            try:
-                smf.printd(
-                    "Lifecycle", f"Executing {hook_name} for {p_name}", level="DEBUG"
-                )
-                hook()  # Panggil tanpa argumen
-                return True
-            except Exception as e:
-                smf.printd(
-                    "Lifecycle", f"Failed {hook_name} on {p_name}: {e}", level="ERROR"
-                )
-
-        return False
 
     def boot(self):
         """
-        Standard boot sequence: Load -> Trigger on_boot.
+        Runs when the framework starts,
+        loads all plugins stored in the cache.
         """
-        active_list = list(self.active_plugins)
-        smf.printd("Booting PluginManager", active_list, level="INFO")
+        smf.printd("Booting PluginManager", list(self.active_plugins), level="INFO")
 
-        for p_name in active_list:
-            # Load plugin menggunakan public method agar aman (pake Proxy)
-            if self.load(p_name):
-                # Cukup panggil dispatcher untuk hook 'on_boot'
-                self._trigger_hook(p_name, "sync_modules")
+        # Iterate over copy(list) so that modifications
+        # to the set do not trigger a RuntimeError
+        for p_name in list(self.active_plugins):
+            self._load_module(p_name)
 
+    
     def _load_module(self, plugin_name):
         try:
             smf.printd("Resolving module path", plugin_name, level="DEBUG")

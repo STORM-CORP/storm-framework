@@ -6,7 +6,7 @@ import data.option.session as ops
 
 from apps.utility.colors import *
 from lib.core import handler as ex
-from lib.roar.plugins import register
+from lib.roar.plugin_api import plugin
 from dataclasses import dataclass, field
 
 
@@ -23,7 +23,7 @@ class Context:
     exit: bool = False
 
     # Put core plugin into context
-    plugin: typing.Any = register.plugins
+    plugin: typing.Any = plugin
 
     def dispatch(self, cmd: str, args: list[str]) -> None:
         """

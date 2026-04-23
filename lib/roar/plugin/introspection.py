@@ -7,6 +7,7 @@ from .safe import NullPlugin
 
 class PluginMethodManifest(TypedDict):
     """Kontrak struktur data hasil introspeksi."""
+
     action: str
     parameters: str
     description: Optional[str]
@@ -17,8 +18,8 @@ class PluginProvider(Protocol):
     Protocol / Interface abstrak untuk memuaskan Static Type Checker.
     Ini memberitahu IDE: "Mixin ini akan digabung dengan class yang memiliki method get()".
     """
-    def get(self, plugin_name: str) -> Any:
-        ...
+
+    def get(self, plugin_name: str) -> Any: ...
 
 
 class PluginIntrospection:
@@ -27,7 +28,9 @@ class PluginIntrospection:
     Memerlukan host class yang mengimplementasikan PluginProvider.
     """
 
-    def get_plugin_manifest(self: PluginProvider, plugin_name: str) -> List[PluginMethodManifest]:
+    def get_plugin_manifest(
+        self: PluginProvider, plugin_name: str
+    ) -> List[PluginMethodManifest]:
         """
         Membongkar plugin untuk memetakan fungsi-fungsi publik beserta metadata.
         """
@@ -43,8 +46,10 @@ class PluginIntrospection:
         manifest: List[PluginMethodManifest] = []
 
         # 4. Scanning methods: Ambil member yang murni berupa method
-        for name, func in inspect.getmembers(actual_instance, predicate=inspect.ismethod):
-            
+        for name, func in inspect.getmembers(
+            actual_instance, predicate=inspect.ismethod
+        ):
+
             # Abaikan private/protected/dunder methods
             if name.startswith("_"):
                 continue
@@ -60,7 +65,7 @@ class PluginIntrospection:
                     clean_params = str(new_sig)
                 else:
                     clean_params = str(sig)
-                    
+
             except ValueError:
                 # Fallback jika inspect gagal membongkar (biasanya terjadi pada C-extension/built-ins)
                 clean_params = "(...)"
@@ -69,11 +74,8 @@ class PluginIntrospection:
             docstring = inspect.getdoc(func)
 
             # 5. Penyatuan Data ke dalam Kontrak TypedDict
-            manifest.append({
-                "action": name,
-                "parameters": clean_params,
-                "description": docstring
-            })
+            manifest.append(
+                {"action": name, "parameters": clean_params, "description": docstring}
+            )
 
         return manifest
-        

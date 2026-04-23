@@ -6,12 +6,10 @@ import time
 from apps.utility.verify import *
 from apps.utility.colors import C
 from plugin.caching.utils_cache import StormSmartCache
-from lib.roar.plugin.manager import PluginManager
+from lib.roar.plugin.manager import registry as plugin
 
 
 def boot():
-    # Load plugin manager
-    plugin = PluginManager()
     # Smart Cache func call
     sync = StormSmartCache()
     # Check core startup security

@@ -44,7 +44,6 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
         return None
 
-
     def boot(self):
         """
         Runs when the framework starts,
@@ -57,7 +56,6 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         for p_name in list(self.active_plugins):
             self._load_module(p_name)
 
-    
     def _load_module(self, plugin_name):
         try:
             smf.printd("Resolving module path", plugin_name, level="DEBUG")

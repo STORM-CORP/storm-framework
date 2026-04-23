@@ -37,4 +37,4 @@ class StormFrameworkPlugin:
 # SINGLETON & ENTRY POINT EKSEKUSI
 # ==========================================
 
-app = StormFrameworkPlugin()
+register = StormFrameworkPlugin()

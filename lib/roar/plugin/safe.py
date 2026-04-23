@@ -1,7 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import functools
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Tuple
 import smf
 
 
@@ -44,6 +44,7 @@ class SafePluginProxy:
     Membungkus instance plugin asli.
     Menangkap error saat runtime, memelihara metadata, dan meneruskan mutasi state.
     """
+
     # Menggunakan __slots__ tidak mungkin karena kita butuh __dict__ dinamis untuk setattr bypass,
     # tapi kita mendefinisikan field internal yang tidak boleh diteruskan ke instance asli.
     _INTERNAL_FIELDS: Tuple[str, ...] = ("_plugin_name", "_instance", "_method_cache")
@@ -53,7 +54,7 @@ class SafePluginProxy:
         # pada custom __setattr__ di bawah.
         super().__setattr__("_plugin_name", plugin_name)
         super().__setattr__("_instance", instance)
-        
+
         # [OPTIMASI 1]: Caching untuk Method Wrapper (Mencegah Memory Leak & CPU Overhead)
         super().__setattr__("_method_cache", {})
 
@@ -96,13 +97,15 @@ class SafePluginProxy:
             return SilentAbsorber(self._plugin_name, name)
 
         except Exception as e:
-            smf.printd(f"Unexpected Error [{self._plugin_name}]", str(e), level="CRITICAL")
+            smf.printd(
+                f"Unexpected Error [{self._plugin_name}]", str(e), level="CRITICAL"
+            )
             return SilentAbsorber(self._plugin_name, name)
 
     def __setattr__(self, name: str, value: Any) -> None:
         """
         [OPTIMASI 2]: Delegasi Mutasi State.
-        Memastikan jika framework melakukan `plugin.state = X`, 
+        Memastikan jika framework melakukan `plugin.state = X`,
         nilai tersebut masuk ke instance asli, bukan menempel di Proxy.
         """
         if name in self._INTERNAL_FIELDS:
@@ -133,4 +136,3 @@ class NullPlugin:
 
     def __getattr__(self, name: str) -> SilentAbsorber:
         return SilentAbsorber(self._plugin_name, name)
-                    

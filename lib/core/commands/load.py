@@ -4,12 +4,10 @@ import smf
 
 from apps.utility.colors import CC
 from lib.roar.plugin.manager import PluginManager
-from lib.smf.core.console.engine import Context
 
 
 def execute(args: list[str], ctx: Context) -> None:
-    plugin = PluginManager()
-
+    
     if not args:
         smf.printf(
             f"{CC.RED}[!] ERROR => Invalid syntax. Run help to see the correct command.{CC.RESET}"
@@ -17,4 +15,4 @@ def execute(args: list[str], ctx: Context) -> None:
         return
 
     cmd = args[0].lower
-    plugin.load(cmd)
+    ctx.plugin.load(cmd)

@@ -88,23 +88,22 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         for p_name in tuple(self.active_plugins):
             self._load_module(p_name)
 
-    def _load_module(self, plugin_name: str) -> bool:
+        def _load_module(self, plugin_name: str) -> bool:
         with self._lock:
+            # [PERBAIKAN]: Cek eksistensi file SEBELUM masuk ke blok eksekusi yang rawan crash.
+            # Jika file tidak ada, langsung tolak tanpa menyentuh registry.
+            plugin_path = self._resolve_plugin_path(plugin_name)
+            if not plugin_path or not plugin_path.exists():
+                smf.printf(f"{CC.YELLOW}[!] Plugin not found on disk =>{CC.RESET}", plugin_name)
+                # Kembalikan False tanpa mendaftarkannya ke NullPlugin
+                return False
+
+            # Jika file ada secara fisik, baru kita coba kompilasi dan load
             try:
                 smf.printd("Resolving module path", plugin_name, level="DEBUG")
 
-                # O(1) Path Resolution
-                plugin_path = self._resolve_plugin_path(plugin_name)
-                if not plugin_path or not plugin_path.exists():
-                    raise FileNotFoundError(
-                        f"Plugin '{plugin_name}' not found in index. "
-                        "If recently added, trigger a refresh."
-                    )
-
                 # Low-level Module Specification loading
-                spec = importlib.util.spec_from_file_location(
-                    plugin_name, str(plugin_path)
-                )
+                spec = importlib.util.spec_from_file_location(plugin_name, str(plugin_path))
                 if spec is None or spec.loader is None:
                     raise ImportError(f"Cannot create module spec for {plugin_path}")
 
@@ -132,16 +131,19 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
                 return True
 
             except Exception as e:
+                # Blok ini sekarang HANYA akan menangkap plugin yang ADA secara fisik, 
+                # tetapi rusak secara logika (misal: SyntaxError, ImportError, atau crash saat init).
+                # Ini adalah perilaku CRASHED yang valid.
                 smf.printf(f"Failed to load plugin =>", plugin_name)
-                smf.printd(
-                    f"Failed to load plugin [{plugin_name}]", str(e), level="CRITICAL"
-                )
+                smf.printd(f"Failed to load plugin [{plugin_name}]", e, level="CRITICAL")
+                
+                # Daftarkan sebagai NullPlugin HANYA jika file-nya memang ada tapi rusak
                 self.registry[plugin_name] = NullPlugin(plugin_name)
 
                 # Purge from memory on partial fail (Clean state)
                 self._purge_module_from_memory(plugin_name)
                 return False
-
+                
     def load(self, plugin_name: str) -> bool:
         """Command handler to load new plugins."""
         with self._lock:

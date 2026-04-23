@@ -7,17 +7,18 @@ from apps.utility.verify import run_verif as verify
 from apps.utility.restart import run_restart as restart
 from apps.utility.colors import C
 
+from lib.smf.core.console.engine import Context
 
 # This command storm is used for several specific command values.
 # for example give this;
 # 1. Command => storm update > to update the Storm Framework.
 # 2. Command => storm verify > to re-verify by activating the integrity check.
 # 3. Command => storm restart > to restart storm if there are any strange bugs or errors after the update.
-def execute(args, context):
+def execute(args: list[str], ctx: Context) -> None:
     cmd = args[0].lower() if args else ""
     if not cmd:
         smf.printf(f"{C.ERROR}[!] ERROR => Not module selected")
-        return context
+        return
 
     # I don't understand this update command, which sometimes happens when there is a big and sensitive update.
     # then sometimes integrity detects a missing file, which indicates that there is an identity but the file is missing on the disk
@@ -41,4 +42,4 @@ def execute(args, context):
     else:
         smf.printf(f"{C.INPUT}[-] WARN => {cmd} > Not found.")
 
-    return context
+    return

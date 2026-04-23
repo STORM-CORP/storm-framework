@@ -42,23 +42,22 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             Membangun Hash Map menggunakan Shallow Scan.
             """
             self._plugin_index.clear()
-         
+
             for child in self.plugin_dir.iterdir():
                 if child.name.startswith(".") or child.name.startswith("__"):
                     continue
-                
+
                 # Architecture 1: Package Based
                 if child.is_dir():
                     init_file = child / "__init__.py"
                     if init_file.exists():
                         self._plugin_index[child.name] = init_file
-            
+
                 # Architecture 2: Single File
                 elif child.is_file() and child.suffix == ".py":
                     plugin_name = child.stem
                     if plugin_name not in self._plugin_index:
                         self._plugin_index[plugin_name] = child
-                    
 
     def _resolve_plugin_path(self, plugin_name: str) -> Optional[Path]:
         """O(1) Directory Traversal via Hash Map."""

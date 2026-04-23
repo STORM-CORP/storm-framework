@@ -85,7 +85,6 @@ class PluginManager(PluginMonitoring):
             safe_instance = SafePluginProxy(plugin_name, instance)
             self.registry[plugin_name] = safe_instance
 
-            smf.printf("Plugin loaded successfully =>", plugin_name)
             smf.printd("Plugin loaded successfully", plugin_name, level="INFO")
             return True
 
@@ -111,6 +110,7 @@ class PluginManager(PluginMonitoring):
         if success:
             self.active_plugins.add(plugin_name)
             self.store.save_active_plugins(self.active_plugins)
+            smf.printf("Plugin loaded successfully =>", plugin_name)
         return success
 
     def unload(self, plugin_name):

@@ -3,9 +3,9 @@ import smf
 from rootmap import ROOT
 
 
-def session(ctx: 'Context') -> None:
+def session(ctx: "Context") -> None:
     options = ctx.options
-    
+
     full_path = os.path.join(ROOT, "lib", "smf", "cache", "res")
     cache_path = os.path.join(full_path, ".storm-options")
     # check cache files

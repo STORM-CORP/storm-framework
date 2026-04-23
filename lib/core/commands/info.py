@@ -7,18 +7,17 @@ import smf
 import sys
 
 from apps.utility.colors import C
-
-
+from lib.smf.core.console.engine import Context
 # For those who like CVE collections, this logic is definitely needed
 # Because this will produce output that is neat in structure and style.
 # For ease of reading, and to differentiate between Description, name, ID, etc.
 # The most important thing is to make sure that the CVE uses the example data format that has been provided.
 # Otherwise the output will be messy and not according to storm rules.
-def execute(args, context):
+def execute(args: list[str], ctx: Context) -> None:
     query = args[0] if args else ""
     if not query:
         smf.printf("{C.ERROR}[-] Enter file name to info!")
-        return context
+        return
 
     # This is a special logic to know where the CVE is located.
     # Make sure CVE is always in the vulnerability folder
@@ -135,4 +134,4 @@ def execute(args, context):
     else:
         smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.")
 
-    return context
+    

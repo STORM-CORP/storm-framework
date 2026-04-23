@@ -3,6 +3,7 @@ import os
 import smf
 
 from apps.utility.colors import C
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from lib.smf.core.console.engine import Context

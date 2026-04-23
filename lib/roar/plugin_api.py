@@ -1,54 +1,59 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-import smf
+from typing import Any, List
 
-from typing import Any
 from .plugin import manager
-
+from .plugin import monitoring
+from .plugin import introspection
 
 class StormAPI:
     """
-    Facade idiot-proof untuk eksekusi perintah Storm.
-    Tidak ada class inheritance, hanya pemanggilan fungsi murni ke mesin.
+    Antarmuka tunggal untuk REPL.
+    User/CLI hanya boleh berinteraksi dengan class ini.
     """
 
     @staticmethod
-    def execute(plugin_name: str, payload: Any = None) -> Any:
+    def show_plugins() -> List[dict]:
         """
-        [ATURAN EMAS]: Satu fungsi untuk mengeksekusi semua plugin.
-        Framework berasumsi setiap plugin murni fungsional dan memiliki fungsi 'run()'.
+        Perintah REPL: `show plugin`
+        Menyambungkan manager ke monitoring.
         """
-        # Mengambil referensi dari memori manager
-        plugin = manager.get_plugin(plugin_name)
+        # API mengambil 'State/Data' dari Manager...
+        folder_plugin = manager.PLUGIN_DIR
+        data_di_ram = manager.REGISTRY
 
-        if not plugin:
-            smf.printd(f"[ERROR] Plugin '{plugin_name}' is not active.")
-            return
-
-        # Sanitasi terpusat (contoh sederhana)
-        clean_payload = str(payload).strip() if payload is not None else None
-
-        # Introspeksi fungsional (Mencari fungsi run)
-        action = getattr(plugin, "run", None)
-
-        if callable(action):
-            try:
-                # Direct Dispatch Execution
-                return action(clean_payload)
-            except Exception as e:
-                smf.printd(f"[CRITICAL] Crash on execution => {plugin_name}", e)
-                return
-        else:
-            smf.printd(
-                f"[ERROR] Plugin {plugin_name} violates contract. No functionality 'run()'."
-            )
-            return
+        # ...lalu menyuntikkan data tersebut ke fungsi Monitoring.
+        # Monitoring akan memprosesnya dan mengembalikan laporan.
+        laporan = monitoring.get_status_map(folder_plugin, data_di_ram)
+        
+        return laporan
 
     @staticmethod
-    def trigger_event(event_name: str, *args, **kwargs) -> dict:
-        """Menyiarkan sinyal ke semua plugin yang mendengarkan."""
-        return manager.broadcast(event_name, *args, **kwargs)
+    def inspect_plugin(plugin_name: str) -> List[dict]:
+        """
+        Perintah REPL: `info <nama_plugin>`
+        Menyambungkan manager ke introspection.
+        """
+        # API meminta spesifik 1 plugin dari Manager
+        target_plugin = manager.get_plugin(plugin_name)
+
+        # Melemparkan instance plugin tersebut ke fungsi Introspection (Pisau Bedah)
+        manifest = introspection.get_plugin_manifest(target_plugin)
+        
+        return manifest
+
+    @staticmethod
+    def execute(plugin_name: str, payload: Any = None) -> Any:
+        """Eksekusi tunggal plugin."""
+        plugin = manager.get_plugin(plugin_name)
+        if not plugin or isinstance(plugin, manager.NullPlugin):
+            return f"[ERROR] Plugin '{plugin_name}' tidak dapat dieksekusi."
+
+        action = getattr(plugin, "run", None)
+        if callable(action):
+            return action(payload)
+        return f"[ERROR] Plugin {plugin_name} tidak memiliki fungsi 'run()'."
 
 
-# Instance statis untuk Caller
-plugin = StormAPI()
+# Expose instance untuk di-import oleh file CLI/Terminal Anda
+app = StormAPI()

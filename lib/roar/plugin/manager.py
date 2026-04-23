@@ -5,6 +5,7 @@ import sys
 import smf
 import os
 
+from apps.utility.colors import CC
 from rootmap import ROOT
 from .storage import PluginStateStore
 from .safe import SafePluginProxy, NullPlugin
@@ -18,34 +19,38 @@ class PluginManager(PluginMonitoring):
         self.store = PluginStateStore()
         self.active_plugins = self.store.load_active_plugins()
 
-        # Garansi keberadaan direktori plugin root
+        # Guaranteed existence of root plugin directory
         os.makedirs(self.plugin_dir, exist_ok=True)
 
     def _resolve_plugin_path(self, plugin_name):
         """
         O(N) Directory Traversal.
-        Mencari plugin secara rekursif di dalam self.plugin_dir.
-        Mendukung 2 arsitektur plugin:
-        1. Single File   : /subfolder/namaplugin.py
-        2. Package Based : /subfolder/namaplugin/__init__.py
+        Searches for plugins recursively in self.plugin_dir.
+        Supports 2 plugin architectures:
+        1. Single File   : /subfolder/pluginname.py
+        2. Package Based : /subfolder/pluginname/__init__.py
         """
         for root, dirs, files in os.walk(self.plugin_dir):
-            # Skenario 1: File tunggal (namaplugin.py)
+            # Single file (pluginname.py)
             target_file = f"{plugin_name}.py"
             if target_file in files:
                 return os.path.join(root, target_file)
 
-            # Skenario 2: Berbasis direktori (namaplugin/__init__.py)
+            # Directory based (pluginname/__init__.py)
             if os.path.basename(root) == plugin_name and "__init__.py" in files:
                 return os.path.join(root, "__init__.py")
 
         return None
 
     def boot(self):
-        """Dijalankan saat framework start, me-load semua plugin yang tersimpan di cache."""
+        """
+        Runs when the framework starts, 
+        loads all plugins stored in the cache.
+        """
         smf.printd("Booting PluginManager", list(self.active_plugins), level="INFO")
 
-        # Iterasi dari copy (list) agar modifikasi pada set tidak memicu RuntimeError
+        # Iterate over copy(list) so that modifications 
+        # to the set do not trigger a RuntimeError
         for p_name in list(self.active_plugins):
             self._load_module(p_name)
 
@@ -53,34 +58,34 @@ class PluginManager(PluginMonitoring):
         try:
             smf.printd("Resolving module path", plugin_name, level="DEBUG")
 
-            # 1. Path Resolution
+            # Path Resolution
             plugin_path = self._resolve_plugin_path(plugin_name)
             if not plugin_path:
                 raise FileNotFoundError(
                     f"Plugin '{plugin_name}' not found in {self.plugin_dir} or its subdirectories."
                 )
 
-            # 2. Low-level Module Specification loading (Mencegah sys.path pollution)
+            # Low-level Module Specification loading (Prevents sys.path pollution)
             spec = importlib.util.spec_from_file_location(plugin_name, plugin_path)
             if spec is None or spec.loader is None:
                 raise ImportError(f"Cannot create module spec for {plugin_path}")
 
-            # 3. Instance Module Memory Allocation
+            # Instance Module Memory Allocation
             module = importlib.util.module_from_spec(spec)
 
-            # 4. Daftarkan ke sys.modules (Dibutuhkan jika plugin melakukan relative import)
+            # Register to sys.modules (Needed if the plugin does relative imports)
             sys.modules[plugin_name] = module
 
-            # 5. Eksekusi kode di dalam module (Compile AST to Bytecode)
+            # Execute code inside module (Compile AST to Bytecode)
             spec.loader.exec_module(module)
 
-            # 6. Validasi Entry Point
+            # Entry Point Validation
             if not hasattr(module, "Plugin"):
                 raise AttributeError(
                     f"Module '{plugin_name}' is missing the main 'Plugin' class."
                 )
 
-            # 7. Inisialisasi & Proxying
+            # Initialization & Proxying
             instance = module.Plugin()
             safe_instance = SafePluginProxy(plugin_name, instance)
             self.registry[plugin_name] = safe_instance
@@ -93,16 +98,16 @@ class PluginManager(PluginMonitoring):
             smf.printd(f"Failed to load plugin [{plugin_name}]", e, level="CRITICAL")
             self.registry[plugin_name] = NullPlugin(plugin_name)
 
-            # Hapus dari sys.modules jika load gagal sebagian (Clean state)
+            # Remove from sys.modules if load fails partially (Clean state)
             if plugin_name in sys.modules:
                 del sys.modules[plugin_name]
 
             return False
 
     def load(self, plugin_name):
-        """Command handler untuk me-load plugin baru."""
-        # Jika memuat ulang (reload), kita hapus dulu dari memori agar interpreter
-        # dipaksa membaca file fisis terbaru (menggantikan importlib.reload)
+        """Command handler to load new plugins."""
+        # If we reload, we first delete it from memory so that the interpreter can
+        # forced to read the latest physical file (replacing importlib.reload)
         if plugin_name in sys.modules:
             del sys.modules[plugin_name]
 
@@ -115,46 +120,39 @@ class PluginManager(PluginMonitoring):
 
     
     def unload(self, plugin_name):
-    """Command handler untuk mematikan plugin dengan fitur Auto-Correct."""
+        """Command handler to explicitly disable plugins."""
     
-    # Inisialisasi status pencarian
-    target_plugin = None
+        # Target initialization (Strict Match)
+        # We immediately check the registry for efficiency.
+        if plugin_name in self.registry:
+            # Delete instance from registry (RAM)
+            del self.registry[plugin_name]
+            smf.printd("Plugin instance destroyed", plugin_name, level="DEBUG")
+
+            # Update Persistence (To prevent auto-load on restart)
+            if plugin_name in self.active_plugins:
+                self.active_plugins.remove(plugin_name)
+                self.store.save_active_plugins(self.active_plugins)
+
+            # Hard Cleanup (Memory Cache Python)
+            if plugin_name in sys.modules:
+                del sys.modules[plugin_name]
+
+            # Feedback Success
+            smf.printf(f"{CC.GREEN}[✓] Plugin unloaded completely =>{CC.RESET}", plugin_name)
+            smf.printd("Unloaded", plugin_name, level="INFO")
+            return True
     
-    # Cek apakah nama yang diketik user ada persis (Exact Match)
-    if plugin_name in self.registry:
-        target_plugin = plugin_name
+        # If not found in the registry
+        else:
+            smf.printf(f"{CC.YELLOW}[!] Plugin not found =>{CC.RESET}", plugin_name)
+            smf.printd("Unload failed plugin not found.", plugin_name, level="WARN")
+            return False
+
         
-    # Jika di temukan
-    if target_plugin:
-        # Hapus dari registry (Instance di RAM)
-        if target_plugin in self.registry:
-            del self.registry[target_plugin]
-            smf.printd("Plugin instance destroyed", target_plugin, level="DEBUG")
-
-        # Hapus dari daftar aktif (Persistensi JSON)
-        if target_plugin in self.active_plugins:
-            self.active_plugins.remove(target_plugin)
-            self.store.save_active_plugins(self.active_plugins)
-
-        # Hard Cleanup: Hapus dari cache internal Python (sys.modules)
-        if target_plugin in sys.modules:
-            del sys.modules[target_plugin]
-
-        # Feedback ke User
-        smf.printf(f"{CC.GREEN}[+] SUCCESS => Plugin '{target_plugin}' unloaded completely.{CC.RESET}")
-        smf.printd(f"Unloaded", target_plugin, level="INFO")
-        return True
-    
-    # Jika benar-benar tidak ditemukan
-    else:
-        smf.printf(f"{CC.RED}[!] FAILED => Plugin '{plugin_name}' is not active or not found.{CC.RESET}")
-        smf.printd(f"Unload failed plugin not found.", plugin_name, level="WARN")
-        return False
-        
-
     
     def get(self, plugin_name):
-        """Dipanggil oleh caller untuk mendapatkan plugin."""
+        """Called by caller to get plugin."""
         if plugin_name not in self.registry:
             smf.printd(
                 "Caller requested inactive/missing plugin", plugin_name, level="WARN"

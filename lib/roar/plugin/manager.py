@@ -44,12 +44,12 @@ class PluginManager(PluginMonitoring):
 
     def boot(self):
         """
-        Runs when the framework starts, 
+        Runs when the framework starts,
         loads all plugins stored in the cache.
         """
         smf.printd("Booting PluginManager", list(self.active_plugins), level="INFO")
 
-        # Iterate over copy(list) so that modifications 
+        # Iterate over copy(list) so that modifications
         # to the set do not trigger a RuntimeError
         for p_name in list(self.active_plugins):
             self._load_module(p_name)
@@ -118,10 +118,9 @@ class PluginManager(PluginMonitoring):
             smf.printf("Plugin loaded successfully =>", plugin_name)
         return success
 
-    
     def unload(self, plugin_name):
         """Command handler to explicitly disable plugins."""
-    
+
         # Target initialization (Strict Match)
         # We immediately check the registry for efficiency.
         if plugin_name in self.registry:
@@ -139,18 +138,18 @@ class PluginManager(PluginMonitoring):
                 del sys.modules[plugin_name]
 
             # Feedback Success
-            smf.printf(f"{CC.GREEN}[✓] Plugin unloaded completely =>{CC.RESET}", plugin_name)
+            smf.printf(
+                f"{CC.GREEN}[✓] Plugin unloaded completely =>{CC.RESET}", plugin_name
+            )
             smf.printd("Unloaded", plugin_name, level="INFO")
             return True
-    
+
         # If not found in the registry
         else:
             smf.printf(f"{CC.YELLOW}[!] Plugin not found =>{CC.RESET}", plugin_name)
             smf.printd("Unload failed plugin not found.", plugin_name, level="WARN")
             return False
 
-        
-    
     def get(self, plugin_name):
         """Called by caller to get plugin."""
         if plugin_name not in self.registry:

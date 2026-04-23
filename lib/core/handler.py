@@ -3,7 +3,6 @@ import os
 import smf
 
 from apps.utility.colors import C
-from lib.smf.core.console.engine import Context
 
 
 def execute(cmd: str, args: list[str], ctx: "Context") -> bool:

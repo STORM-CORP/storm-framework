@@ -2,6 +2,7 @@
 import os
 from .safe import NullPlugin
 
+
 class PluginMonitoring:
     """
     Mixin class untuk memberikan kemampuan observasi pada PluginManager.
@@ -20,8 +21,8 @@ class PluginMonitoring:
                 # Filter: hanya .py dan bukan dunder/private files
                 if file.endswith(".py") and not file.startswith("__"):
                     available.append(file[:-3])
-        
-        return sorted(list(set(available))) # Set untuk menghindari duplikasi path
+
+        return sorted(list(set(available)))  # Set untuk menghindari duplikasi path
 
     def get_status_map(self) -> list[dict]:
         """
@@ -32,18 +33,14 @@ class PluginMonitoring:
 
         for p_name in disk_plugins:
             status = "Non-Active"
-            
+
             if p_name in self.registry:
                 # Logika deteksi Crash lewat NullPlugin
                 if isinstance(self.registry[p_name], NullPlugin):
                     status = "CRASHED"
                 else:
                     status = "ACTIVE"
-            
-            status_report.append({
-                "name": p_name,
-                "status": status
-            })
-        
+
+            status_report.append({"name": p_name, "status": status})
+
         return status_report
-      

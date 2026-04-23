@@ -17,8 +17,11 @@ def execute(args: list[str], ctx: Context) -> None:
     module_name = args[0].lower() if args else ""
     mod = utils.load_module_dynamically(module_name)
 
+    current_module = ctx.current_module
+    current_module_name = ctx.current_module_name
+    
     if mod:
-        ctx.current_module
-        ctx.current_module_name
+        current_module["current_module"] = mod
+        current_module_name["current_module_name"] = module_name
     else:
         smf.printf(f"{C.INPUT}[-] WARN => {module_name} > Not found.")

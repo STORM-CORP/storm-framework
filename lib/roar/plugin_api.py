@@ -5,6 +5,7 @@ import smf
 from typing import Any
 from .plugin import manager
 
+
 class StormAPI:
     """
     Facade idiot-proof untuk eksekusi perintah Storm.
@@ -29,7 +30,7 @@ class StormAPI:
 
         # Introspeksi fungsional (Mencari fungsi run)
         action = getattr(plugin, "run", None)
-        
+
         if callable(action):
             try:
                 # Direct Dispatch Execution
@@ -38,7 +39,9 @@ class StormAPI:
                 smf.printd(f"[CRITICAL] Crash on execution => {plugin_name}", e)
                 return
         else:
-            smf.printd(f"[ERROR] Plugin {plugin_name} violates contract. No functionality 'run()'.")
+            smf.printd(
+                f"[ERROR] Plugin {plugin_name} violates contract. No functionality 'run()'."
+            )
             return
 
     @staticmethod
@@ -49,4 +52,3 @@ class StormAPI:
 
 # Instance statis untuk Caller
 plugin = StormAPI()
-

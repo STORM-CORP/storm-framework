@@ -200,6 +200,3 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             return NullPlugin(plugin_name)
         return plugin
 
-
-# Plugin registration singleton
-registry = PluginManager()

@@ -3,9 +3,7 @@ import smf
 from rootmap import ROOT
 
 
-def session(ctx: "Context"):
-    options = ctx.options
-
+def session(options):
     full_path = os.path.join(ROOT, "lib", "smf", "cache")
     res_path = os.path.join(full_path, "res")
 

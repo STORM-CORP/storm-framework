@@ -8,6 +8,8 @@ import sys
 
 from apps.utility.colors import C
 from lib.smf.core.console.engine import Context
+
+
 # For those who like CVE collections, this logic is definitely needed
 # Because this will produce output that is neat in structure and style.
 # For ease of reading, and to differentiate between Description, name, ID, etc.
@@ -133,5 +135,3 @@ def execute(args: list[str], ctx: Context) -> None:
                 )
     else:
         smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.")
-
-    

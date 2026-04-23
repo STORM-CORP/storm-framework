@@ -199,4 +199,3 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             )
             return NullPlugin(plugin_name)
         return plugin
-

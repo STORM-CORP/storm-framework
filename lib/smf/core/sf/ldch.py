@@ -3,9 +3,7 @@ import smf
 from rootmap import ROOT
 
 
-def session(ctx: "Context") -> None:
-    options = ctx.options
-
+def session(options):
     full_path = os.path.join(ROOT, "lib", "smf", "cache", "res")
     cache_path = os.path.join(full_path, ".storm-options")
     # check cache files
@@ -24,8 +22,10 @@ def session(ctx: "Context") -> None:
 
             # delete cache file
             os.remove(cache_path)
-            return
+            return options
         except Exception as e:
             smf.printf(f"[!] ERROR loading session")
             smf.printd("ERROR LOADING SESSION OPTIONS", e, level="ERROR")
-            return
+            return options
+            
+    return options

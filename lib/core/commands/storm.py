@@ -18,7 +18,7 @@ from lib.smf.core.console.engine import Context
 def execute(args: list[str], ctx: Context) -> None:
     cmd = args[0].lower() if args else ""
     options = ctx.options
-    
+
     if not cmd:
         smf.printf(f"{C.ERROR}[!] ERROR => Not module selected")
         return

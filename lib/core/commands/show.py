@@ -2,7 +2,7 @@
 # -- SMF License
 import smf
 import apps.utility.utils as utils
-from apps.utility.colors import C
+from apps.utility.colors import *
 from lib.smf.core.console.engine import Context
 
 
@@ -17,6 +17,7 @@ def execute(args: list[str], ctx: Context) -> None:
     current_module = ctx.current_module
     current_module_name = ctx.current_module_name
     options = ctx.options
+    plugin = ctx.plugin
 
     if not target_show:
         smf.printf(f"{C.ERROR}[!] No modules selected.{C.RESET}")
@@ -53,7 +54,36 @@ def execute(args: list[str], ctx: Context) -> None:
                 smf.printf(f"{k:<12} {val:<25} Global Variable")
         smf.printf()
 
-    # 3. show <category_name>
+    elif target_show == "plugin":
+        status_list = plugin.get_status_map()
+
+        if not status_list:
+            smf.printf(f"{CC.WARN}[!] No plugins found in {manager.plugin_dir}{CC.RESET}")
+            return
+
+        # Header Tabel
+        smf.printf(f"\n{CC.CYAN}{'PLUGIN NAME':<25} {'STATUS':<10}{CC.RESET}")
+        smf.printf(f"{CC.CYAN}{'-' * 36}{CC.RESET}")
+
+        for item in status_list:
+            name = item['name']
+            status = item['status']
+
+            # Pewarnaan Status
+            color = CC.WHITE
+            if status == "ACTIVE":
+                color = CC.GREEN
+            elif status == "CRASHED":
+                color = CC.RED
+            elif status == "INACTIVE":
+                color = CC.YELLOW
+
+            smf.printf(f"{name:<25} {color}{status:<10}{CC.RESET}")
+        
+        smf.printf(f"{CC.CYAN}{'-' * 36}{CC.RESET}\n")
+    
+
+    # 4. show <category_name>
     else:
         module_files = utils.get_modules_in_category(target_show)
         if module_files:

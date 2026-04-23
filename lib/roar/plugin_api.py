@@ -9,8 +9,8 @@ from .plugin import introspection
 
 class StormAPI:
     """
-    Antarmuka tunggal untuk REPL.
-    User/CLI hanya boleh berinteraksi dengan class ini.
+    Single interface for REPL.
+    The user/CLI may only interact with this class.
     """
 
     @staticmethod
@@ -64,12 +64,12 @@ class StormAPI:
         """Eksekusi tunggal plugin."""
         plugin = manager.get_plugin(plugin_name)
         if not plugin or isinstance(plugin, manager.NullPlugin):
-            return f"[ERROR] Plugin '{plugin_name}' tidak dapat dieksekusi."
+            return f"[ERROR] Plugin '{plugin_name}' could not be executed."
 
         action = getattr(plugin, "run", None)
         if callable(action):
             return action(payload)
-        return f"[ERROR] Plugin {plugin_name} tidak memiliki fungsi 'run()'."
+        return f"[ERROR] Plugin {plugin_name} has no function 'run()'."
 
 
 # Expose instance untuk di-import oleh file CLI/Terminal Anda

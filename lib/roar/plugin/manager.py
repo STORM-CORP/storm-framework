@@ -24,7 +24,6 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         # Guaranteed existence of root plugin directory
         os.makedirs(self.plugin_dir, exist_ok=True)
 
-    
     def _resolve_plugin_path(self, plugin_name):
         """
         O(N) Directory Traversal.
@@ -45,27 +44,29 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
         return None
 
-    
     def _trigger_hook(self, p_name: str, hook_name: str):
         """
         Mencari dan menjalankan fungsi lifecycle (hook) pada plugin jika tersedia.
         """
         plugin = self.get(p_name)
-    
+
         # Mencari atribut fungsi berdasarkan nama (on_boot, on_shutdown, dll)
         # Jika tidak ada, getattr akan memberikan None
         hook = getattr(plugin, hook_name, None)
 
         if callable(hook):
             try:
-                smf.printd("Lifecycle", f"Executing {hook_name} for {p_name}", level="DEBUG")
-                hook() # Panggil tanpa argumen
+                smf.printd(
+                    "Lifecycle", f"Executing {hook_name} for {p_name}", level="DEBUG"
+                )
+                hook()  # Panggil tanpa argumen
                 return True
             except Exception as e:
-                smf.printd("Lifecycle", f"Failed {hook_name} on {p_name}: {e}", level="ERROR")
-    
+                smf.printd(
+                    "Lifecycle", f"Failed {hook_name} on {p_name}: {e}", level="ERROR"
+                )
+
         return False
-    
 
     def boot(self):
         """
@@ -79,8 +80,7 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             if self.load(p_name):
                 # Cukup panggil dispatcher untuk hook 'on_boot'
                 self._trigger_hook(p_name, "sync_modules")
-            
-    
+
     def _load_module(self, plugin_name):
         try:
             smf.printd("Resolving module path", plugin_name, level="DEBUG")
@@ -131,7 +131,6 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
             return False
 
-    
     def load(self, plugin_name):
         """Command handler to load new plugins."""
         # If we reload, we first delete it from memory so that the interpreter can
@@ -148,7 +147,6 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             )
         return success
 
-    
     def unload(self, plugin_name):
         """Command handler to explicitly disable plugins."""
 
@@ -181,7 +179,6 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
             smf.printd("Unload failed plugin not found.", plugin_name, level="WARN")
             return False
 
-    
     def get(self, plugin_name):
         """Called by caller to get plugin."""
         if plugin_name not in self.registry:

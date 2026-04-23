@@ -4,8 +4,7 @@ import smf
 import lib.smf.core.sf.svch as svch
 
 
-def run_restart(ctx):
-    options = ctx.options
+def run_restart(options):
     # save old variables
     svch.session(options)
     # Restart the storm

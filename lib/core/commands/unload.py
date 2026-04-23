@@ -3,7 +3,6 @@
 import smf
 
 from apps.utility.colors import CC
-from lib.roar.plugin.manager import PluginManager
 from lib.smf.core.console.engine import Context
 
 

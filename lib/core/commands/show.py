@@ -13,14 +13,14 @@ from lib.smf.core.console.engine import Context
 # 3. Command => show options > will display global variables.
 def execute(args: list[str], ctx: Context) -> None:
     target_show = args[0].lower() if args else ""
-    
+
     current_module = ctx.current_module
     current_module_name = ctx.current_module_name
     options = ctx.options
-    
+
     if not target_show:
         smf.printf(f"{C.ERROR}[!] No modules selected.{C.RESET}")
-        return 
+        return
 
     # 1. show modules
     if target_show == "modules":

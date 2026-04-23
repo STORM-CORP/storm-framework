@@ -57,7 +57,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
     # 3. show plugin
     elif target_show == "plugin":
-        status_list = plugin.get_status_map()
+        status_list = plugin.monitor()
 
         if not status_list:
             smf.printf(
@@ -79,8 +79,10 @@ def execute(args: list[str], ctx: Context) -> None:
                 color = CC.GREEN
             elif status == "CRASHED":
                 color = CC.RED
-            elif status == "INACTIVE":
+            elif status == "NON-ACTIVE":
                 color = CC.YELLOW
+            elif status == "ORPHANED":
+                color = CC.BLUE
 
             smf.printf(f"{name:<25} {color}{status:<10}{CC.RESET}")
 

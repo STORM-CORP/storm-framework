@@ -89,24 +89,29 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
 
         # Iterasi seluruh plugin yang saat ini ada di registry
         for plugin_name, safe_proxy in self.registry.items():
-            
+
             # Cek apakah plugin ini punya 'antena' untuk mendengarkan event ini
             # getattr akan otomatis menembus SafePluginProxy
             event_hook = getattr(safe_proxy, event_name, None)
-            
+
             # Jika punya dan berupa fungsi, eksekusi!
             if callable(event_hook):
                 try:
-                    smf.printd(f"Triggering Hook", f"{plugin_name}.{event_name}()", level="DEBUG")
-                    
+                    smf.printd(
+                        f"Triggering Hook",
+                        f"{plugin_name}.{event_name}()",
+                        level="DEBUG",
+                    )
+
                     # Simpan hasil eksekusi (jika plugin mengembalikan data)
                     results[plugin_name] = event_hook(*args, **kwargs)
                 except Exception as e:
-                    smf.printd(f"Broadcast Failed on [{plugin_name}]", str(e), level="ERROR")
+                    smf.printd(
+                        f"Broadcast Failed on [{plugin_name}]", str(e), level="ERROR"
+                    )
                     results[plugin_name] = None
 
         return results
-        
 
     def boot(self) -> None:
         """Runs when the framework starts, loads all stored plugins."""

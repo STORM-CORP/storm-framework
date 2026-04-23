@@ -3,11 +3,10 @@
 import smf
 
 from apps.utility.colors import CC
-from lib.roar.plugin.manager import PluginManager
 
 
 def execute(args: list[str], ctx: Context) -> None:
-    
+
     if not args:
         smf.printf(
             f"{CC.RED}[!] ERROR => Invalid syntax. Run help to see the correct command.{CC.RESET}"

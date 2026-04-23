@@ -113,23 +113,46 @@ class PluginManager(PluginMonitoring):
             smf.printf("Plugin loaded successfully =>", plugin_name)
         return success
 
+    
     def unload(self, plugin_name):
-        """Command handler untuk mematikan plugin."""
-        if plugin_name in self.registry:
-            del self.registry[plugin_name]
-            smf.printd("Plugin instance destroyed", plugin_name, level="DEBUG")
+    """Command handler untuk mematikan plugin dengan fitur Auto-Correct."""
+    
+    # Inisialisasi status pencarian
+    target_plugin = None
+    
+    # Cek apakah nama yang diketik user ada persis (Exact Match)
+    if plugin_name in self.registry:
+        target_plugin = plugin_name
+        
+    # Jika di temukan
+    if target_plugin:
+        # Hapus dari registry (Instance di RAM)
+        if target_plugin in self.registry:
+            del self.registry[target_plugin]
+            smf.printd("Plugin instance destroyed", target_plugin, level="DEBUG")
 
-        if plugin_name in self.active_plugins:
-            self.active_plugins.remove(plugin_name)
+        # Hapus dari daftar aktif (Persistensi JSON)
+        if target_plugin in self.active_plugins:
+            self.active_plugins.remove(target_plugin)
             self.store.save_active_plugins(self.active_plugins)
 
-        # Hard Cleanup: Hapus referensi dari memory system (Garbage Collection Trigger)
-        if plugin_name in sys.modules:
-            del sys.modules[plugin_name]
+        # Hard Cleanup: Hapus dari cache internal Python (sys.modules)
+        if target_plugin in sys.modules:
+            del sys.modules[target_plugin]
 
-        smf.printf("Plugin unloaded completely =>", plugin_name)
-        smf.printd("Plugin unloaded completely", plugin_name, level="INFO")
+        # Feedback ke User
+        smf.printf(f"{CC.GREEN}[+] SUCCESS => Plugin '{target_plugin}' unloaded completely.{CC.RESET}")
+        smf.printd(f"Unloaded", target_plugin, level="INFO")
+        return True
+    
+    # Jika benar-benar tidak ditemukan
+    else:
+        smf.printf(f"{CC.RED}[!] FAILED => Plugin '{plugin_name}' is not active or not found.{CC.RESET}")
+        smf.printd(f"Unload failed plugin not found.", plugin_name, level="WARN")
+        return False
+        
 
+    
     def get(self, plugin_name):
         """Dipanggil oleh caller untuk mendapatkan plugin."""
         if plugin_name not in self.registry:

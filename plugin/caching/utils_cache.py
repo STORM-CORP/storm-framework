@@ -75,9 +75,7 @@ class StormSmartCache:
                                     ".py", ""
                                 )
                                 category = (
-                                    module_name.split("/")[0]
-                                    if "/" in module_name
-                                    else module_name
+                                    module_name.split("/")[-1]
                                 )
 
                                 to_upsert.append(

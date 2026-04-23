@@ -15,7 +15,10 @@ def boot():
     run_verif()
     # Boot manager
     plugin.boot()
-
+    # Load cache modules
+    plugin.load("utils_cache")
+    cache = plugin.get("utils_cache")
+    cache.plugin.sync_modules()
     # Countdown to pause and start
     try:
         for i in range(6, 0, -1):

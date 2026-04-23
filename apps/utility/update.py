@@ -35,13 +35,12 @@ def run_update():
         from scripts.cpl import compiler
 
         compiler.start_build()
-        return True
     except ImportError as e:
         print(f"Error import compiler => {e}")
-        return False
+        return
     except Exception as e:
         print(f"Error when running the compiler => {e}")
-        return False
+        return
 
     # 5. Trigger Signed to all file
     try:

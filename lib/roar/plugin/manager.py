@@ -36,30 +36,29 @@ class PluginManager(PluginMonitoring, PluginIntrospection):
         # Build index immediately upon initialization
         self._build_index()
 
-    def _build_index(self) -> None:
-        """
-        O(N) executed ONLY ONCE during instantiation or manual refresh.
-        Builds a Hash Map for O(1) plugin path resolution.
-        """
-        self._plugin_index.clear()
-
-        # Use rglob for recursive searching (much faster and cleaner than os.walk)
-        for path in self.plugin_dir.rglob("*.py"):
-            # Ignore __pycache__ and hidden files
-            if "__pycache__" in path.parts or path.name.startswith("."):
-                continue
-
-            # Architecture 1: Package Based (/pluginname/__init__.py)
-            if path.name == "__init__.py":
-                plugin_name = path.parent.name
-                self._plugin_index[plugin_name] = path
-
-            # Architecture 2: Single File (/pluginname.py)
-            else:
-                plugin_name = path.stem  # removes the .py extension
-                # Prevent overwriting package-based with single-file of the same name
-                if plugin_name not in self._plugin_index:
-                    self._plugin_index[plugin_name] = path
+        def _build_index(self) -> None:
+            """
+            O(N) executed ONLY ONCE.
+            Membangun Hash Map menggunakan Shallow Scan.
+            """
+            self._plugin_index.clear()
+         
+            for child in self.plugin_dir.iterdir():
+                if child.name.startswith(".") or child.name.startswith("__"):
+                    continue
+                
+                # Architecture 1: Package Based
+                if child.is_dir():
+                    init_file = child / "__init__.py"
+                    if init_file.exists():
+                        self._plugin_index[child.name] = init_file
+            
+                # Architecture 2: Single File
+                elif child.is_file() and child.suffix == ".py":
+                    plugin_name = child.stem
+                    if plugin_name not in self._plugin_index:
+                        self._plugin_index[plugin_name] = child
+                    
 
     def _resolve_plugin_path(self, plugin_name: str) -> Optional[Path]:
         """O(1) Directory Traversal via Hash Map."""

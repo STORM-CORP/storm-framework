@@ -16,7 +16,7 @@ class StormAPI:
     @staticmethod
     def boot() -> None:
         return manager.boot()
-        
+
     @staticmethod
     def load(plugin_name: str) -> bool:
         return manager.load(plugin_name)

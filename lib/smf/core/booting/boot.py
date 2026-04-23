@@ -5,7 +5,7 @@ import time
 
 from apps.utility.verify import *
 from apps.utility.colors import C
-from lib.roar.plugin import app
+from lib.roar.plugins import register as plugin
 from lib.roar.cache import cache_modules as cache
 
 
@@ -15,7 +15,7 @@ def boot():
     # Verify file integrity
     run_verif()
     # Boot Plugin Manager
-    app.start()
+    plugin.start()
     # Cache modules synchronization
     cache.sync_modules
     # Countdown to pause and start

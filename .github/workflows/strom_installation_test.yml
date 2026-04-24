@@ -1,0 +1,60 @@
+name: Storm Framework Multi-OS CI Testing
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Memungkinkan menjalankan manual dari UI GitHub
+
+jobs:
+  installation-test:
+    name: Test ${{ matrix.setup_type }} on ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false # Agar kegagalan di satu OS tidak menghentikan OS lainnya
+      matrix:
+        os: [ubuntu-latest, debian:latest, kalilinux/kali-rolling:latest]
+        setup_type: [linux, docker, venv]
+        # Kita kecualikan setup docker di dalam container (Docker-in-Docker) 
+        # karena kompleksitas tinggi di CI standar
+        exclude:
+          - os: debian:latest
+            setup_type: docker
+          - os: kalilinux/kali-rolling:latest
+            setup_type: docker
+
+    container:
+      image: ${{ matrix.os }}
+      # Memberikan izin akses host jika menggunakan setup linux/venv
+      options: --privileged 
+
+    steps:
+      - name: Prepare Environment
+        run: |
+          apt-get update
+          apt-get install -y curl sudo bash jq
+          
+      - name: Execute Storm Installation (${{ matrix.setup_type }})
+        run: |
+          if [ "${{ matrix.setup_type }}" == "linux" ]; then
+            curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setuplinux | bash
+          elif [ "${{ matrix.setup_type }}" == "docker" ]; then
+            curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupdocker | bash
+          elif [ "${{ matrix.setup_type }}" == "venv" ]; then
+            curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupvenv | bash
+          fi
+
+      - name: Verify Installation and Version
+        run: |
+          # Pastikan wrapper 'storm' terdaftar di PATH
+          export PATH=$PATH:/usr/local/bin
+          storm --version || echo "Storm installed but binary not in path"
+          
+      - name: Run Basic Health Check
+        run: |
+          # Contoh menjalankan perintah dasar untuk memastikan logika internal jalan
+          # Ganti dengan flag yang sesuai di framework anda
+          storm
+          

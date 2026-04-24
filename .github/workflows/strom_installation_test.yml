@@ -60,7 +60,10 @@ jobs:
         run: |
           apt-get update
           apt-get install -y curl sudo bash jq
-          
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
       - name: Execute Storm Installation (${{ matrix.setup_type }})
         run: |
           if [ "${{ matrix.setup_type }}" == "linux" ]; then

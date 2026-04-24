@@ -31,7 +31,7 @@ write_to_file() {
 echo -e "${GREEN}[!] Environment detected: Standard Linux${NC}"
 
 BIN_DIR="/usr/local/bin"
-SHEBANG_PATH="#!/bin/env bash"
+SHEBANG_PATH="#!/usr/bin/env bash"
 PYTHON_CMD="python3"
 INSTALL_DIR="/opt/$REPO_NAME"
 VENV_DIR="$INSTALL_DIR/venv"

@@ -67,6 +67,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Execute Storm Installation (${{ matrix.setup_type }})
+        shell: bash
         run: |
           if [ "${{ matrix.setup_type }}" == "linux" ]; then
             bash ./setuplinux

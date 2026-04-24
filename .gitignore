@@ -13,7 +13,6 @@ __pycache__/
 !*.*
 
 # allow specific no-extension files
-!install
 !compiler
 !storm
 !LICENSE
@@ -21,6 +20,10 @@ __pycache__/
 !smfupdate
 !Makefile
 !makefile*
+!setuptermux
+!setuplinux
+!setupdocker
+!setupvenv
 
 # logs & temp
 *.log

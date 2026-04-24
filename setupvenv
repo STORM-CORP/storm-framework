@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+
+# --- CONFIGURATION ---
+TOOL_NAME="storm"
+REPO_NAME="storm-framework"
+GITHUB_REPO="https://github.com/StormWorld0/$REPO_NAME.git"
+VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json | jq -r '.version')
+
+# Color
+GREEN='\033[92m'
+RED='\033[91m'
+BLUE='\033[94m'
+NC='\033[0m'
+
+write_to_file() {
+    local content=$1
+    local file=$2
+    local append=$3
+
+    if [ "$append" = true ]; then
+        echo "$content" | sudo tee -a "$file" > /dev/null
+    else
+        echo "$content" | sudo tee "$file" > /dev/null
+    fi
+}
+
+# -----------------------------------------------------------------------------
+# --- AUTOMATIC ENVIRONMENT DETECTION & PATH CONFIGURATION ---
+# -----------------------------------------------------------------------------
+# Standard Linux Environment
+echo -e "${GREEN}[!] Environment detected: Standard Linux${NC}"
+
+BIN_DIR="/usr/local/bin"
+SHEBANG_PATH="#!/bin/env bash"
+PYTHON_CMD="python3"
+INSTALL_DIR="/opt/$REPO_NAME"
+VENV_DIR="$INSTALL_DIR/venv"
+VENV_PYTHON="$VENV_DIR/bin/python"
+
+sudo apt install -y jq python3-full python3-venv git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
+# -----------------------------------------------------------------------------
+
+echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"
+
+# 1. Check Python and Git
+if ! command -v git &> /dev/null; then
+    echo -e "${RED}[x] ERROR: Git not found. Install Git first.${NC}"
+    exit 1
+fi
+if ! command -v "$PYTHON_CMD" &> /dev/null; then
+    echo -e "${RED}[x] ERROR: Python not found. Make sure $PYTHON_CMD installed.${NC}"
+    exit 1
+fi
+
+# 2. Installation Directory Preparation
+if [ -d "$INSTALL_DIR" ]; then
+    echo -e "${GREEN}[-] Remove old installations.${NC}"
+    cd ~
+    sudo rm -rf "$INSTALL_DIR"
+fi
+
+echo -e "${GREEN}[+] Create installation directory"
+
+# Creating a directory and cloning a repository (use sudo if necessary)
+sudo mkdir -p "$INSTALL_DIR"
+sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}[x] ERROR: Failed to clone repository.${NC}"
+    sudo rm -rf "$INSTALL_DIR"
+    exit 1
+fi
+
+# 3. Install Python Dependencies
+if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
+    echo -e "${GREEN}[+] Installing Python dependencies.${NC}"
+
+    # Create Virtual Environment first
+    sudo "$PYTHON_CMD" -m venv "$VENV_DIR"
+
+    # Install using the isolated venv python
+    sudo "$VENV_PYTHON" -m pip install "$INSTALL_DIR/."
+
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}[x] ERROR: Failed to install Python dependencies.${NC}"
+    fi
+fi
+
+# 4. Run binary compilation
+if [ -d "$INSTALL_DIR" ]; then
+    cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Cannot access $INSTALL_DIR${NC}"; }
+fi
+
+# Compilation binary (executed within venv context)
+sudo "$VENV_PYTHON" -m scripts.cpl.compiler
+cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Lost track of directory!${NC}"; exit 1; }
+
+# --- Security Identity Generation (Version: The 60-Char Fix) ---
+if [ ! -f .env ]; then
+    echo -e "[+] Generating unique security keys via OpenSSL..."
+
+    # Generate Private Key
+    PRIV_KEY=$(openssl genpkey -algorithm ed25519 2>/dev/null | openssl pkey -outform DER 2>/dev/null | base64 -w 0 | tr -d '[:space:]')
+
+    # Generate Public Key
+    PUB_KEY=$(echo -n "$PRIV_KEY" | base64 -d | openssl pkey -inform DER -pubout -outform DER 2>/dev/null | base64 -w 0 | tr -d '[:space:]')
+
+    # This code just adds '=' when PUBKEY is only 59 characters long
+    # Rust with its dependencies is very sensitive, it doesn't want anything odd.
+    # Storm's security logic is written in Rust, and this Key is to make it run.
+    if [ ${#PUB_KEY} -eq 59 ]; then
+        PUB_KEY="${PUB_KEY}="
+    fi
+
+    # This code will insert the key into .env
+    # This is very crucial because if there is only 1 space it will not be usable.
+    write_to_file "STORM_PRIVKEY=${PRIV_KEY}" ".env" false
+    write_to_file "STORM_PUBKEY=${PUB_KEY}" ".env" true
+
+    echo -e "[✓] Security identity created successfully."
+fi
+
+# This ensures that the command always matches the environment.
+sudo chmod 600 .env
+# Sign using the isolated venv python
+sudo "$VENV_PYTHON" -m scripts.security.sign
+
+# 5. Creating a Dynamic Wrapper Script
+WRAPPER_DST="$BIN_DIR/$TOOL_NAME"
+
+# Create wrapper content in variables for easy management
+CREATE_WRAPPER="${SHEBANG_PATH}
+
+PROJECT_DIR=\"$INSTALL_DIR\"
+VENV_ACTIVATE=\"\$PROJECT_DIR/venv/bin/activate\"
+
+cd \"\$PROJECT_DIR\" || { echo \"[x] ERROR: Failed to access project directory.\"; exit 1; }
+
+# Automatically load virtual environment to ensure Python dependencies are injected into PATH
+if [ -f \"\$VENV_ACTIVATE\" ]; then
+    source \"\$VENV_ACTIVATE\"
+fi
+
+if [ \"\$1\" == \"--update\" ] && [ \$# -eq 1 ]; then
+    exec ./smfupdate
+
+elif [ \$# -eq 0 ]; then
+
+    if [ ! -f \"./storm\" ]; then
+        exec ./smfupdate
+    else
+        exec ./storm
+    fi
+
+else
+    echo \"[x] Error: Command '\$@' not found.\"
+    exit 1
+fi"
+
+write_to_file "$CREATE_WRAPPER" "$WRAPPER_DST" false
+
+sudo chmod +x "$WRAPPER_DST"
+
+echo -e "${GREEN}####################################################${NC}"
+echo -e "${GREEN}[✓] PATH STORM: ${INSTALL_DIR}${NC}"
+echo -e "${GREEN}[✓] PATH WRAPPER: ${BIN_DIR}/${TOOL_NAME}${NC}"
+echo -e "${GREEN}[✓] INSTALLATION COMPLETE VERSION: ${VERSION}${NC}"
+echo -e "${GREEN}####################################################${NC}"

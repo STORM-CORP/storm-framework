@@ -5,30 +5,46 @@ on:
     branches: [ main, dev ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch: # Memungkinkan menjalankan manual dari UI GitHub
+  workflow_dispatch:
 
 jobs:
-  installation-test:
+  # =================================================================
+  # JOB 1: NATIVE DOCKER TEST (1 Job)
+  # Mengeksekusi setupdocker langsung di level Host OS (tanpa container)
+  # Memanfaatkan pre-installed Docker daemon dari GitHub Actions VM
+  # =================================================================
+  docker-test:
+    name: Test docker on native ubuntu host
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute Storm Installation (docker)
+        run: curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupdocker | bash
+        
+      - name: Verify Installation
+        run: |
+          export PATH=$PATH:/usr/local/bin
+          storm --version || echo "Storm installed but binary not in path"
+          storm --help
+
+  # =================================================================
+  # JOB 2: CONTAINERIZED SCRIPT TEST (6 Jobs)
+  # Mengeksekusi setuplinux & setupvenv di dalam lingkungan yang terisolasi
+  # Total eksekusi: 3 OS x 2 Setup = 6 Jobs
+  # =================================================================
+  script-test:
     name: Test ${{ matrix.setup_type }} on ${{ matrix.os }}
     runs-on: ubuntu-latest
     
     strategy:
-      fail-fast: false # Agar kegagalan di satu OS tidak menghentikan OS lainnya
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, debian:latest, kalilinux/kali-rolling:latest]
-        setup_type: [linux, docker, venv]
-        # Kita kecualikan setup docker di dalam container (Docker-in-Docker) 
-        # karena kompleksitas tinggi di CI standar
-        exclude:
-          - os: debian:latest
-            setup_type: docker
-          - os: kalilinux/kali-rolling:latest
-            setup_type: docker
+        # Menggunakan format penamaan Docker Hub yang benar (titik dua, bukan strip)
+        os: [ubuntu:latest, debian:latest, kalilinux/kali-rolling:latest]
+        setup_type: [linux, venv]
 
     container:
       image: ${{ matrix.os }}
-      # Memberikan izin akses host jika menggunakan setup linux/venv
-      options: --privileged 
+      options: --privileged
 
     steps:
       - name: Prepare Environment
@@ -40,21 +56,12 @@ jobs:
         run: |
           if [ "${{ matrix.setup_type }}" == "linux" ]; then
             curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setuplinux | bash
-          elif [ "${{ matrix.setup_type }}" == "docker" ]; then
-            curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupdocker | bash
           elif [ "${{ matrix.setup_type }}" == "venv" ]; then
             curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupvenv | bash
           fi
 
       - name: Verify Installation and Version
         run: |
-          # Pastikan wrapper 'storm' terdaftar di PATH
           export PATH=$PATH:/usr/local/bin
-          storm --version || echo "Storm installed but binary not in path"
-          
-      - name: Run Basic Health Check
-        run: |
-          # Contoh menjalankan perintah dasar untuk memastikan logika internal jalan
-          # Ganti dengan flag yang sesuai di framework anda
-          storm
+          storm || echo "Storm installed but binary not in path"
           

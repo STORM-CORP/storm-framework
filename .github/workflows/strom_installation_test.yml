@@ -32,6 +32,8 @@ jobs:
         
       - name: Verify Installation
         run: |
+          ls -la /usr/local/bin/storm
+          cat /usr/local/bin/storm
           export PATH=$PATH:/usr/local/bin
           storm
           
@@ -74,6 +76,8 @@ jobs:
 
       - name: Verify Installation and Version
         run: |
+          ls -la /usr/local/bin/storm
+          cat /usr/local/bin/storm
           export PATH=$PATH:/usr/local/bin
           storm
           

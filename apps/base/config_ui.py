@@ -39,6 +39,7 @@ def show_help():
   show options                  : View the variables that have been set
   show modules                  : Displaying module categories
   show <name_categories>        : Displays the complete contents
+  show plugin                   : Displays existing plugins & plugin status
 
 
   export log <val>              : Export logs from internal database and save as txt
@@ -49,6 +50,8 @@ def show_help():
   back                          : Back from current position
   clear                         : Clear command line
   exit                          : Exit the application
+  load <plugin_name>            : Loading plugins into memory
+  unload <plugin_name>          : Remove plugins from memory
 
   
   use <nama_modul>              : Selecting a module

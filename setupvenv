@@ -104,23 +104,28 @@ if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
 fi
 
 # --- RUST TOOLCHAIN PREPARATION ---
-if ! command -v cargo &> /dev/null || ! cargo --version | grep -q "1.8"; then
-    echo -e "${GREEN}[+] Installing/Updating modern Rust toolchain via rustup...${NC}"
-    # Instalasi rustup
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Kita mengecek ketersediaan cargo menggunakan sudo agar mendeteksi environment root
+if ! sudo command -v cargo &> /dev/null || ! sudo cargo --version | grep -q "1.8"; then
+    echo -e "${GREEN}[+] Installing modern Rust toolchain for ROOT environment...${NC}"
     
-    # Load environment lokal
-    source "$HOME/.cargo/env"
-
-    # symlink global
-    sudo ln -sf "$HOME/.cargo/bin/cargo" /usr/local/bin/cargo
-    sudo ln -sf "$HOME/.cargo/bin/rustc" /usr/local/bin/rustc
+    # [PERBAIKAN 1] Paksa instalasi sepenuhnya menggunakan user ROOT
+    # Ini menghindari konflik $HOME antara user biasa dan euid sudo
+    sudo bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+    
+    # [PERBAIKAN 2] Buat symlink biner Rust dari direktori root ke sistem global
+    sudo ln -sf /root/.cargo/bin/cargo /usr/local/bin/cargo
+    sudo ln -sf /root/.cargo/bin/rustc /usr/local/bin/rustc
+    sudo ln -sf /root/.cargo/bin/rustup /usr/local/bin/rustup
+    
+    # [PERBAIKAN 3] Atur default toolchain secara eksplisit khusus untuk user root
+    # Ini mengabulkan permintaan error: "run 'rustup default stable'"
+    sudo /usr/local/bin/rustup default stable
 fi
 
-# Memastikan cargo/rustc yang dipanggil adalah versi terbaru dari rustup
-export PATH="$HOME/.cargo/bin:$PATH"
-echo -e "${BLUE}[*] Cargo version: $(cargo --version)${NC}"
+# Validasi versi menggunakan konteks sudo
+echo -e "${BLUE}[*] Cargo version: $(sudo /usr/local/bin/cargo --version)${NC}"
 # ----------------------------------
+
 
 
 # 4. Run binary compilation

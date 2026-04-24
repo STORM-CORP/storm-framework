@@ -37,7 +37,8 @@ INSTALL_DIR="/opt/$REPO_NAME"
 VENV_DIR="$INSTALL_DIR/venv"
 VENV_PYTHON="$VENV_DIR/bin/python"
 
-sudo apt install -y jq python3-full python3-venv git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
+sudo apt install -y jq python3-full python3-venv python3-pip git golang build-essential libpcap-dev clang ffmpeg openssl pkg-config libssl-dev
+
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"

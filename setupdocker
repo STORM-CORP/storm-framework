@@ -154,14 +154,21 @@ sudo docker run --rm -v "$INSTALL_DIR":"$INSTALL_DIR" -w "$INSTALL_DIR" "$REPO_N
 WRAPPER_DST="$BIN_DIR/$TOOL_NAME"
 
 # Create wrapper content in variables for easy management
-# Wrapper sekarang akan meneruskan eksekusi ke Docker Container
 CREATE_WRAPPER="${SHEBANG_PATH}
 
 PROJECT_DIR=\"$INSTALL_DIR\"
 cd \"\$PROJECT_DIR\" || { echo \"[x] ERROR: Failed to access project directory.\"; exit 1; }
 
-# Menggunakan flag -it untuk TTY interaktif dan --network host agar tool bisa mengakses jaringan secara native
-DOCKER_CMD=\"sudo docker run -it --rm --network host -v \\\"\$PROJECT_DIR\\\":\\\"\$PROJECT_DIR\\\" -w \\\"\$PROJECT_DIR\\\" $REPO_NAME\"
+# [PERBAIKAN] Dynamic TTY Detection
+# Cek apakah descriptor 1 (STDOUT) terhubung ke terminal asli (TTY)
+if [ -t 1 ]; then
+    TTY_FLAG=\"-it\"
+else
+    TTY_FLAG=\"\"
+fi
+
+# Variabel \$TTY_FLAG akan menyuntikkan -it di laptop user, tapi kosong saat di GitHub Actions
+DOCKER_CMD=\"sudo docker run \$TTY_FLAG --rm --network host -v \\\"\$PROJECT_DIR\\\":\\\"\$PROJECT_DIR\\\" -w \\\"\$PROJECT_DIR\\\" $REPO_NAME\"
 
 if [ \"\$1\" == \"--update\" ] && [ \$# -eq 1 ]; then
     exec \$DOCKER_CMD ./smfupdate
@@ -182,6 +189,7 @@ fi"
 write_to_file "$CREATE_WRAPPER" "$WRAPPER_DST" false
 
 sudo chmod +x "$WRAPPER_DST"
+
 
 echo -e "${GREEN}####################################################${NC}"
 echo -e "${GREEN}[✓] PATH STORM: ${INSTALL_DIR}${NC}"

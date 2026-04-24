@@ -2,9 +2,9 @@ name: Storm Framework Multi-OS CI Testing
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ DevExperiment ]
   pull_request:
-    branches: [ main ]
+    branches: [ DevExperiment ]
   workflow_dispatch:
 
 jobs:

@@ -50,14 +50,18 @@ def load_module_dynamically(module_name):
             full_file_path = os.path.join(root, file)
             relative_path = os.path.relpath(full_file_path, ROOT)
 
-            clean_path = relative_path[:-3] if relative_path.endswith(".py") else relative_path
+            clean_path = (
+                relative_path[:-3] if relative_path.endswith(".py") else relative_path
+            )
             clean_path_norm = clean_path.replace(os.sep, "/")
 
             if not is_path_mode:
                 if name_without_ext == normalized_input:
                     matches.append(clean_path_norm)
             else:
-                if clean_path_norm == normalized_input or clean_path_norm.endswith("/" + normalized_input):
+                if clean_path_norm == normalized_input or clean_path_norm.endswith(
+                    "/" + normalized_input
+                ):
                     matches.append(clean_path_norm)
 
     if not matches:

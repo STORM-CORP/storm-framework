@@ -57,7 +57,9 @@ jobs:
 
     steps:
       - name: Prepare Environment
-        run: sudo apt-get update && sudo apt-get install -y curl bash jq
+        run: |
+          apt-get update
+          apt-get install -y curl sudo bash jq
           
       - name: Execute Storm Installation (${{ matrix.setup_type }})
         run: |

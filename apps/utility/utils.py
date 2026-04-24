@@ -30,7 +30,7 @@ def resolve_path(kata_kunci):
     return None
 
 
-# LOGIC SEARCHING & USE
+# LOGIC USE
 def load_module_dynamically(module_name):
     base_path = os.path.join(ROOT, "modules")
 

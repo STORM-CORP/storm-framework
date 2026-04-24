@@ -89,16 +89,19 @@ RUN pip install --no-cache-dir $INSTALL_DIR/."
 
     write_to_file "$CREATE_DOCKERFILE" "$INSTALL_DIR/Dockerfile" false
 
-    echo -e "${BLUE}[*] Initiating BuildKit with GitHub Actions Cache Backend...${NC}"
-    
-    # Menggunakan 'sudo -E' (Preserve Environment) agar token GitHub Actions Cache terbaca oleh BuildKit
-    # --cache-from: Mencari cache layer yang relevan dari eksekusi pipeline sebelumnya
-    # --cache-to: Menulis cache layer baru ke GitHub API jika ada instruksi yang berubah
-    # --load: Memastikan image hasil build diekspor ke local docker daemon host agar bisa dijalankan di langkah berikutnya
-    sudo -E docker buildx build -t "$REPO_NAME" \
-        --cache-from type=gha \
-        --cache-to type=gha,mode=max \
-        --load "$INSTALL_DIR"
+    echo -e "${BLUE}[*] Initiating Docker Build Process...${NC}"
+
+    # Mengecek apakah script sedang berjalan di dalam GitHub Actions (CI/CD) atau di Produksi
+    if [ "$GITHUB_ACTIONS" == "true" ]; then
+        echo -e "${BLUE}[*] CI Environment detected.${NC}"
+        sudo -E docker buildx build -t "$REPO_NAME" \
+            --cache-from type=gha \
+            --cache-to type=gha,mode=max \
+            --load "$INSTALL_DIR"
+    else
+        echo -e "${BLUE}[*] Production Environment detected.${NC}"
+        sudo docker build -t "$REPO_NAME" "$INSTALL_DIR"
+    fi
 
     # PENERAPAN FAIL-FAST
     if [ $? -ne 0 ]; then
@@ -107,7 +110,6 @@ RUN pip install --no-cache-dir $INSTALL_DIR/."
         exit 1
     fi
 fi
-
 
 # 4. Run binary compilation
 if [ -d "$INSTALL_DIR" ]; then

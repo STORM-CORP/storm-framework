@@ -33,28 +33,46 @@ def resolve_path(kata_kunci):
 # LOGIC USE
 def load_module_dynamically(module_name):
     base_path = os.path.join(ROOT, "modules")
+    normalized_input = module_name.strip().replace("\\", "/")
+
+    if "." in normalized_input:
+        raise ValueError("Gunakan '/' untuk path, bukan '.'")
+
+    is_path_mode = "/" in normalized_input
+    matches = []
 
     for root, dirs, files in os.walk(base_path):
         for file in files:
             name_without_ext, ext = os.path.splitext(file)
+            if ext != ".py":
+                continue
 
-            if name_without_ext == module_name and ext == ".py":
-                full_file_path = os.path.join(root, file)
-                relative_path = os.path.relpath(full_file_path, ROOT)
+            full_file_path = os.path.join(root, file)
+            relative_path = os.path.relpath(full_file_path, ROOT)
 
-                if relative_path.endswith(".py"):
-                    clean_path = relative_path[:-3]
-                else:
-                    clean_path = relative_path
+            clean_path = relative_path[:-3] if relative_path.endswith(".py") else relative_path
+            clean_path_norm = clean_path.replace(os.sep, "/")
 
-                module_dots = clean_path.replace(os.sep, ".")
-                try:
-                    return importlib.import_module(module_dots)
-                except Exception as e:
-                    smf.printf(f"[-] ERROR UTILS =>", e, file=sys.stderr, flush=True)
-                    return None
+            if not is_path_mode:
+                if name_without_ext == normalized_input:
+                    matches.append(clean_path_norm)
+            else:
+                if clean_path_norm == normalized_input or clean_path_norm.endswith("/" + normalized_input):
+                    matches.append(clean_path_norm)
 
-    return None
+    if not matches:
+        return None
+
+    if len(matches) > 1:
+        return None
+
+    module_dots = matches[0].replace("/", ".")
+
+    try:
+        return importlib.import_module(module_dots)
+    except Exception as e:
+        smf.printf(f"[-] ERROR UTILS =>", e, file=sys.stderr, flush=True)
+        return None
 
 
 # UI MODULES

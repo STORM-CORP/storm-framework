@@ -17,48 +17,25 @@ write_to_file() {
     local file=$2
     local append=$3
 
-    if $NEEDS_SUDO; then
-        if [ "$append" = true ]; then
-            echo "$content" | sudo tee -a "$file" > /dev/null
-        else
-            echo "$content" | sudo tee "$file" > /dev/null
-        fi
+    if [ "$append" = true ]; then
+        echo "$content" | sudo tee -a "$file" > /dev/null
     else
-        if [ "$append" = true ]; then
-            echo "$content" >> "$file"
-        else
-            echo "$content" > "$file"
-        fi
+        echo "$content" | sudo tee "$file" > /dev/null
     fi
 }
 
 # -----------------------------------------------------------------------------
 # --- AUTOMATIC ENVIRONMENT DETECTION & PATH CONFIGURATION ---
 # -----------------------------------------------------------------------------
-if [ -d "/data/data/com.termux" ]; then
-    # Termux Environment
-    echo -e "${GREEN}[!] Environment detected: Termux${NC}"
+# Standard Linux Environment
+echo -e "${GREEN}[!] Environment detected: Standard Linux${NC}"
 
-    BIN_DIR="$PREFIX/bin"
-    SHEBANG_PATH="#!/usr/bin/env bash"
-    PYTHON_CMD="python"
-    INSTALL_DIR="$PREFIX/share/$REPO_NAME"
+BIN_DIR="/usr/local/bin"
+SHEBANG_PATH="#!/bin/env bash"
+PYTHON_CMD="python3"
+INSTALL_DIR="/opt/$REPO_NAME"
 
-    NEEDS_SUDO=false
-    pkg install -y jq python git golang rust  build-essential libpcap clang ffmpeg openssl binutils pkg-config
-else
-    # Standard Linux Environment
-    echo -e "${GREEN}[!] Environment detected: Standard Linux${NC}"
-
-    BIN_DIR="/usr/local/bin"
-    SHEBANG_PATH="#!/bin/env bash"
-    PYTHON_CMD="python3"
-    INSTALL_DIR="/opt/$REPO_NAME"
-
-    NEEDS_SUDO=true
-    sudo apt install -y jq python3-full git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
-fi
-
+sudo apt install -y jq python3-full git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"
@@ -77,23 +54,18 @@ fi
 if [ -d "$INSTALL_DIR" ]; then
     echo -e "${GREEN}[-] Remove old installations.${NC}"
     cd ~
-    if $NEEDS_SUDO; then sudo rm -rf "$INSTALL_DIR"; else rm -rf "$INSTALL_DIR"; fi
+    sudo rm -rf "$INSTALL_DIR"
 fi
 
 echo -e "${GREEN}[+] Create installation directory"
 
 # Creating a directory and cloning a repository (use sudo if necessary)
-if $NEEDS_SUDO; then
-    sudo mkdir -p "$INSTALL_DIR"
-    sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
-else
-    mkdir -p "$INSTALL_DIR"
-    git clone "$GITHUB_REPO" "$INSTALL_DIR"
-fi
+sudo mkdir -p "$INSTALL_DIR"
+sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}[x] ERROR: Failed to clone repository.${NC}"
-    if $NEEDS_SUDO; then sudo rm -rf "$INSTALL_DIR"; else rm -rf "$INSTALL_DIR"; fi
+    sudo rm -rf "$INSTALL_DIR"
     exit 1
 fi
 
@@ -101,13 +73,8 @@ fi
 if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
     echo -e "${GREEN}[+] Installing Python dependencies.${NC}"
 
-    if $NEEDS_SUDO; then
-        # In Ubuntu/Kali, we add the flag --break-system-packages
-        sudo "$PYTHON_CMD" -m pip install "$INSTALL_DIR/." --break-system-packages
-    else
-        # In Termux, pip usually doesn't need additional flags.
-        "$PYTHON_CMD" -m pip install "$INSTALL_DIR/."
-    fi
+    # In Ubuntu/Kali, we add the flag --break-system-packages
+    sudo "$PYTHON_CMD" -m pip install "$INSTALL_DIR/." --break-system-packages
 
     if [ $? -ne 0 ]; then
         echo -e "${RED}[x] ERROR: Failed to install Python dependencies.${NC}"
@@ -120,11 +87,7 @@ if [ -d "$INSTALL_DIR" ]; then
 fi
 
 # Compilation binary
-if $NEEDS_SUDO; then
-    sudo "$PYTHON_CMD" -m scripts.cpl.compiler
-else
-    "$PYTHON_CMD" -m scripts.cpl.compiler
-fi
+sudo "$PYTHON_CMD" -m scripts.cpl.compiler
 cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Lost track of directory!${NC}"; exit 1; }
 
 # --- Security Identity Generation (Version: The 60-Char Fix) ---
@@ -153,13 +116,8 @@ if [ ! -f .env ]; then
 fi
 
 # This ensures that the command always matches the environment.
-if $NEEDS_SUDO; then
-    sudo chmod 600 .env
-    sudo python3 -m scripts.security.sign
-else
-    chmod 600 .env
-    python3 -m scripts.security.sign
-fi
+sudo chmod 600 .env
+sudo python3 -m scripts.security.sign
 
 # 5. Creating a Dynamic Wrapper Script
 WRAPPER_DST="$BIN_DIR/$TOOL_NAME"
@@ -188,15 +146,10 @@ fi"
 
 write_to_file "$CREATE_WRAPPER" "$WRAPPER_DST" false
 
-if $NEEDS_SUDO; then
-    sudo chmod +x "$WRAPPER_DST"
-else
-    chmod +x "$WRAPPER_DST"
-fi
+sudo chmod +x "$WRAPPER_DST"
 
 echo -e "${GREEN}####################################################${NC}"
 echo -e "${GREEN}[✓] PATH STORM: ${INSTALL_DIR}${NC}"
 echo -e "${GREEN}[✓] PATH WRAPPER: ${BIN_DIR}/${TOOL_NAME}${NC}"
 echo -e "${GREEN}[✓] INSTALLATION COMPLETE VERSION: ${VERSION}${NC}"
 echo -e "${GREEN}####################################################${NC}"
-

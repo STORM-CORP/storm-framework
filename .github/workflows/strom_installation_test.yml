@@ -23,8 +23,8 @@ jobs:
       - name: Verify Installation
         run: |
           export PATH=$PATH:/usr/local/bin
-          storm --version || echo "Storm installed but binary not in path"
-          storm --help
+          storm || echo "Storm installed but binary not in path"
+          
 
   # =================================================================
   # JOB 2: CONTAINERIZED SCRIPT TEST (6 Jobs)

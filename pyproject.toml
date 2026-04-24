@@ -6,7 +6,7 @@ authors = [
 ]
 description = "Just a Storm Framework"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 license = {text = "GPL-3.0"}
 classifiers = [
     "License :: OSI Approved :: GPL License",

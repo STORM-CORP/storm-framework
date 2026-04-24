@@ -82,6 +82,22 @@ if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
     fi
 fi
 
+# --- RUST TOOLCHAIN PREPARATION ---
+if ! command -v cargo &> /dev/null || ! cargo --version | grep -q "1.8"; then
+    echo -e "${GREEN}[+] Installing/Updating modern Rust toolchain via rustup...${NC}"
+    # Menginstal rustup secara senyap (-y = otomatis yes)
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    
+    # Memuat environment variables dari Cargo ke dalam sesi bash saat ini
+    source "$HOME/.cargo/env"
+fi
+
+# Memastikan cargo/rustc yang dipanggil adalah versi terbaru dari rustup
+export PATH="$HOME/.cargo/bin:$PATH"
+echo -e "${BLUE}[*] Cargo version: $(cargo --version)${NC}"
+# ----------------------------------
+
+
 # 4. Run binary compilation
 if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Cannot access $INSTALL_DIR${NC}"; }

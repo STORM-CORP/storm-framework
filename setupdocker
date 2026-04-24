@@ -64,11 +64,28 @@ if [ -d "$INSTALL_DIR" ]; then
     sudo rm -rf "$INSTALL_DIR"
 fi
 
-echo -e "${GREEN}[+] Create installation directory"
+echo -e "${GREEN}[+] Create installation directory${NC}"
 
-# Creating a directory and cloning a repository (use sudo if necessary)
-sudo mkdir -p "$INSTALL_DIR"
-sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
+# Mengecek apakah script sedang berjalan di dalam GitHub Actions
+if [ "$GITHUB_ACTIONS" == "true" ]; then
+    echo -e "${BLUE}[*] CI Environment detected. Injecting local branch code...${NC}"
+    # Salin semua file dari branch lokal (DevExperiment) ke folder instalasi
+    # Ini menghindari git clone yang secara otomatis menarik branch main
+    sudo cp -a . "$INSTALL_DIR"
+else
+    echo -e "${BLUE}[*] Production Environment detected. Cloning repository...${NC}"
+    # Pengguna asli tetap akan mengunduh dari internet
+    sudo mkdir -p "$INSTALL_DIR"
+    sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
+fi
+
+# Validasi apakah folder berhasil terisi
+if [ ! -f "$INSTALL_DIR/pyproject.toml" ]; then
+    echo -e "${RED}[x] ERROR: Failed to prepare repository files.${NC}"
+    sudo rm -rf "$INSTALL_DIR"
+    exit 1
+fi
+
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}[x] ERROR: Failed to clone repository.${NC}"

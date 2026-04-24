@@ -90,11 +90,15 @@ fi
 # --- RUST TOOLCHAIN PREPARATION ---
 if ! command -v cargo &> /dev/null || ! cargo --version | grep -q "1.8"; then
     echo -e "${GREEN}[+] Installing/Updating modern Rust toolchain via rustup...${NC}"
-    # Menginstal rustup secara senyap (-y = otomatis yes)
+    # Instalasi rustup
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     
-    # Memuat environment variables dari Cargo ke dalam sesi bash saat ini
+    # Load environment lokal
     source "$HOME/.cargo/env"
+
+    # symlink global
+    sudo ln -sf "$HOME/.cargo/bin/cargo" /usr/local/bin/cargo
+    sudo ln -sf "$HOME/.cargo/bin/rustc" /usr/local/bin/rustc
 fi
 
 # Memastikan cargo/rustc yang dipanggil adalah versi terbaru dari rustup

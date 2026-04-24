@@ -19,6 +19,9 @@ jobs:
     steps:
       - name: Execute Storm Installation (docker)
         run: curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupdocker | bash
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
         
       - name: Verify Installation
         run: |

@@ -132,9 +132,10 @@ if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Cannot access $INSTALL_DIR${NC}"; }
 fi
 
-# Compilation binary (Dieksekusi di dalam Container dengan volume mount)
-sudo docker run --rm -v "$INSTALL_DIR":"$INSTALL_DIR" -w "$INSTALL_DIR" "$REPO_NAME" "$PYTHON_CMD" -m scripts.cpl.compiler
+# [PERBAIKAN GO] Menyuntikkan -e GOFLAGS="-buildvcs=false" untuk mematikan VCS stamping
+sudo docker run --rm -e GOFLAGS="-buildvcs=false" -v "$INSTALL_DIR":"$INSTALL_DIR" -w "$INSTALL_DIR" "$REPO_NAME" "$PYTHON_CMD" -m scripts.cpl.compiler
 cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Lost track of directory!${NC}"; exit 1; }
+
 
 # --- Security Identity Generation (Version: The 60-Char Fix) ---
 if [ ! -f .env ]; then
@@ -183,8 +184,7 @@ else
     TTY_FLAG=\"\"
 fi
 
-# Variabel \$TTY_FLAG akan menyuntikkan -it di laptop user, tapi kosong saat di GitHub Actions
-DOCKER_CMD=\"sudo docker run \$TTY_FLAG --rm --network host -v \\\"\$PROJECT_DIR\\\":\\\"\$PROJECT_DIR\\\" -w \\\"\$PROJECT_DIR\\\" $REPO_NAME\"
+DOCKER_CMD=\"sudo docker run \$TTY_FLAG --rm --network host -v \$PROJECT_DIR:\$PROJECT_DIR -w \$PROJECT_DIR $REPO_NAME\"
 
 if [ \"\$1\" == \"--update\" ] && [ \$# -eq 1 ]; then
     exec \$DOCKER_CMD ./smfupdate

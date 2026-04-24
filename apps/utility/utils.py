@@ -36,7 +36,7 @@ def load_module_dynamically(module_name):
     normalized_input = module_name.strip().replace("\\", "/")
 
     if "." in normalized_input:
-        raise ValueError("Gunakan '/' untuk path, bukan '.'")
+        return None
 
     is_path_mode = "/" in normalized_input
     matches = []

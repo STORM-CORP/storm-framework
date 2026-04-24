@@ -78,22 +78,26 @@ fi
 
 # 3. Install Python Dependencies (Diubah menjadi proses Build Docker Image)
 if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
-    echo -e "${GREEN}[+] Installing Python dependencies.${NC}"
+    echo -e "${GREEN}[+] Installing Python dependencies and Building Image.${NC}"
 
-    # Membuat Dockerfile secara dinamis untuk mengisolasi environment instalasi
+    # Menginjeksi python3-dev dan meng-upgrade setuptools/wheel sebelum instalasi utama
     CREATE_DOCKERFILE="FROM python:3.11-slim
-RUN apt-get update && apt-get install -y git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
+RUN apt-get update && apt-get install -y git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc python3-dev
 WORKDIR $INSTALL_DIR
 COPY . $INSTALL_DIR
+RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir $INSTALL_DIR/."
 
     write_to_file "$CREATE_DOCKERFILE" "$INSTALL_DIR/Dockerfile" false
 
-    # Build image Docker. Penamaan image menggunakan REPO_NAME
+    # Build image Docker.
     sudo docker build -t "$REPO_NAME" "$INSTALL_DIR"
 
+    # PENERAPAN FAIL-FAST
     if [ $? -ne 0 ]; then
-        echo -e "${RED}[x] ERROR: Failed to install Python dependencies.${NC}"
+        echo -e "${RED}[x] FATAL ERROR: Failed to build Docker Image and Python dependencies.${NC}"
+        echo -e "${RED}[x] Halting installation to prevent downstream failures.${NC}"
+        exit 1
     fi
 fi
 

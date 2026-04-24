@@ -90,6 +90,10 @@ if ! command -v cargo &> /dev/null || ! cargo --version | grep -q "1.8"; then
     
     # Memuat environment variables dari Cargo ke dalam sesi bash saat ini
     source "$HOME/.cargo/env"
+
+    # symlink global
+    sudo ln -sf "$HOME/.cargo/bin/cargo" /usr/local/bin/cargo
+    sudo ln -sf "$HOME/.cargo/bin/rustc" /usr/local/bin/rustc
 fi
 
 # Memastikan cargo/rustc yang dipanggil adalah versi terbaru dari rustup

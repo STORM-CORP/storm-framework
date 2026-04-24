@@ -79,16 +79,15 @@ else
     sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
 fi
 
-# Validasi apakah folder berhasil terisi
-if [ ! -f "$INSTALL_DIR/pyproject.toml" ]; then
-    echo -e "${RED}[x] ERROR: Failed to prepare repository files.${NC}"
+if [ $? -ne 0 ]; then
+    echo -e "${RED}[x] ERROR: Failed to clone repository.${NC}"
     sudo rm -rf "$INSTALL_DIR"
     exit 1
 fi
 
-
-if [ $? -ne 0 ]; then
-    echo -e "${RED}[x] ERROR: Failed to clone repository.${NC}"
+# Validasi apakah folder berhasil terisi
+if [ ! -f "$INSTALL_DIR/pyproject.toml" ]; then
+    echo -e "${RED}[x] ERROR: Failed to prepare repository files.${NC}"
     sudo rm -rf "$INSTALL_DIR"
     exit 1
 fi

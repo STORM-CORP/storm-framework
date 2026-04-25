@@ -2,6 +2,7 @@
 # -- SMF License
 import sys
 import time
+import smf
 
 from apps.utility.verify import *
 from apps.utility.colors import C
@@ -10,6 +11,8 @@ from lib.roar.cache import cache_modules as cache
 
 
 def boot():
+    smf.printd("Boot starting...")
+    smf.printd("Start checking the core...")
     # Check core startup security
     check_critical_files()
     # Verify file integrity
@@ -18,6 +21,10 @@ def boot():
     plugin.boot()
     # Cache modules synchronization
     cache.sync_modules()
+
+    smf.printd("Check core success")
+    smf.printd("Boot plugin successfuls")
+    smf.printd("Module synchronization successful")
     # Countdown to pause and start
     try:
         for i in range(6, 0, -1):

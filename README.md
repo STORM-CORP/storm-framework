@@ -80,7 +80,7 @@ This open source Storm-Framework project is open to anyone.
 If you're interested in helping develop this project—whether through bug fixes, feature additions, or documentation—please check out our contribution guidelines. 
 
 👉 **Read the contribution guidelines here:** 
-[Documentation](./CONTRIBUTING.md) 
+[CONTRIBUTING](./CONTRIBUTING.md) 
 
 Thank you for your interest in contributing! 💙 
 

@@ -1,7 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import smf
-import sys
 import apps.utility.utils as utils
 from apps.utility.colors import C
 from lib.smf.core.console.engine import Context
@@ -50,6 +49,4 @@ def execute(args: list[str], ctx: Context) -> None:
         smf.printf(f"{C.ERROR}[!] RUN ATTRIBUTE ERROR.{C.RESET}")
     except Exception as e:
         smf.printd("ERROR COMMAND RUN EXCEPTION", e, level="ERROR")
-        smf.printf(
-            f"{C.ERROR}[!] Error during execution.{C.RESET}"
-        )
+        smf.printf(f"{C.ERROR}[!] Error during execution.{C.RESET}")

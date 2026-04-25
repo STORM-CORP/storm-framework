@@ -40,9 +40,10 @@ def execute(cmd: str, args: list[str], ctx: "Context") -> bool:
             return True
 
         except Exception as e:
-            smf.printf(
-                f"{C.ERROR}[-] ERROR COMMAND =>{C.RESET}", safe_cmd
-            )
+<<<<<<< HEAD
+=======
+            smf.printf(f"{C.ERROR}[-] ERROR COMMAND =>{C.RESET}", safe_cmd)
+>>>>>>> origin/main
             smf.printd("ERROR WHEN EXECUTING A COMMAND", safe_cmd, e, level="CRITICAL")
 
             # Sama seperti KeyboardInterrupt, return True karena failure terjadi

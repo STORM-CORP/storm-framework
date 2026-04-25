@@ -4,7 +4,6 @@ import os
 import importlib.util
 import textwrap
 import smf
-import sys
 
 from apps.utility.colors import *
 from lib.smf.core.console.engine import Context
@@ -78,9 +77,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
             except Exception as e:
                 smf.printd("FAILED TO READ INFORMATION CVE", e, level="ERROR")
-                smf.printf(
-                    f"{C.ERROR}[!] Failed to read CVE{C.RESET}"
-                )
+                smf.printf(f"{C.ERROR}[!] Failed to read CVE{C.RESET}")
 
         else:
             # To display information about a specific module
@@ -132,8 +129,6 @@ def execute(args: list[str], ctx: Context) -> None:
 
             except Exception as e:
                 smf.printd("FAILED TO READ INFORMATION MODULE", e, level="ERROR")
-                smf.printf(
-                    f"{C.ERROR}[-] Failed to read MODULE{C.RESET}"
-                )
+                smf.printf(f"{C.ERROR}[-] Failed to read MODULE{C.RESET}")
     else:
         smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.{C.RESET}")

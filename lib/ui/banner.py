@@ -1,6 +1,5 @@
 import os
 import smf
-import sys
 import apps.base.config_ui as ui
 
 from apps.base.config_update import *

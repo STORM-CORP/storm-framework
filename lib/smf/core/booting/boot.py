@@ -17,7 +17,7 @@ def boot():
     # Boot Plugin Manager
     plugin.boot()
     # Cache modules synchronization
-    cache.sync_modules
+    cache.sync_modules()
     # Countdown to pause and start
     try:
         for i in range(6, 0, -1):

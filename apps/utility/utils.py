@@ -75,7 +75,8 @@ def load_module_dynamically(module_name):
     try:
         return importlib.import_module(module_dots)
     except Exception as e:
-        smf.printf(f"[-] ERROR UTILS =>", e, file=sys.stderr, flush=True)
+        smf.printd("ERROR LOGIC USE UTILS", e, level="ERROR")
+        smf.printf(f"[!] ERROR USE UTILS")
         return None
 
 

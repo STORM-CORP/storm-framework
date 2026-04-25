@@ -5,7 +5,7 @@ import smf
 from apps.utility.update import run_update as update
 from apps.utility.verify import run_verif as verify
 from apps.utility.restart import run_restart as restart
-from apps.utility.colors import C
+from apps.utility.colors import *
 
 from lib.smf.core.console.engine import Context
 
@@ -20,7 +20,7 @@ def execute(args: list[str], ctx: Context) -> None:
     options = ctx.options
 
     if not cmd:
-        smf.printf(f"{C.ERROR}[!] ERROR => Not module selected")
+        smf.printf(f"{CC.RED}[!] ERROR => Not module selected{CC.RESET}")
         return
 
     # I don't understand this update command, which sometimes happens when there is a big and sensitive update.
@@ -43,6 +43,6 @@ def execute(args: list[str], ctx: Context) -> None:
     elif cmd == "restart":
         restart(options)
     else:
-        smf.printf(f"{C.INPUT}[-] WARN => {cmd} > Not found.")
+        smf.printf(f"{CC.YELLOW}[-] WARN => {cmd} > Not found.{CC.RESET}")
 
     return

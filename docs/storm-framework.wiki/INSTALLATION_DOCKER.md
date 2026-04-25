@@ -1,28 +1,28 @@
 # 🛠️ Installation Docker Storm Framework
 
-Kita menyediakan instalasi untuk Docker karena biasanya pengguna suka menggunakan Container Docker, kita memastikan instalasi berjalan dengan lancar sesuai ekspektasi, jadi kami menyediakan instalasi yang sangat spesifik.
+We provide a dedicated installation method for Docker to accommodate users who prefer containerized environments. This approach is carefully designed to ensure a smooth, reliable, and predictable setup process aligned with expected deployment standards.
 
-## Step Instalasi
+## 📖 Storm Framework Installation Steps
 
-### 1. Clone Repositori & Instalasi Otomatis
+### 1. Repository Clone & Automated Installation
 
-Ini sebuah URL khusus untuk instalasi Storm di dalam Container Docker secara otomatis.
+This is a special URL for Storm installation and creating Docker Containers and so on automatically.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupdocker | bash
 ```
 
-### 2. Perintah Menjalankan
+### 2. Execute Command
 
-Ini perintah untuk menjalankan Storm setelah instalasi selesai.
+This is the command to run Storm after the installation is complete.
 
 ```bash
 sudo storm
 ```
 
-### 3. Perintah Update External
+### 3. External Update Command
 
-Ini akan menjalankan update di luar antarmuka Storm.
+This will run updates outside of the Storm interface without having to startup.
 
 ```bash
 sudo storm --update

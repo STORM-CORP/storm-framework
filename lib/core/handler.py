@@ -41,7 +41,7 @@ def execute(cmd: str, args: list[str], ctx: "Context") -> bool:
 
         except Exception as e:
             smf.printf(
-                f"{C.ERROR}[-] ERROR COMMAND => {safe_cmd} > Check critical level in internal database{C.RESET}"
+                f"{C.ERROR}[-] ERROR COMMAND =>{C.RESET}", safe_cmd
             )
             smf.printd("ERROR WHEN EXECUTING A COMMAND", safe_cmd, e, level="CRITICAL")
 

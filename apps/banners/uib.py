@@ -1,6 +1,8 @@
 import os
+import smf
 import random
 import importlib
+
 from apps.utility.colors import C
 from rootmap import ROOT
 
@@ -37,4 +39,5 @@ def banner_live():
 
         return result
     except Exception as e:
-        return f"Error loading banner => {e}"
+        smf.printd("Live banner failed to load", e, level="ERROR")
+        return

@@ -1,6 +1,6 @@
 [project]
 name = "Storm-Framework"
-version = "3.8"
+version = "3.9"
 authors = [
     {name = "エルジー", email = "elzyproot@protonmail.com"}
 ]
@@ -33,15 +33,19 @@ dependencies = [
 keywords=["storm", "pentest", "cybersecurity", "security-research", "pentesting-tools"]
 
 [project.urls]
-"Home page" = "https://github.com/StormWorld0/storm-framework"
+"Home Page" = "https://github.com/StormWorld0/storm-framework"
 "Discussion" = "https://github.com/StormWorld0/storm-framework/discussions"
 "Bug Reports" = "https://github.com/StormWorld0/storm-framework/issues"
-"wiki" = "https://github.com/StormWorld0/storm-framework/wiki"
+"Github Wiki" = "https://github.com/StormWorld0/storm-framework/wiki"
 
-"Documentation" = "https://github.com/StormWorld0/storm-framework/docs"
-"Installation" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/installation.md"
-"Logger Docs" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/logger.md"
+"Documentation" = "https://github.com/StormWorld0/storm-framework/docs/storm-framework.wiki"
+"Logger Docs" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/LOGGER.md"
 "Module Guide" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/MODULE_GUIDE.md"
+
+"Installation Venv" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_VENV.md"
+"Installation Docker" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_DOCKER.md"
+"Installation Linux" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_LINUX.md"
+"Installation Termux" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_TERMUX.md"
 
 [tool.black]
 line-length = 88

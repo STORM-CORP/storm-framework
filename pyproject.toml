@@ -46,6 +46,7 @@ keywords=["storm", "pentest", "cybersecurity", "security-research", "pentesting-
 "Installation Docker" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_DOCKER.md"
 "Installation Linux" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_LINUX.md"
 "Installation Termux" = "https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_TERMUX.md"
+
 [tool.black]
 line-length = 88
 target-version = ['py313']

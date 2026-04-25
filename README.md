@@ -61,7 +61,7 @@ We recommend the standard installation provided:
 
 To start using Storm:
 
-**beginning `sudo storm`:** This is the main interface for interacting with Storm.
+**beginning `storm`:** This is the main interface for interacting with Storm.
 
 ## Communication and Questions
 

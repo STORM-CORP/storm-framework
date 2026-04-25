@@ -19,7 +19,7 @@ def show_about():
         f"{C.HEADER}=========================================================================="
     )
     smf.printf(f"{C.INPUT}      owner                     : エルジー")
-    smf.printf(f"{C.INPUT}      Purpose                   : All-in-One Pentest Tools")
+    smf.printf(f"{C.INPUT}      Purpose                   : All-in-One Storm Framework")
     smf.printf(f"{C.INPUT}      Version                   : {VERSION}")
     smf.printf(
         f"{C.INPUT}      GitHub                    : github.com/StormWorld0/storm-framework"
@@ -35,13 +35,13 @@ def show_help():
 {C.SUCCESS}                             COMMAND GUIDE
 {C.HEADER}==========================================================================
 {C.INPUT}
-  help                          : Displaying the manual
   show options                  : View the variables that have been set
   show modules                  : Displaying module categories
   show <name_categories>        : Displays the complete contents
   show plugin                   : Displays existing plugins & plugin status
 
 
+  help                          : Displaying the manual
   export log <val>              : Export logs from internal database and save as txt
   search <filename>             : To search for files
   about                         : Information Development
@@ -54,7 +54,7 @@ def show_help():
   unload <plugin_name>          : Remove plugins from memory
 
   
-  use <nama_modul>              : Selecting a module
+  use <module_name>             : To select a module, you can also use <path_module>
   set <key> <val>               : Filling in the parameters
   run                           : Run the selected module
 
@@ -62,7 +62,7 @@ def show_help():
   storm update                  : Make updates if necessary
   storm verify                  : Used to check the signature of all files
   storm restart                 : To restart if you experience a bug or error
-{C.HEADER}==========================================================================
+{C.RESET}
     """)
 
 

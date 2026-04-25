@@ -2,7 +2,7 @@
 # -- SMF License
 import smf
 
-from apps.utility.colors import CC
+from apps.utility.colors import *
 from lib.smf.core.console.engine import Context
 
 
@@ -18,7 +18,7 @@ def execute(args: list[str], ctx: Context) -> None:
     # Input validation
     if not args:
         smf.printf(
-            f"{CC.RED}[!] ERROR => Invalid syntax. Run help to see the correct command.{CC.RESET}"
+            f"[!] WARN => Use the command {CC.GREEN}help{CC.RESET} to see the correct command."
         )
         return
 

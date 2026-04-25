@@ -194,7 +194,7 @@ elif [ \$# -eq 0 ]; then
     if [ ! -f \"./storm\" ]; then
         exec \$DOCKER_CMD ./smfupdate
     else
-        exec \$DOCKER_CMD ./storm
+        exec \$DOCKER_CMD ./smfstart
     fi
 
 else

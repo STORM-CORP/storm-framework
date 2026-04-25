@@ -1,7 +1,7 @@
 import requests
 import urllib3
 import ssl
-
+import smf
 
 def storm_ssl(method, url, **kwargs):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -16,6 +16,10 @@ def storm_ssl(method, url, **kwargs):
     try:
         return requests.request(method, url, **kwargs)
     except requests.exceptions.SSLError as e:
-        return f"SSL ERROR => {e}"
+        smf.print("SSL ERROR")
+        smf.printd("SSL ERROR", e, level="ERROR")
+        return
     except Exception as e:
-        return f"NET ERROR => {e}"
+        smf.print("NET SSL ERROR")
+        smf.printd("NET SSL ERRROR", e, level="ERROR")
+        return

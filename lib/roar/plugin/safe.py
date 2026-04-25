@@ -76,7 +76,7 @@ class SafePluginProxy:
                     except Exception as e:
                         smf.printd(
                             f"Plugin Runtime Crash [{self._plugin_name}]",
-                            f"Method '{name}' failed: {str(e)}",
+                            f"Method '{name}' failed: {e}",
                             level="ERROR",
                         )
                         return None
@@ -98,7 +98,7 @@ class SafePluginProxy:
 
         except Exception as e:
             smf.printd(
-                f"Unexpected Error [{self._plugin_name}]", str(e), level="CRITICAL"
+                f"Unexpected Error [{self._plugin_name}]", e, level="CRITICAL"
             )
             return SilentAbsorber(self._plugin_name, name)
 

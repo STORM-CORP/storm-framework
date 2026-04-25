@@ -18,7 +18,7 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
     db_path = db_dir / "log.db"
 
     if not db_path.exists():
-        print(f"[-] Database not found => {db_path}")
+        smf.printf("[!] Database not found =>", db_path)
         return
 
     # 2. Normalisasi Input Level

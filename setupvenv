@@ -31,13 +31,14 @@ write_to_file() {
 echo -e "${GREEN}[!] Environment detected: Standard Linux${NC}"
 
 BIN_DIR="/usr/local/bin"
-SHEBANG_PATH="#!/bin/env bash"
+SHEBANG_PATH="#!/usr/bin/env bash"
 PYTHON_CMD="python3"
 INSTALL_DIR="/opt/$REPO_NAME"
 VENV_DIR="$INSTALL_DIR/venv"
 VENV_PYTHON="$VENV_DIR/bin/python"
 
-sudo apt install -y jq python3-full python3-venv git golang build-essential libpcap-dev clang ffmpeg openssl cargo pkg-config libssl-dev rustc
+sudo apt install -y jq python3-full python3-venv python3-pip git golang build-essential libpcap-dev clang ffmpeg openssl pkg-config libssl-dev
+
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"
@@ -59,14 +60,30 @@ if [ -d "$INSTALL_DIR" ]; then
     sudo rm -rf "$INSTALL_DIR"
 fi
 
-echo -e "${GREEN}[+] Create installation directory"
+echo -e "${GREEN}[+] Create installation directory${NC}"
 
-# Creating a directory and cloning a repository (use sudo if necessary)
-sudo mkdir -p "$INSTALL_DIR"
-sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
+# Mengecek apakah script sedang berjalan di dalam GitHub Actions
+if [ "$GITHUB_ACTIONS" == "true" ]; then
+    echo -e "${BLUE}[*] CI Environment detected. Injecting local branch code...${NC}"
+    # Salin semua file dari branch lokal (DevExperiment) ke folder instalasi
+    # Ini menghindari git clone yang secara otomatis menarik branch main
+    sudo cp -a . "$INSTALL_DIR"
+else
+    echo -e "${BLUE}[*] Production Environment detected. Cloning repository...${NC}"
+    # Pengguna asli tetap akan mengunduh dari internet
+    sudo mkdir -p "$INSTALL_DIR"
+    sudo git clone "$GITHUB_REPO" "$INSTALL_DIR"
+fi
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}[x] ERROR: Failed to clone repository.${NC}"
+    sudo rm -rf "$INSTALL_DIR"
+    exit 1
+fi
+
+# Validasi apakah folder berhasil terisi
+if [ ! -f "$INSTALL_DIR/pyproject.toml" ]; then
+    echo -e "${RED}[x] ERROR: Failed to prepare repository files.${NC}"
     sudo rm -rf "$INSTALL_DIR"
     exit 1
 fi
@@ -85,6 +102,31 @@ if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
         echo -e "${RED}[x] ERROR: Failed to install Python dependencies.${NC}"
     fi
 fi
+
+# --- RUST TOOLCHAIN PREPARATION ---
+# Kita mengecek ketersediaan cargo menggunakan sudo agar mendeteksi environment root
+if ! sudo command -v cargo &> /dev/null || ! sudo cargo --version | grep -q "1.8"; then
+    echo -e "${GREEN}[+] Installing modern Rust toolchain for ROOT environment...${NC}"
+    
+    # [PERBAIKAN 1] Paksa instalasi sepenuhnya menggunakan user ROOT
+    # Ini menghindari konflik $HOME antara user biasa dan euid sudo
+    sudo bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+    
+    # [PERBAIKAN 2] Buat symlink biner Rust dari direktori root ke sistem global
+    sudo ln -sf /root/.cargo/bin/cargo /usr/local/bin/cargo
+    sudo ln -sf /root/.cargo/bin/rustc /usr/local/bin/rustc
+    sudo ln -sf /root/.cargo/bin/rustup /usr/local/bin/rustup
+    
+    # [PERBAIKAN 3] Atur default toolchain secara eksplisit khusus untuk user root
+    # Ini mengabulkan permintaan error: "run 'rustup default stable'"
+    sudo /usr/local/bin/rustup default stable
+fi
+
+# Validasi versi menggunakan konteks sudo
+echo -e "${BLUE}[*] Cargo version: $(sudo /usr/local/bin/cargo --version)${NC}"
+# ----------------------------------
+
+
 
 # 4. Run binary compilation
 if [ -d "$INSTALL_DIR" ]; then

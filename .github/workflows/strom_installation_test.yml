@@ -2,9 +2,9 @@ name: Storm Framework Multi-OS CI Testing
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ main, DevExperiment ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, DevExperiment ]
   workflow_dispatch:
 
 jobs:
@@ -17,16 +17,25 @@ jobs:
     name: Test docker on native ubuntu host
     runs-on: ubuntu-latest
     steps:
-      - name: Execute Storm Installation (docker)
-        run: curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupdocker | bash
+      - name: Prepare Environment
+        run: sudo apt-get update && sudo apt-get install -y curl bash jq
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Execute Storm Installation (docker)
+        run: bash ./setupdocker
+
         
       - name: Verify Installation
         run: |
+          ls -la /usr/local/bin/storm
+          cat /usr/local/bin/storm
           export PATH=$PATH:/usr/local/bin
-          storm || echo "Storm installed but binary not in path"
+          storm
           
 
   # =================================================================
@@ -41,7 +50,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Menggunakan format penamaan Docker Hub yang benar (titik dua, bukan strip)
         os: [ubuntu:latest, debian:latest, kalilinux/kali-rolling:latest]
         setup_type: [linux, venv]
 
@@ -54,17 +62,23 @@ jobs:
         run: |
           apt-get update
           apt-get install -y curl sudo bash jq
-          
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
       - name: Execute Storm Installation (${{ matrix.setup_type }})
+        shell: bash
         run: |
           if [ "${{ matrix.setup_type }}" == "linux" ]; then
-            curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setuplinux | bash
+            bash ./setuplinux
           elif [ "${{ matrix.setup_type }}" == "venv" ]; then
-            curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setupvenv | bash
+            bash ./setupvenv
           fi
 
       - name: Verify Installation and Version
         run: |
+          ls -la /usr/local/bin/storm
+          cat /usr/local/bin/storm
           export PATH=$PATH:/usr/local/bin
-          storm || echo "Storm installed but binary not in path"
+          storm
           

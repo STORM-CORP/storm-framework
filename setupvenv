@@ -188,7 +188,7 @@ if [ \"\$1\" == \"--update\" ] && [ \$# -eq 1 ]; then
 
 elif [ \$# -eq 0 ]; then
 
-    if [ ! -f \"./storm\" ]; then
+    if [ ! -f \"./smfstart\" ]; then
         exec ./smfupdate
     else
         exec ./smfstart

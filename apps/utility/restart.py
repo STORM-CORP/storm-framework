@@ -14,5 +14,5 @@ def run_restart(options):
         os.execv(executable, args)
     except Exception as e:
         smf.printd("ERROR RESTART", e, level="ERROR")
-        smf.printf(f"[-] Restart failed =>", e, file=sys.stderr, flush=True)
+        smf.printf(f"[!] Restart failed")
         sys.exit(1)

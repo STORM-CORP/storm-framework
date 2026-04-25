@@ -46,4 +46,4 @@ We really appreciate your hard work. The name of each contributor whose code was
 If you want to make sure your code passes the censorship before it is-*push*, run this in terminal:
 ```bash
 pip install flake8
-flake8 . --count --select=E9,F63,F7,F82,F401,W191 --show-source --statistics
+flake8 . --count --select=E9,F63,F7,F82,F401,W191,B018 --show-source --statistics

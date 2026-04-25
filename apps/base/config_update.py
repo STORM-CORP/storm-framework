@@ -21,4 +21,5 @@ def check_update():
             smf.printf(f"{C.SUCCESS}[-] Type => storm update")
             smf.printf()
     except Exception as e:
-        smf.printf(f"ERROR CHECK UPDATE =>", e)
+        smf.printd("ERROR CHECK UPDATE", e, level="ERROR")
+        smf.printf(f"ERROR CHECK UPDATE")

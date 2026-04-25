@@ -1,30 +1,30 @@
 # 🛠️ Installation Linux Storm Framework
 
-Untuk instalasi linux ini sebenernya installasi dengan versi lama di environment Linux standar, ini akan menggunakan perintah seperti `--break-system-packages` saat menjalankan `pip` yang dimana ini sebenarnya beresiko konflik terhadap dependesi Python yang di gunakan oleh system Linux.
+For this Linux installation, it is actually an installation with an old version in a standard Linux environment, this will use commands like `--break-system-packages` while running `pip` which actually carries the risk of conflict with the Python dependencies used by the Linux system.
 
-Tapi kita tetap sediakan ini karena siapa tau ada yang menginginkan instalasi menggunakan metode lama seperti ini, tapi kita tetap menyarankan kamu untuk menggunakan Virtual Environment saat instalasi dengan metode ini supaya lebih aman, atau bisa menggunakan cara lain yang sudah kita sediakan seperti **Venv/Docker.**
+However, we still provide this option in case some users prefer installing using this legacy method. That said, we strongly recommend using a Virtual Machine (VM) when installing this way for better safety, or alternatively using other methods we have already provided **Venv/Docker.**
 
-## Step Instalasi
+## 📖 Storm Framework Installation Steps
 
-### 1. Clone Repositori & Otomatis Instalasi
+### 1. Clone Repository & Automated Installation
 
-Ini akan melakukan instalasi secara otomatis hingga selesai.
+This URL will do the automatic installation and handle everything, you just have to wait until it's finished.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setuplinux | bash
 ```
 
-### 2. Perintah Menjalankan
+### 2. Execute Command
 
-Ini perintah untuk menjalankan Storm setelah instalasi selesai.
+This is the command to run Storm after the installation is complete.
 
 ```bash
 sudo storm
 ```
 
-### 3. Perintah Update External
+### 3. External Update Command
 
-Ini akan menjalankan update tanpa harus masuk ke antarmuka Storm.
+This will run the update without having to enter the Storm interface.
 
 ```bash
 sudo storm --update

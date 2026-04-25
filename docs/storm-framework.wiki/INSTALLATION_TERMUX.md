@@ -1,26 +1,28 @@
 # 🛠️ Installation Termux Storm Framework
 
-Use the command below to install, and make sure to use a minimum version of Python 3.12*, make sure to use the standard installation that we recommend for Termux to ensure the installation runs smoothly.
+The installation for Termux is flexible, you don't have to root the device you are using and even if the device is rooted it will still run very well as it should.
+
+## 📖 Step Instalasi Storm Framework
 
 ### 1. Repository Cloning & Automated Installation
 
-Use the command `curl` following to clone the repository and run the necessary installation scripts:
+Use this command to install in Termux, it will run the installation automatically and handle everything and you just have to wait until it is finished.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/StormWorld0/storm-framework/main/setuptermux | bash
 ```
 
-### 2. Run
+### 2. Execute Command
 
-Use this command to run it.
+Use this command to run Storm.
 
 ```bash
 storm
 ```
 
-### 3. Update
+### 3. External Update Command
 
-Run this command to perform an external update.
+Use this if you want to perform updates outside the Storm interface.
 
 ```bash
 storm --update

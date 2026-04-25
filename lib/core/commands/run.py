@@ -9,17 +9,18 @@ from lib.smf.core.console.engine import Context
 
 # Run command to run a module that we want to execute
 # The workflow is as below;
+#
 # Command => use <module_name>
 # Command => set <var> <val>
 # Command => run
-##
+#
 # After running the module will run and you just have to wait for it to finish.
 def execute(args: list[str], ctx: Context) -> None:
     current_module = ctx.current_module
     options = ctx.options
 
     if not current_module:
-        smf.printf(f"{C.ERROR}[!] No modules selected. 'use <module>' first.")
+        smf.printf(f"{C.ERROR}[!] No modules selected. 'use <module>' first.{C.RESET}")
         smf.printf()
         return
 
@@ -30,7 +31,7 @@ def execute(args: list[str], ctx: Context) -> None:
     ]
 
     if missing:
-        smf.printf(f"{C.ERROR}[!] Failed to run. Variabel null.")
+        smf.printf(f"{C.ERROR}[!] Failed to run. Variabel null.{C.RESET}")
         smf.printf()
         return
 
@@ -45,8 +46,10 @@ def execute(args: list[str], ctx: Context) -> None:
         current_module.execute(options)
 
     except AttributeError as d:
-        smf.printf(f"{C.ERROR}[-] ERROR =>", d, file=sys.stderr, flush=True)
+        smf.printd("ERROR COMMAND RUN", d, level="ERROR")
+        smf.printf(f"{C.ERROR}[!] RUN ATTRIBUTE ERROR.{C.RESET}")
     except Exception as e:
+        smf.printd("ERROR COMMAND RUN EXCEPTION", e, level="ERROR")
         smf.printf(
-            f"{C.ERROR}[-] Error during execution =>", e, file=sys.stderr, flush=True
+            f"{C.ERROR}[!] Error during execution.{C.RESET}"
         )

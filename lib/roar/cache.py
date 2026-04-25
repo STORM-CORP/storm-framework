@@ -28,7 +28,9 @@ class StormSmartCache:
 
             self._init_db()
         except Exception as e:
-            smf.printd("Failed to connect or configure SQLite database", e, level="CRITICAL")
+            smf.printd(
+                "Failed to connect or configure SQLite database", e, level="CRITICAL"
+            )
             raise
 
     def _init_db(self):
@@ -97,14 +99,26 @@ class StormSmartCache:
                                 to_upsert.append(
                                     (full_path, mtime, category, module_name)
                                 )
-                                smf.printd(f"Module staged for upsert: {module_name}", level="INFO")
+                                smf.printd(
+                                    f"Module staged for upsert: {module_name}",
+                                    level="INFO",
+                                )
                             else:
-                                smf.printd(f"File unchanged, skipping: {entry.name}", level="DEBUG")
+                                smf.printd(
+                                    f"File unchanged, skipping: {entry.name}",
+                                    level="DEBUG",
+                                )
 
         except PermissionError as e:
-            smf.printd(f"Permission denied accessing directory: {directory}", e, level="WARN")
+            smf.printd(
+                f"Permission denied accessing directory: {directory}", e, level="WARN"
+            )
         except Exception as e:
-            smf.printd(f"Unexpected error while scanning directory: {directory}", e, level="ERROR")
+            smf.printd(
+                f"Unexpected error while scanning directory: {directory}",
+                e,
+                level="ERROR",
+            )
 
     def sync_modules(self) -> None:
         """Synchronize the disk with the cache database."""
@@ -123,7 +137,10 @@ class StormSmartCache:
             deleted_files = set(db_state.keys()) - current_disk_files
 
             if to_upsert or deleted_files:
-                smf.printd(f"Delta detected -> Upsert: {len(to_upsert)}, Delete: {len(deleted_files)}", level="INFO")
+                smf.printd(
+                    f"Delta detected -> Upsert: {len(to_upsert)}, Delete: {len(deleted_files)}",
+                    level="INFO",
+                )
                 with self.conn:
                     if to_upsert:
                         self.cursor.executemany(
@@ -139,8 +156,11 @@ class StormSmartCache:
                         )
                         smf.printd("Delete transaction committed", level="DEBUG")
             else:
-                smf.printd("No drift detected between disk and database. Sync skipped.", level="INFO")
-                
+                smf.printd(
+                    "No drift detected between disk and database. Sync skipped.",
+                    level="INFO",
+                )
+
         except Exception as e:
             smf.printd("Fatal error during module synchronization", e, level="CRITICAL")
 
@@ -156,14 +176,18 @@ class StormSmartCache:
             )
             # Fetchall returns a list of tuples: [('exploits/test',), ('exploits/demo',)]
             results = [row[0] for row in self.cursor.fetchall()]
-            smf.printd(f"Query returned {len(results)} records for category '{category}'", level="INFO")
+            smf.printd(
+                f"Query returned {len(results)} records for category '{category}'",
+                level="INFO",
+            )
             return results
         except Exception as e:
-            smf.printd(f"Failed to execute lookup for category: {category}", e, level="ERROR")
+            smf.printd(
+                f"Failed to execute lookup for category: {category}", e, level="ERROR"
+            )
             return []
 
 
 # Global register
 smf.printd("Allocating StormSmartCache global instance", level="DEBUG")
 cache_modules = StormSmartCache()
-                        

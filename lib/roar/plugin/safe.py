@@ -97,9 +97,7 @@ class SafePluginProxy:
             return SilentAbsorber(self._plugin_name, name)
 
         except Exception as e:
-            smf.printd(
-                f"Unexpected Error [{self._plugin_name}]", e, level="CRITICAL"
-            )
+            smf.printd(f"Unexpected Error [{self._plugin_name}]", e, level="CRITICAL")
             return SilentAbsorber(self._plugin_name, name)
 
     def __setattr__(self, name: str, value: Any) -> None:

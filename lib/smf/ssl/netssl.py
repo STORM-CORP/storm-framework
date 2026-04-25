@@ -3,6 +3,7 @@ import urllib3
 import ssl
 import smf
 
+
 def storm_ssl(method, url, **kwargs):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

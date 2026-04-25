@@ -6,7 +6,7 @@ import textwrap
 import smf
 import sys
 
-from apps.utility.colors import C
+from apps.utility.colors import *
 from lib.smf.core.console.engine import Context
 
 
@@ -18,7 +18,7 @@ from lib.smf.core.console.engine import Context
 def execute(args: list[str], ctx: Context) -> None:
     query = args[0] if args else ""
     if not query:
-        smf.printf("{C.ERROR}[-] Enter file name to info!")
+        smf.printf(f"{C.ERROR}[-] Enter file name to info!{C.RESET}")
         return
 
     # This is a special logic to know where the CVE is located.
@@ -77,8 +77,9 @@ def execute(args: list[str], ctx: Context) -> None:
                 smf.printf()
 
             except Exception as e:
+                smf.printd("FAILED TO READ INFORMATION CVE", e, level="ERROR")
                 smf.printf(
-                    f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True
+                    f"{C.ERROR}[!] Failed to read CVE{C.RESET}"
                 )
 
         else:
@@ -130,8 +131,9 @@ def execute(args: list[str], ctx: Context) -> None:
                 smf.printf()
 
             except Exception as e:
+                smf.printd("FAILED TO READ INFORMATION MODULE", e, level="ERROR")
                 smf.printf(
-                    f"{C.ERROR}[-] Failed to read =>", e, file=sys.stderr, flush=True
+                    f"{C.ERROR}[-] Failed to read MODULE{C.RESET}"
                 )
     else:
-        smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.")
+        smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.{C.RESET}")

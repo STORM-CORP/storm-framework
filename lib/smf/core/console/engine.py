@@ -25,6 +25,12 @@ class Context:
     # Put core plugin into context
     plugin: typing.Any = plugin
 
+    smf.printd("CONTEXT CURRENT MODULE", current_module, level="INFO")
+    smf.printd("CONTEXT CURRENT MODULE NAME", current_module_name, level="INFO")
+    smf.printd("CONTEXT OPTIONS", options, level="INFO")
+    smf.printd("CONTEXT EXIT", exit, level="INFO")
+    smf.printd("CONTEXT PLUGIN", plugin, level="INFO")
+
     def dispatch(self, cmd: str, args: list[str]) -> None:
         """
         Method ini adalah Pintu Masuk ke Handler.
@@ -34,6 +40,10 @@ class Context:
         # ex.execute sekarang tidak perlu mereturn dict baru,
         # cukup modifikasi atribut objek context ini secara in-place.
         handled = ex.execute(cmd, args, self)
+        smf.printd("Catch dispatch handled", handled, level="INFO")
+        smf.printd("Capture cmd dispatch", cmd, level="INFO")
+        smf.printd("Capture dispatch args", args, level="INFO")
+        smf.printd("Capturing self from context", self, level="WARN")
 
         if not handled:
             # Pindahkan logika error handling unknown command ke sini

@@ -178,7 +178,7 @@ elif [ \$# -eq 0 ]; then
     if [ ! -f \"./storm\" ]; then
         exec ./smfupdate
     else
-        exec ./storm
+        exec ./smfstart
     fi
 
 else

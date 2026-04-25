@@ -59,9 +59,9 @@ We recommend the standard installation provided:
 
 ## Using Storm
 
-To start using Storm:
+To get started with Storm:
 
-**beginning `storm`:** This is the main interface for interacting with Storm.
+**Start `storm`:** This is the main interface for interacting with Storm.
 
 ## Communication and Questions
 

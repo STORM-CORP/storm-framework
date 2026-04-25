@@ -31,6 +31,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
     if missing:
         smf.printf(f"{C.ERROR}[!] Failed to run. Variabel null.{C.RESET}")
+        smf.printd("Null variable in run command", missing, level="WARN")
         smf.printf()
         return
 

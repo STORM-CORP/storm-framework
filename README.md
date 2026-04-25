@@ -51,7 +51,11 @@ Developer **NO** responsible for any damage, loss, or illegal actions arising fr
 
 ### Recommended installation
 
-We recommend the standard installation provided [Storm installation.](https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/installation.md)
+We recommend the standard installation provided: 
+
+- [Installation Venv](https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_VENV.md)
+- [Installation Docker](https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_DOCKER.md)
+- [Installation Termux](https://github.com/StormWorld0/storm-framework/blob/main/docs/storm-framework.wiki/INSTALLATION_TERMUX.md)
 
 ## Using Storm
 

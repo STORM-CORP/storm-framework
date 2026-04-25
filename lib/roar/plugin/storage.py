@@ -35,11 +35,11 @@ class PluginStateStore:
             return set(data.get("active_plugins", []))
 
         except json.JSONDecodeError as e:
-            smf.printd("State Storage JSON Corrupted", str(e), level="ERROR")
+            smf.printd("State Storage JSON Corrupted", e, level="ERROR")
             # Fallback ke set kosong jika korup, agar sistem tetap bisa boot
             return set()
         except Exception as e:
-            smf.printd("State Storage Error", str(e), level="CRITICAL")
+            smf.printd("State Storage Error", e, level="CRITICAL")
             return set()
 
     def save_active_plugins(self, active_plugins_set: Set[str]) -> None:
@@ -61,7 +61,7 @@ class PluginStateStore:
             temp_filepath.replace(self.filepath)
 
         except Exception as e:
-            smf.printd("State Storage Save Error", str(e), level="ERROR")
+            smf.printd("State Storage Save Error", e, level="ERROR")
         finally:
             # [OPTIMASI]: I/O Cleanup
             # Memastikan jika operasi gagal sebelum .replace() selesai,

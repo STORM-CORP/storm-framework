@@ -32,13 +32,11 @@ fn printf(
 }
 
 #[pyfunction]
-// PERBAIKAN KRUSIAL: Pindahkan level SETELAH *args. 
-// Ini menjadikannya Keyword-Only Argument (e.g., smf.printd("Crash", level="CRITICAL"))
 #[pyo3(signature = (*args, level="DEBUG"))] 
 fn printd(
     py: Python<'_>,
-    args: &Bound<'_, PyTuple>, // Pindahkan posisi argumen menyesuaikan makro
-    level: &str,               // Pindahkan posisi argumen
+    args: &Bound<'_, PyTuple>,
+    level: &str,
 ) -> PyResult<()> {
     
     // Ekstraksi seluruh pesan pengguna tanpa terpotong

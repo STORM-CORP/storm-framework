@@ -9,6 +9,7 @@ from rootmap import ROOT
 def run_verif():
     lib = "external/source/out/core/integrity/verified"
     if not os.path.exists(lib):
+        smf.printd("Binary verification missing", lib, level="CRITICAL")
         smf.printf(f"[-] ERROR => Rust binary not found in {lib}")
         sys.exit(1)
     smf.printf(f"[∆] [INTEGRITY STORM RUNNING] [∆]")
@@ -16,14 +17,15 @@ def run_verif():
         result = subprocess.run([lib])
 
         if result.returncode != 0:
-            smf.printf(f"\n[-] CRITICAL => Reinstall Storm for security.)")
+            smf.printf("\n[-] CRITICAL => Reinstall Storm for security.)")
+            smf.printd("Binary verification", result, level="CRITICAL")
             sys.exit(result.returncode)
 
         return True
-
     except KeyboardInterrupt:
         return
     except Exception as e:
+        smf.printd("INTEGRITY VERIFICATION", e, level="CRITICAL")
         smf.printf("[-] ERROR =>", e, file=sys.stderr, flush=True)
         sys.exit(1)
 
@@ -48,6 +50,7 @@ def validate_binary_files():
     # Binary check loop
     for file_name, is_found in found_map.items():
         if not is_found:
+            smf.printd("BINARY CORE MISSING", file_name, level="CRITICAL")
             smf.printf(f"{C.ERROR}[!] Binary core missing => {file_name}{C.RESET}")
             failed = True
 
@@ -74,6 +77,7 @@ def validate_binary_core():
     # Binary check loop
     for file_name, is_found in found_map.items():
         if not is_found:
+            smf.printd("BINARY CORE MISSING", file_name, level="CRITICAL")
             smf.printf(f"{C.ERROR}[!] Binary core missing => {file_name}{C.RESET}")
             failed = True
 
@@ -90,6 +94,7 @@ def check_critical_files():
         error = True
 
     if not os.path.exists(".env"):
+        smf.printd("FILES CORE MISSING", ".env", level="CRITICAL")
         smf.printf(
             f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}"
         )

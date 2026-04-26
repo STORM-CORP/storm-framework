@@ -1,6 +1,5 @@
 import subprocess
 import threading
-import sys
 import os
 import smf
 from rootmap import ROOT
@@ -23,11 +22,12 @@ target VoIP system.
 }
 
 REQUIRED_OPTIONS = {
-    "IP": "", 
+    "IP": "",
     "PORT": "standar port 5060/5061",
     "PROTOCOL": "example (udp, tls, tcp)",
-    "THREAD": "example 50"
+    "THREAD": "example 50",
 }
+
 
 def execute(options):
     """
@@ -38,21 +38,16 @@ def execute(options):
     port = str(options.get("PORT"))
     protocol = str(options.get("PROTOCOL")).lower()
     threads = str(options.get("THREAD"))
-    
+
     # Resolusi path absolut ke binary (diasumsikan binary bernama 'sip_scan')
     bin_path = os.path.join(ROOT, "external", "source", "out", "voip", "sip_scan")
-    
+
     if not os.path.exists(bin_path):
         smf.printf(f"[!] Binary not found =>", bin_path)
         return
 
     # 2. Konstruksi argumen Command-Line
-    cmd = [
-        bin_path,
-        "-p", port,
-        "-proto", protocol,
-        "-c", threads
-    ]
+    cmd = [bin_path, "-p", port, "-proto", protocol, "-c", threads]
 
     smf.printf(f"[*] External process initialization: {' '.join(cmd)}")
 
@@ -63,16 +58,18 @@ def execute(options):
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True, 
-            bufsize=1 
+            text=True,
+            bufsize=1,
         )
 
         # 4. Injeksi Data Dinamis (Single IP, CIDR, atau File)
         if ip_target:
             if os.path.isfile(ip_target):
                 # Eksekusi stream I/O jika target berupa file (Skala Besar)
-                smf.printf(f"[*] Streaming targets from file {ip_target} to the scanner...")
-                with open(ip_target, 'r') as f:
+                smf.printf(
+                    f"[*] Streaming targets from file {ip_target} to the scanner..."
+                )
+                with open(ip_target, "r") as f:
                     for line in f:
                         clean_line = line.strip()
                         if clean_line:
@@ -81,19 +78,23 @@ def execute(options):
                 # Eksekusi single target
                 smf.printf(f"[*] Sending target {ip_target} to the scanner...")
                 process.stdin.write(f"{ip_target}\n")
-            
+
         # EOF trigger untuk binary Go agar wait group dapat ditutup
         process.stdin.close()
 
         # 5. Threaded Async Output Reader
         def read_output(pipe, prefix=""):
-            for line in iter(pipe.readline, ''):
+            for line in iter(pipe.readline, ""):
                 if line:
                     smf.printf(f"{prefix} {line.strip()}")
             pipe.close()
 
-        stdout_thread = threading.Thread(target=read_output, args=(process.stdout, "[GO]"))
-        stderr_thread = threading.Thread(target=read_output, args=(process.stderr, "[!]"))
+        stdout_thread = threading.Thread(
+            target=read_output, args=(process.stdout, "[GO]")
+        )
+        stderr_thread = threading.Thread(
+            target=read_output, args=(process.stderr, "[!]")
+        )
 
         stdout_thread.start()
         stderr_thread.start()

@@ -21,6 +21,6 @@ def default_options():
         "THREAD": "",
         "DOMAIN": "",
         "HOSTNAME": "",
-        "MODULE": ""
+        "MODULE": "",
     }
     return ldch.session(options)

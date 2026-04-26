@@ -15,7 +15,7 @@ def boot():
     smf.printd("Start checking the core...", level="INFO")
     # Check core startup security
     check_critical_files()
-    smf.printd("Check core success", level="INFO")   
+    smf.printd("Check core success", level="INFO")
     # Boot Plugin Manager
     plugin.boot()
     smf.printd("Boot plugin successfuls", level="INFO")
@@ -23,7 +23,7 @@ def boot():
     cache.sync_modules()
     smf.printd("Module synchronization successful", level="INFO")
     # Verify file integrity
-    run_verif()  
+    run_verif()
     smf.printd("Verification of integrity check success", level="INFO")
     # Countdown to pause and start
     try:

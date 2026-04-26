@@ -44,6 +44,7 @@ REQUIRED_OPTIONS = {
     "COUNT": "",
     "PATH": "",
     "INTERFACE": "",
+    "PROTOCOL": "",
     "THREAD": "",
     "DOMAIN": "",
     "HOSTNAME": "",

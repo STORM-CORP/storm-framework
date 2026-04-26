@@ -11,8 +11,8 @@ from lib.roar.cache import cache_modules as cache
 
 
 def boot():
-    smf.printd("Boot starting...")
-    smf.printd("Start checking the core...")
+    smf.printd("Boot starting...", level="INFO")
+    smf.printd("Start checking the core...", level="INFO")
     # Check core startup security
     check_critical_files()
     # Verify file integrity
@@ -22,9 +22,10 @@ def boot():
     # Cache modules synchronization
     cache.sync_modules()
 
-    smf.printd("Check core success")
-    smf.printd("Boot plugin successfuls")
-    smf.printd("Module synchronization successful")
+    smf.printd("Check core success", level="INFO")
+    smf.printd("Verification of integrity check success", level="INFO")
+    smf.printd("Boot plugin successfuls", level="INFO")
+    smf.printd("Module synchronization successful", level="INFO")
     # Countdown to pause and start
     try:
         for i in range(6, 0, -1):

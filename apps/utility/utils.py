@@ -112,29 +112,31 @@ def count_by_category():
     if not os.path.exists(modules_path):
         return stats
 
-    # Take the folder directly under /modules (as the main category)
     categories = [
         d
         for d in os.listdir(modules_path)
         if os.path.isdir(os.path.join(modules_path, d))
     ]
 
-    try:
-        for cat in categories:
+    for cat in categories:
+        try:
             cat_full_path = os.path.join(modules_path, cat)
             count = 0
-            # Count files in the category folder (recursive)
+
             for root, dirs, files in os.walk(cat_full_path):
                 for file in files:
                     if file.endswith(EXT) and file != "__init__.py":
                         count += 1
 
-    except Exception as e:
-        smf.printd("Error utils looping over modules category", e, level="ERROR")
+            if count > 0:
+                stats[cat] = count
 
-        # Add to dictionary if the folder contains modules
-        if count > 0:
-            stats[cat] = count
+        except Exception as e:
+            smf.printd(
+                "Error utils looping over modules category",
+                e,
+                level="ERROR"
+            )
 
     return stats
 

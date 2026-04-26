@@ -5,17 +5,17 @@ import smf
 from rootmap import ROOT
 
 MOD_INFO = {
-    "Name": "VoIP connection scanning",
+    "Name": "Session Initiation Protocol Scanning",
     "Description": """
-Monitor VoIP systems before conducting DoS attacks on 
+Monitor SIP systems before conducting DoS attacks on 
 VoIP traffic. Uses multiple dynamic protocols as needed 
 (UDP, TCP, TLS) to handle different protocols in the 
-target VoIP system.
+target SIP system.
 """,
     "Author": ["zxelzy"],
     "Action": [
-        ["Scanner", {"Description": "VoIP Spying"}],
-        ["SIP", {"Description": "Telephone traffic"}],
+        ["Scanner", {"Description": "VoIP system scanning"}],
+        ["SIP", {"Description": "Signaling control protocol"}],
     ],
     "DefaultAction": "Scanner",
     "License": "SMF License",

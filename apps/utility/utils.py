@@ -27,11 +27,11 @@ def resolve_path(kata_kunci):
                 for file in files:
                     if kata_kunci.lower() in file.lower():
                         return os.path.join(root, file)
-                        
+
     except Exception as e:
         smf.printd("Wordlist utils global logic error", e, level="ERROR")
         return None
-        
+
     return None
 
 
@@ -127,7 +127,7 @@ def count_by_category():
             for root, dirs, files in os.walk(cat_full_path):
                 for file in files:
                     if file.endswith(EXT) and file != "__init__.py":
-                       count += 1
+                        count += 1
 
     except Exception as e:
         smf.printd("Error utils looping over modules category", e, level="ERROR")

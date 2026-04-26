@@ -132,11 +132,7 @@ def count_by_category():
                 stats[cat] = count
 
         except Exception as e:
-            smf.printd(
-                "Error utils looping over modules category",
-                e,
-                level="ERROR"
-            )
+            smf.printd("Error utils looping over modules category", e, level="ERROR")
 
     return stats
 

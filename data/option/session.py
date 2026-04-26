@@ -17,9 +17,10 @@ def default_options():
         "COUNT": "",
         "PATH": "",
         "INTERFACE": "",
+        "PROTOCOL": "",
         "THREAD": "",
         "DOMAIN": "",
         "HOSTNAME": "",
-        "MODULE": "",
+        "MODULE": ""
     }
     return ldch.session(options)

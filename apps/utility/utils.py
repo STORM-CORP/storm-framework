@@ -20,12 +20,18 @@ def resolve_path(kata_kunci):
     if os.path.exists(kata_kunci):
         return os.path.abspath(kata_kunci)
 
-    # Search in assets
-    if os.path.exists(assets_dir):
-        for root, dirs, files in os.walk(assets_dir):
-            for file in files:
-                if kata_kunci.lower() in file.lower():
-                    return os.path.join(root, file)
+    try:
+        # Search in assets
+        if os.path.exists(assets_dir):
+            for root, dirs, files in os.walk(assets_dir):
+                for file in files:
+                    if kata_kunci.lower() in file.lower():
+                        return os.path.join(root, file)
+                        
+    except Exception as e:
+        smf.printd("Wordlist utils global logic error", e, level="ERROR")
+        return None
+        
     return None
 
 
@@ -113,14 +119,18 @@ def count_by_category():
         if os.path.isdir(os.path.join(modules_path, d))
     ]
 
-    for cat in categories:
-        cat_full_path = os.path.join(modules_path, cat)
-        count = 0
-        # Count files in the category folder (recursive)
-        for root, dirs, files in os.walk(cat_full_path):
-            for file in files:
-                if file.endswith(EXT) and file != "__init__.py":
-                    count += 1
+    try:
+        for cat in categories:
+            cat_full_path = os.path.join(modules_path, cat)
+            count = 0
+            # Count files in the category folder (recursive)
+            for root, dirs, files in os.walk(cat_full_path):
+                for file in files:
+                    if file.endswith(EXT) and file != "__init__.py":
+                       count += 1
+
+    except Exception as e:
+        smf.printd("Error utils looping over modules category", e, level="ERROR")
 
         # Add to dictionary if the folder contains modules
         if count > 0:

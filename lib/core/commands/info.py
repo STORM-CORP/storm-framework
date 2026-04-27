@@ -130,4 +130,4 @@ def execute(args: list[str], ctx: Context) -> None:
                 smf.printd("FAILED TO READ INFORMATION MODULE", e, level="ERROR")
                 smf.printf("[!] Failed to read MODULE")
     else:
-        smf.printf("[!] WARN => {query} > not found.")
+        smf.printf(f"[!] WARN => {query} > not found.")

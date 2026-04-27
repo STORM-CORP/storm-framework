@@ -2,11 +2,8 @@
 
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
-
 import requests
 import subprocess
-
-from apps.utility.colors import C
 
 
 def update():
@@ -33,7 +30,7 @@ def update():
 
     if process.returncode == 0:
         print(
-            f"{C.SUCCESS}\n[✓] System updated to version => {latest_version}{C.RESET}"
+            f"\n[✓] System updated to version => {latest_version}"
         )
 
     # 4. Trigger Compiler ONLY IF needed

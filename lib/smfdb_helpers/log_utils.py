@@ -3,7 +3,6 @@ import datetime
 import rootmap
 import smf
 
-from apps.utility.colors import CC
 from pathlib import Path
 
 
@@ -11,7 +10,7 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
     """
     Extract logs from internal SQLite database by level.
     """
-    
+
     db_dir = Path(rootmap.ROOT) / "lib" / "sqlite" / "logging"
     db_path = db_dir / "log.db"
 
@@ -81,9 +80,7 @@ def extract_logs(level_target: str, output_file: str = "log.txt"):
                 f.write("-" * 60 + "\n")
 
         smf.printd("System log extracted by user", final_output_path, level="INFO")
-        smf.printf(
-            f"[✓] Extraction Successful! {len(rows)} log lines =>", level_query
-        )
+        smf.printf(f"[✓] Extraction Successful! {len(rows)} log lines =>", level_query)
         smf.printf("[!] File saved to =>", final_output_path)
 
     except sqlite3.Error as e:

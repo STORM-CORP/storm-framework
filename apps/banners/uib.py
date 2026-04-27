@@ -11,7 +11,7 @@ def banner_live():
     banner_dir = os.path.join(ROOT, "lib", "ui", "console")
     try:
         if not os.path.exists(banner_dir):
-            return f"{C.SUCCESS}[!] Folder Not Found => {banner_dir}"
+            return f"[!] Folder Not Found => {banner_dir}"
         all_files = [
             f
             for f in os.listdir(banner_dir)
@@ -19,7 +19,7 @@ def banner_live():
         ]
 
         if not all_files:
-            return f"{C.SUCCESS}Storm Framework"
+            return f"Storm Framework"
 
         random_file = random.choice(all_files)
         module_path = f"lib.ui.console.{random_file.replace('.py', '')}"

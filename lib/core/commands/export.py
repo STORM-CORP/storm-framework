@@ -2,7 +2,6 @@
 # -- SMF License
 import smf
 from lib.smfdb_helpers.log_utils import extract_logs
-from apps.utility.colors import CC
 from lib.smf.core.console.engine import Context
 
 
@@ -44,13 +43,9 @@ def execute(args: list[str], ctx: Context) -> None:
             extract_logs(val, output_file=output_filename)
         else:
             # If the user types: take backup, take system, etc.
-            smf.printf(
-                f"[!] WARN => Unknown subcommand '{cmd}' for 'export'"
-            )
+            smf.printf(f"[!] WARN => Unknown subcommand '{cmd}' for 'export'")
     else:
         # If the user just types "take" or "take log" without a level argument
-        smf.printf(
-            f"[!] WARN => Syntax error. Usage: export log <level>"
-        )
+        smf.printf(f"[!] WARN => Syntax error. Usage: export log <level>")
         # Log syntax errors to the log database
         smf.printd("CLI Syntax Error", args, level="DEBUG")

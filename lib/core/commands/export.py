@@ -29,7 +29,7 @@ def execute(args: list[str], ctx: Context) -> None:
             valid_levels = {"DEBUG", "INFO", "WARN", "ERROR", "CRITICAL"}
             if val not in valid_levels:
                 smf.printf(
-                    f"{CC.RED}[!] ERROR => Unknown log level > {val}. Allowed => {', '.join(valid_levels)}{CC.RESET}"
+                    f"[!] ERROR => Unknown log level > {val}. Allowed => {', '.join(valid_levels)}"
                 )
                 # Monitor user typos
                 smf.printd("Invalid log extraction attempt", val, level="WARN")
@@ -45,12 +45,12 @@ def execute(args: list[str], ctx: Context) -> None:
         else:
             # If the user types: take backup, take system, etc.
             smf.printf(
-                f"{CC.YELLOW}[!] WARN => Unknown subcommand '{cmd}' for 'export'{CC.RESET}"
+                f"[!] WARN => Unknown subcommand '{cmd}' for 'export'"
             )
     else:
         # If the user just types "take" or "take log" without a level argument
         smf.printf(
-            f"{CC.YELLOW}[!] WARN => Syntax error. Usage: export log <level>{CC.RESET}"
+            f"[!] WARN => Syntax error. Usage: export log <level>"
         )
         # Log syntax errors to the log database
         smf.printd("CLI Syntax Error", args, level="DEBUG")

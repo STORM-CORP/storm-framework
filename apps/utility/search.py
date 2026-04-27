@@ -8,7 +8,7 @@ from apps.utility.colors import C
 def search_modules(query):
     modules_path = os.path.join(ROOT, "modules")
 
-    smf.printf(f"{C.INPUT}\n[*] Searching for =>{C.RESET}", query)
+    smf.printf("\n[*] Searching for =>", query)
     smf.printf()
     smf.printf(f"{'Module Path':<35} {'Category'}")
     smf.printf(f"{'-'*35} {'-'*15}")

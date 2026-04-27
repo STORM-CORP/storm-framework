@@ -1,6 +1,5 @@
 import requests
 import subprocess
-from apps.utility.colors import C
 
 
 def run_update():
@@ -26,9 +25,7 @@ def run_update():
     )
 
     if process.returncode == 0:
-        print(
-            f"\n[✓] System updated to version => {latest_version}"
-        )
+        print(f"\n[✓] System updated to version => {latest_version}")
 
     # 4. Trigger Compiler ONLY IF needed
     try:

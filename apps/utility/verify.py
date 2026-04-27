@@ -2,7 +2,6 @@ import subprocess
 import os
 import sys
 import smf
-from apps.utility.colors import C
 from rootmap import ROOT
 
 
@@ -95,9 +94,7 @@ def check_critical_files():
 
     if not os.path.exists(".env"):
         smf.printd("FILES KEY MISSING", ".env", level="CRITICAL")
-        smf.printf(
-            "[!] CRITICAL => Integrity Key (.env) is missing!"
-        )
+        smf.printf("[!] CRITICAL => Integrity Key (.env) is missing!")
         smf.printf(
             "[*] Storm cannot verify the database signature without your unique keys."
         )

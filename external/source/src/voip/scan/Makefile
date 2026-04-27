@@ -7,8 +7,9 @@ SRC      := $(wildcard *.go)
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-    @mkdir -p $(OUT)
-    @go build -o $(TARGET) .
+	@mkdir -p $(OUT)
+	@go build -o $(TARGET) .
 
 clean:
-    rm -rf $(OUT)
+	rm -rf $(OUT)
+

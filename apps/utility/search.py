@@ -2,7 +2,6 @@ import os
 import smf
 
 from rootmap import ROOT
-from apps.utility.colors import C
 
 
 def search_modules(query):

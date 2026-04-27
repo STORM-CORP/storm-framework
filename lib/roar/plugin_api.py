@@ -66,7 +66,7 @@ class StormAPI:
         """Eksekusi tunggal plugin."""
         plugin = manager.get_plugin(plugin_name)
         if not plugin or isinstance(plugin, manager.NullPlugin):
-            msf.printd(f"Plugin '{plugin_name}' could not be executed.", level="ERROR")
+            smf.printd(f"Plugin '{plugin_name}' could not be executed.", level="ERROR")
             return
 
         action = getattr(plugin, "run", None)

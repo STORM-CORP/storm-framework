@@ -1,7 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import smf
-from apps.utility.colors import *
 from apps.utility.search import search_modules
 from lib.smf.core.console.engine import Context
 
@@ -16,6 +15,6 @@ from lib.smf.core.console.engine import Context
 def execute(args: list[str], ctx: Context) -> None:
     query = args[0] if args else ""
     if not query:
-        smf.printf(f"{CC.YELLOW}[-] Enter file name to search!{CC.RESET}")
+        smf.printf("[!] Enter file name to search!")
     else:
         search_modules(query)

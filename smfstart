@@ -2,6 +2,7 @@
 
 import readline  # noqa: F401
 
+from apps.base.config_update import check_update
 from apps.utility.colors import *
 from lib.smf.core.booting.boot import *
 from lib.ui.banner import *
@@ -10,6 +11,7 @@ from lib.smf.core.console.engine import Context
 def main():
     boot()
     banner()
+    check_update()
     core = Context()
 
     while not core.exit:

@@ -32,9 +32,7 @@ def execute(args: list[str], ctx: Context) -> None:
         for cat in categories:
             smf.printf(f"  - {cat}")
 
-        smf.printf(
-            "\n[!] WARN => show <category_name> to see modules."
-        )
+        smf.printf("\n[!] WARN => show <category_name> to see modules.")
         smf.printf()
 
     # 2. show options
@@ -60,9 +58,7 @@ def execute(args: list[str], ctx: Context) -> None:
         status_list = plugin.monitor()
 
         if not status_list:
-            smf.printf(
-                f"[!] No plugins found in {manager.plugin_dir}"
-            )
+            smf.printf(f"[!] No plugins found in {manager.plugin_dir}")
             return
 
         # Header Tabel

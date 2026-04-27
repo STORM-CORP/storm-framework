@@ -7,6 +7,7 @@ import sys
 
 from rootmap import ROOT
 
+
 def bootstrap():
     json_path = os.path.join(ROOT, "data_storm.json")
 

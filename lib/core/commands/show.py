@@ -96,6 +96,7 @@ def execute(args: list[str], ctx: Context) -> None:
         if module_files:
             smf.printf()
             smf.printf(f"Modules in {target_show}:")
+            smf.printf()
             for mod in module_files:
                 smf.printf(f"  - {mod}")
             smf.printf()

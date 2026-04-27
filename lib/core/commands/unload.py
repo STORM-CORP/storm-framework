@@ -17,7 +17,7 @@ def execute(args: list[str], ctx: Context) -> None:
     # Input validation
     if not args:
         smf.printf(
-            f"[!] WARN => Use the command {CC.GREEN}help{CC.RESET} to see the correct command."
+            "[!] WARN => Use the command => unload <plugin_name>"
         )
         return
 

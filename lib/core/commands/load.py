@@ -1,8 +1,6 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
 import smf
-
-from apps.utility.colors import *
 from lib.smf.core.console.engine import Context
 
 
@@ -18,7 +16,7 @@ def execute(args: list[str], ctx: Context) -> None:
     # Input validation
     if not args:
         smf.printf(
-            f"[!] WARN => Use the command {CC.GREEN}help{CC.RESET} to see the correct command."
+            "[!] WARN => Use the command > load <plugin_name>"
         )
         return
 

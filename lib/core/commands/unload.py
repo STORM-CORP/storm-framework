@@ -2,7 +2,6 @@
 # -- SMF License
 import smf
 
-from apps.utility.colors import CC
 from lib.smf.core.console.engine import Context
 
 
@@ -16,9 +15,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
     # Input validation
     if not args:
-        smf.printf(
-            "[!] WARN => Use the command => unload <plugin_name>"
-        )
+        smf.printf("[!] WARN => Use the command => unload <plugin_name>")
         return
 
     # Get plugin name command

@@ -70,7 +70,7 @@ class StormAPI:
         action = getattr(plugin, "run", None)
         if callable(action):
             return action(payload)
-            
+
         smf.printd(f"Plugin {plugin_name}", "Has no function 'run()'", level="ERROR")
         return
 

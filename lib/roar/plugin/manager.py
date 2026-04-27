@@ -81,7 +81,7 @@ def load_module(plugin_name: str) -> bool:
         plugin_path = resolve_plugin_path(plugin_name)
         if not plugin_path or not plugin_path.exists():
             smf.printf(
-                f"{CC.YELLOW}[!] Plugin not found on disk =>{CC.RESET}", plugin_name
+                "[!] Plugin not found on disk =>", plugin_name
             )
             return False
 
@@ -108,7 +108,7 @@ def load_module(plugin_name: str) -> bool:
         except Exception as e:
             smf.printf(f"Failed to load plugin =>", plugin_name)
             smf.printd(
-                f"Failed to load plugin [{plugin_name}]", str(e), level="CRITICAL"
+                f"Failed to load plugin [{plugin_name}]", e, level="CRITICAL"
             )
             REGISTRY[plugin_name] = NullPlugin(plugin_name)
             purge_module_from_memory(plugin_name)
@@ -124,7 +124,7 @@ def load(plugin_name: str) -> bool:
             ACTIVE_PLUGINS.add(plugin_name)
             _store.save_active_plugins(ACTIVE_PLUGINS)
             smf.printf(
-                f"{CC.GREEN}[✓] Plugin loaded successfully =>{CC.RESET}", plugin_name
+                "[✓] Plugin loaded successfully =>", plugin_name
             )
         return success
 
@@ -137,9 +137,10 @@ def unload(plugin_name: str) -> bool:
             _store.save_active_plugins(ACTIVE_PLUGINS)
             purge_module_from_memory(plugin_name)
             smf.printf(
-                f"{CC.GREEN}[✓] Plugin unloaded completely =>{CC.RESET}", plugin_name
+                "[✓] Plugin unloaded completely =>", plugin_name
             )
             return True
+            
         return False
 
 

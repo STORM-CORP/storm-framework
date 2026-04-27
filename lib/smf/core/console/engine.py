@@ -4,7 +4,6 @@ import typing
 import smf
 import data.option.session as ops
 
-from apps.utility.colors import *
 from lib.core import handler as ex
 from lib.roar.plugin_api import plugin
 from dataclasses import dataclass, field
@@ -13,8 +12,8 @@ from dataclasses import dataclass, field
 @dataclass
 class Context:
     """
-    Representasi dari State Eksekusi Framework.
-    Context ini yang akan dibawa kemana-mana oleh Pipeline.
+    A representation of the Framework's execution state.
+    This context is what the Pipeline will carry everywhere.
     """
 
     current_module: typing.Any = None
@@ -33,21 +32,19 @@ class Context:
 
     def dispatch(self, cmd: str, args: list[str]) -> None:
         """
-        Method ini adalah Pintu Masuk ke Handler.
+        This method is the gateway to the handler.
         Pipeline: Input -> Core (self) -> Handler -> Commands
         """
-        # Melempar 'self' (objek context ini sendiri) ke handler.
-        # ex.execute sekarang tidak perlu mereturn dict baru,
-        # cukup modifikasi atribut objek context ini secara in-place.
+        # Pass 'self' (this context object itself) to the handler.
+        # ex.execute now does not need to return a new dict,
         handled = ex.execute(cmd, args, self)
-        smf.printd("Catch dispatch handled", handled, level="DEBUG")
-        smf.printd("Capture cmd dispatch", cmd, level="INFO")
-        smf.printd("Capture dispatch args", args, level="INFO")
+
+        # Log all to internal
+        smf.printd("Capture cmd dispatch", cmd, level="DEBUG")
+        smf.printd("Capture dispatch args", args, level="DEBUG")
         smf.printd("Capturing self from context", self, level="DEBUG")
 
         if not handled:
-            # Pindahkan logika error handling unknown command ke sini
-            # agar main.py benar-benar bersih dari logika bisnis.
             smf.printf(
-                f"[-] Unknown Command => {cmd} > Run the {CC.GREEN}help{CC.RESET} command for more details."
+                f"[-] Unknown Command => {cmd} > Run the <help> command for more details."
             )

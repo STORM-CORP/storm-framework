@@ -9,7 +9,7 @@ from rootmap import ROOT
 
 
 def bootstrap():
-    json_path = os.path.join(ROOT, "data_storm.json")
+    json_path = os.path.join(ROOT, "data_python.json")
 
     if not os.path.exists(json_path):
         print(f"[!] Configuration missing: {json_path}")

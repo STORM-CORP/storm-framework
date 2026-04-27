@@ -9,10 +9,6 @@ This is the standard that must be set so that all modules can run.
 # This can be used to find the root project if needed.
 from rootmap import ROOT  # noqa
 
-# This can also be used if you need color when printing the log.
-# If you are confused about what the colors are, you can check the file according to the path.
-from apps.utility.colors import C  # noqa
-
 #
 # Apply MOD_INFO with this template in every module you create
 # This serves to identify the module and provide information about its creator

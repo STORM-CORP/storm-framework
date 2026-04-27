@@ -5,7 +5,6 @@ import importlib.util
 import textwrap
 import smf
 
-from apps.utility.colors import *
 from lib.smf.core.console.engine import Context
 
 
@@ -17,7 +16,7 @@ from lib.smf.core.console.engine import Context
 def execute(args: list[str], ctx: Context) -> None:
     query = args[0] if args else ""
     if not query:
-        smf.printf(f"{C.ERROR}[-] Enter file name to info!{C.RESET}")
+        smf.printf("[!] Enter file name to info!")
         return
 
     # This is a special logic to know where the CVE is located.
@@ -44,18 +43,18 @@ def execute(args: list[str], ctx: Context) -> None:
                 width = 55
 
                 smf.printf()
-                smf.printf(f"{C.HEADER}{'='*width}")
-                smf.printf(f"{C.SUCCESS}{'STORM VULNERABILITY KNOWLEDGE BASE':^55}")
-                smf.printf(f"{C.HEADER}{'='*width}")
+                smf.printf(f"{'='*width}")
+                smf.printf(f"{'STORM VULNERABILITY KNOWLEDGE BASE':^55}")
+                smf.printf(f"{'='*width}")
 
-                smf.printf(f"{C.SUCCESS}{'ID CVE':<13} : {info['cve']}")
-                smf.printf(f"{C.SUCCESS}{'NAME':<13} : {info['name']}")
-                smf.printf(f"{C.SUCCESS}{'LEVEL':<13} : {info['severity']}")
-                smf.printf(f"{C.SUCCESS}{'PUBLISHED':<13} : {info['published']}")
-                smf.printf(f"{C.SUCCESS}{'UPDATED':<13} : {info['updated']}")
-                smf.printf(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{'ID CVE':<13} : {info['cve']}")
+                smf.printf(f"{'NAME':<13} : {info['name']}")
+                smf.printf(f"{'LEVEL':<13} : {info['severity']}")
+                smf.printf(f"{'PUBLISHED':<13} : {info['published']}")
+                smf.printf(f"{'UPDATED':<13} : {info['updated']}")
+                smf.printf(f"{'-'*width}")
 
-                smf.printf(f"{C.SUCCESS}DESCRIPTION   :")
+                smf.printf("DESCRIPTION   :")
                 desc = textwrap.fill(
                     info["description"].strip(),
                     width=width - 2,
@@ -64,20 +63,20 @@ def execute(args: list[str], ctx: Context) -> None:
                 )
                 smf.printf(desc)
 
-                smf.printf(f"{C.HEADER}{'-'*width}")
-                smf.printf(f"{C.SUCCESS}REFERENCES    :")
+                smf.printf(f"{'-'*width}")
+                smf.printf("REFERENCES    :")
                 for link in info["URL"]:
                     smf.printf(f" - {link}")
-                smf.printf(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{'-'*width}")
 
-                smf.printf(f"{C.SUCCESS}{'SCANNER':<13} : {info['scanner']}")
-                smf.printf(f"{C.SUCCESS}{'EXPLOIT':<13} : {info['exploit']}")
-                smf.printf(f"{C.HEADER}{'='*width}")
+                smf.printf(f"{'SCANNER':<13} : {info['scanner']}")
+                smf.printf(f"{'EXPLOIT':<13} : {info['exploit']}")
+                smf.printf(f"{'='*width}")
                 smf.printf()
 
             except Exception as e:
                 smf.printd("FAILED TO READ INFORMATION CVE", e, level="ERROR")
-                smf.printf(f"{C.ERROR}[!] Failed to read CVE{C.RESET}")
+                smf.printf("[!] Failed to read CVE")
 
         else:
             # To display information about a specific module
@@ -93,12 +92,12 @@ def execute(args: list[str], ctx: Context) -> None:
                 label_w = 13
 
                 smf.printf()
-                smf.printf(f"{C.HEADER}{'='*width}")
-                smf.printf(f"{C.SUCCESS}{'STORM INFORMATION MODULES':^55}")
-                smf.printf(f"{C.HEADER}{'='*width}")
+                smf.printf(f"{'='*width}")
+                smf.printf(f"{'STORM INFORMATION MODULES':^55}")
+                smf.printf(f"{'='*width}")
 
-                smf.printf(f"{C.SUCCESS}{'NAME':<13} : {info['Name']}")
-                smf.printf(f"{C.SUCCESS}DESCRIPTION   :")
+                smf.printf(f"{'NAME':<13} : {info['Name']}")
+                smf.printf("DESCRIPTION   :")
                 desc = textwrap.fill(
                     info["Description"].strip(),
                     width=width - 2,
@@ -107,28 +106,28 @@ def execute(args: list[str], ctx: Context) -> None:
                 )
                 smf.printf(desc)
 
-                smf.printf(f"{C.HEADER}{'-'*width}")
+                smf.printf(f"{'-'*width}")
                 authors = info.get("Author", [])
                 first_auth = authors[0] if authors else "Unknown"
-                smf.printf(f"{C.SUCCESS}{'AUTHOR':<{label_w}} : - {first_auth}")
+                smf.printf(f"{'AUTHOR':<{label_w}} : - {first_auth}")
                 for extra in authors[1:]:
-                    smf.printf(f"{C.SUCCESS}{' '*(label_w)} : - {extra}")
+                    smf.printf(f"{' '*(label_w)} : - {extra}")
 
-                smf.printf(f"{C.HEADER}{'-'*width}")
-                smf.printf(f"{C.SUCCESS}{'ACTION':<13}")
+                smf.printf(f"{'-'*width}")
+                smf.printf(f"{'ACTION':<13}")
                 for action in info.get("Action", []):
                     name = action[0]
                     desc = action[1].get("Description", "")
-                    smf.printf(f"{C.SUCCESS}  > {name:<9} : {desc}")
+                    smf.printf(f"  > {name:<9} : {desc}")
 
-                smf.printf(f"{C.HEADER}{'-'*width}")
-                smf.printf(f"{C.SUCCESS}{'DefAction':<13} : {info['DefaultAction']}")
-                smf.printf(f"{C.SUCCESS}{'LICENSE':<13} : {info['License']}")
-                smf.printf(f"{C.HEADER}{'='*width}")
+                smf.printf(f"{'-'*width}")
+                smf.printf(f"{'DefAction':<13} : {info['DefaultAction']}")
+                smf.printf(f"{'LICENSE':<13} : {info['License']}")
+                smf.printf(f"{'='*width}")
                 smf.printf()
 
             except Exception as e:
                 smf.printd("FAILED TO READ INFORMATION MODULE", e, level="ERROR")
-                smf.printf(f"{C.ERROR}[-] Failed to read MODULE{C.RESET}")
+                smf.printf("[!] Failed to read MODULE")
     else:
-        smf.printf(f"{C.INPUT}[-] WARN => {query} > not found.{C.RESET}")
+        smf.printf("[!] WARN => {query} > not found.")

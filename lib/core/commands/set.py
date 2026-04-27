@@ -2,7 +2,6 @@
 # -- SMF License
 import smf
 import apps.utility.utils as utils
-from apps.utility.colors import C
 from lib.smf.core.console.engine import Context
 
 
@@ -20,9 +19,7 @@ def execute(args: list[str], ctx: Context) -> None:
         var_value = args[1]
 
         if var_name not in options:
-            smf.printf(
-                f"[-] ERROR => {var_name} > is not a valid options!"
-            )
+            smf.printf(f"[-] ERROR => {var_name} > is not a valid options!")
             return
 
         if "PASS" in var_name:

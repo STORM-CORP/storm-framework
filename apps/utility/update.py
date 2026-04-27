@@ -27,7 +27,7 @@ def run_update():
 
     if process.returncode == 0:
         print(
-            f"{C.SUCCESS}\n[✓] System updated to version => {latest_version}{C.RESET}"
+            f"\n[✓] System updated to version => {latest_version}"
         )
 
     # 4. Trigger Compiler ONLY IF needed

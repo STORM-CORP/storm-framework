@@ -21,7 +21,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
         if var_name not in options:
             smf.printf(
-                f"{C.ERROR}[-] ERROR => {var_name} > is not a valid options!{C.RESET}"
+                f"[-] ERROR => {var_name} > is not a valid options!"
             )
             return
 
@@ -32,9 +32,9 @@ def execute(args: list[str], ctx: Context) -> None:
                 options[var_name] = found_path
                 smf.printf(f"{var_name} => {found_path}")
             else:
-                smf.printf(f"{C.INPUT}[-] WARN => {var_value} > not found!{C.RESET}")
+                smf.printf(f"[!] WARN => {var_value} > not found!")
         else:
             options[var_name] = var_value
             smf.printf(f"{var_name} => {var_value}")
     else:
-        smf.printf(f"{C.INPUT}[!] Try => set <VAR> <VALUE>{C.RESET}")
+        smf.printf(f"[!] Use the command => set <VAR> <VALUE>")

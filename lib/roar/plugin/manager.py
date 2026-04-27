@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Dict, Set, Optional, Any
 
 import smf
-from apps.utility.colors import CC
 from rootmap import ROOT
 from .storage import PluginStateStore
 from .safe import SafePluginProxy, NullPlugin
@@ -80,9 +79,7 @@ def load_module(plugin_name: str) -> bool:
     with _lock:
         plugin_path = resolve_plugin_path(plugin_name)
         if not plugin_path or not plugin_path.exists():
-            smf.printf(
-                "[!] Plugin not found on disk =>", plugin_name
-            )
+            smf.printf("[!] Plugin not found on disk =>", plugin_name)
             return False
 
         try:
@@ -107,9 +104,7 @@ def load_module(plugin_name: str) -> bool:
 
         except Exception as e:
             smf.printf(f"Failed to load plugin =>", plugin_name)
-            smf.printd(
-                f"Failed to load plugin [{plugin_name}]", e, level="CRITICAL"
-            )
+            smf.printd(f"Failed to load plugin [{plugin_name}]", e, level="CRITICAL")
             REGISTRY[plugin_name] = NullPlugin(plugin_name)
             purge_module_from_memory(plugin_name)
             return False
@@ -123,9 +118,7 @@ def load(plugin_name: str) -> bool:
         if success:
             ACTIVE_PLUGINS.add(plugin_name)
             _store.save_active_plugins(ACTIVE_PLUGINS)
-            smf.printf(
-                "[✓] Plugin loaded successfully =>", plugin_name
-            )
+            smf.printf("[✓] Plugin loaded successfully =>", plugin_name)
         return success
 
 
@@ -136,11 +129,9 @@ def unload(plugin_name: str) -> bool:
             ACTIVE_PLUGINS.discard(plugin_name)
             _store.save_active_plugins(ACTIVE_PLUGINS)
             purge_module_from_memory(plugin_name)
-            smf.printf(
-                "[✓] Plugin unloaded completely =>", plugin_name
-            )
+            smf.printf("[✓] Plugin unloaded completely =>", plugin_name)
             return True
-            
+
         return False
 
 

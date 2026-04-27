@@ -100,7 +100,8 @@ class StormSmartCache:
                                     (full_path, mtime, category, module_name)
                                 )
                                 smf.printd(
-                                    f"Module staged for upsert", module_name,
+                                    f"Module staged for upsert",
+                                    module_name,
                                     level="INFO",
                                 )
                             else:
@@ -177,7 +178,8 @@ class StormSmartCache:
             # Fetchall returns a list of tuples: [('exploits/test',), ('exploits/demo',)]
             results = [row[0] for row in self.cursor.fetchall()]
             smf.printd(
-                f"Query returned {len(results)} records for category", category,
+                f"Query returned {len(results)} records for category",
+                category,
                 level="INFO",
             )
             return results

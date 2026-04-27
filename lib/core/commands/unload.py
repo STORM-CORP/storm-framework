@@ -15,7 +15,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
     # Input validation
     if not args:
-        smf.printf("[!] WARN => Use the command => unload <plugin_name>")
+        smf.printf("[!] WARN => Use the command > unload <plugin_name>")
         return
 
     # Get plugin name command

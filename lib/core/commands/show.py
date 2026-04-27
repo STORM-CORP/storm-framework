@@ -2,7 +2,7 @@
 # -- SMF License
 import smf
 import apps.utility.utils as utils
-from apps.utility.colors import *
+from apps.utility.colors import CC
 from lib.smf.core.console.engine import Context
 
 
@@ -21,26 +21,26 @@ def execute(args: list[str], ctx: Context) -> None:
     plugin = ctx.plugin
 
     if not target_show:
-        smf.printf(f"{C.ERROR}[!] No modules selected.{C.RESET}")
+        smf.printf("[!] No modules selected.")
         return
 
     # 1. show modules
     if target_show == "modules":
         categories = utils.get_categories()
-        smf.printf(f"\n{C.HEADER}--- Categories ---{C.RESET}")
+        smf.printf("\n[--- Categories ---]")
 
         for cat in categories:
             smf.printf(f"  - {cat}")
 
         smf.printf(
-            f"\n{C.INPUT}[-] WARN => show <category_name> to see modules.{C.RESET}"
+            "\n[!] WARN => show <category_name> to see modules."
         )
         smf.printf()
 
     # 2. show options
     elif target_show == "options":
         header_name = current_module_name if current_module else "GLOBAL"
-        smf.printf(f"\n{C.HEADER}MODULE OPTIONS ({header_name}):{C.RESET}")
+        smf.printf(f"\nMODULE OPTIONS ({header_name}):")
         smf.printf(f"{'Name':<12} {'Current Setting':<25} {'Description'}")
         smf.printf(f"{'-'*12} {'-'*25} {'-'*15}")
 
@@ -61,13 +61,13 @@ def execute(args: list[str], ctx: Context) -> None:
 
         if not status_list:
             smf.printf(
-                f"{CC.WARN}[!] No plugins found in {manager.plugin_dir}{CC.RESET}"
+                f"[!] No plugins found in {manager.plugin_dir}"
             )
             return
 
         # Header Tabel
-        smf.printf(f"\n{CC.CYAN}{'PLUGIN NAME':<25} {'STATUS':<10}{CC.RESET}")
-        smf.printf(f"{CC.CYAN}{'-' * 36}{CC.RESET}")
+        smf.printf(f"\n{'PLUGIN NAME':<25} {'STATUS':<10}")
+        smf.printf(f"{'-' * 36}")
 
         for item in status_list:
             name = item["name"]
@@ -86,15 +86,15 @@ def execute(args: list[str], ctx: Context) -> None:
 
             smf.printf(f"{name:<25} {color}{status:<10}{CC.RESET}")
 
-        smf.printf(f"{CC.CYAN}{'-' * 36}{CC.RESET}\n")
+        smf.printf(f"{'-' * 36}\n")
 
     # 4. show <category_name>
     else:
         module_files = utils.get_modules_in_category(target_show)
         if module_files:
-            smf.printf(f"\n{C.HEADER}Modules in {target_show}:{C.RESET}")
+            smf.printf(f"\nModules in {target_show}:")
             for mod in module_files:
                 smf.printf(f"  - {mod}")
             smf.printf()
         else:
-            smf.printf(f"{C.INPUT}[-] WARN => {target_show} > not found.{C.RESET}")
+            smf.printf(f"[!] WARN => {target_show} > not found.")

@@ -1,5 +1,7 @@
 # -- https://github.com/StormWorld0/storm-framework
 # -- SMF License
+import smf
+
 from typing import Any, List, Dict
 
 from .plugin import manager

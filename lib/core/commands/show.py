@@ -58,7 +58,7 @@ def execute(args: list[str], ctx: Context) -> None:
         status_list = plugin.monitor()
 
         if not status_list:
-            smf.printf(f"[!] No plugins found in {manager.plugin_dir}")
+            smf.printf(f"[!] No plugins found in {status_list.manager.plugin_dir}")
             return
 
         # Header Tabel

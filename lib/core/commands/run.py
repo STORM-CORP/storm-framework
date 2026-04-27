@@ -19,7 +19,7 @@ def execute(args: list[str], ctx: Context) -> None:
     options = ctx.options
 
     if not current_module:
-        smf.printf(f"{C.ERROR}[!] No modules selected. 'use <module>' first.{C.RESET}")
+        smf.printf("[!] No modules selected. 'use <module>' first.")
         smf.printf()
         return
 
@@ -30,7 +30,7 @@ def execute(args: list[str], ctx: Context) -> None:
     ]
 
     if missing:
-        smf.printf(f"{C.ERROR}[!] Failed to run. Variabel null.{C.RESET}")
+        smf.printf("[!] Failed to run. Variabel null.")
         smf.printd("Null variable in run command", missing, level="WARN")
         smf.printf()
         return
@@ -47,7 +47,7 @@ def execute(args: list[str], ctx: Context) -> None:
 
     except AttributeError as d:
         smf.printd("ERROR COMMAND RUN", d, level="ERROR")
-        smf.printf(f"{C.ERROR}[!] RUN ATTRIBUTE ERROR.{C.RESET}")
+        smf.printf("[!] RUN ATTRIBUTE ERROR.")
     except Exception as e:
         smf.printd("ERROR COMMAND RUN EXCEPTION", e, level="ERROR")
-        smf.printf(f"{C.ERROR}[!] Error during execution.{C.RESET}")
+        smf.printf("[!] Error during execution.")

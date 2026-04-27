@@ -21,4 +21,4 @@ def execute(args: list[str], ctx: Context) -> None:
         ctx.current_module = mod
         ctx.current_module_name = module_name
     else:
-        smf.printf(f"{C.INPUT}[-] WARN => {module_name} > Not found.")
+        smf.printf(f"[!] WARN => {module_name} > Not found.")

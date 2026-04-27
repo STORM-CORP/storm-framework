@@ -3,7 +3,6 @@ import smf
 import random
 import importlib
 
-from apps.utility.colors import C
 from rootmap import ROOT
 
 

@@ -29,7 +29,7 @@ def boot():
     try:
         for i in range(6, 0, -1):
             sys.stdout.write(
-                f"\r{C.SUCCESS}[*] Verification Success! Start Storm: [{i}] {C.RESET}"
+                f"\r[✓] Verification Success! Start Storm: [{i}]"
             )
             sys.stdout.flush()
             time.sleep(1)

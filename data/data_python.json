@@ -1,0 +1,7 @@
+"dependencies": {
+    "requests": "requests",
+    "rich": "rich",
+    "scapy": "scapy",
+    "yaml": "pyyaml",
+    "psutil": "psutil"
+  }

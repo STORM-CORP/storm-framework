@@ -10,9 +10,9 @@ def run_verif():
     lib = "external/source/out/core/integrity/verified"
     if not os.path.exists(lib):
         smf.printd("Binary verification missing", lib, level="CRITICAL")
-        smf.printf(f"[-] ERROR => Rust binary not found in {lib}")
+        smf.printf("[!] ERROR => Rust binary not found in", lib)
         sys.exit(1)
-    smf.printf(f"[∆] [INTEGRITY STORM RUNNING] [∆]")
+    smf.printf("[∆] [INTEGRITY STORM RUNNING] [∆]")
     try:
         result = subprocess.run([lib])
 
@@ -26,7 +26,7 @@ def run_verif():
         return
     except Exception as e:
         smf.printd("INTEGRITY VERIFICATION", e, level="CRITICAL")
-        smf.printf("[-] ERROR =>", e, file=sys.stderr, flush=True)
+        smf.printf("[!] ERROR =>", e, file=sys.stderr, flush=True)
         sys.exit(1)
 
 
@@ -51,7 +51,7 @@ def validate_binary_files():
     for file_name, is_found in found_map.items():
         if not is_found:
             smf.printd("BINARY CORE MISSING", file_name, level="CRITICAL")
-            smf.printf(f"{C.ERROR}[!] Binary core missing => {file_name}{C.RESET}")
+            smf.printf("[!] Binary core missing =>", file_name)
             failed = True
 
     return failed
@@ -78,7 +78,7 @@ def validate_binary_core():
     for file_name, is_found in found_map.items():
         if not is_found:
             smf.printd("BINARY CORE MISSING", file_name, level="CRITICAL")
-            smf.printf(f"{C.ERROR}[!] Binary core missing => {file_name}{C.RESET}")
+            smf.printf("[!] Binary core missing =>", file_name)
             failed = True
 
     return failed
@@ -94,15 +94,15 @@ def check_critical_files():
         error = True
 
     if not os.path.exists(".env"):
-        smf.printd("FILES CORE MISSING", ".env", level="CRITICAL")
+        smf.printd("FILES KEY MISSING", ".env", level="CRITICAL")
         smf.printf(
-            f"{C.ERROR}[!] CRITICAL => Integrity Key (.env) is missing!{C.RESET}"
+            "[!] CRITICAL => Integrity Key (.env) is missing!"
         )
         smf.printf(
-            f"[*] Storm cannot verify the database signature without your unique keys."
+            "[*] Storm cannot verify the database signature without your unique keys."
         )
         smf.printf(
-            f"[*] Please run the installation/recovery script to regenerate your keys."
+            "[*] Please run the installation/recovery script to regenerate your keys."
         )
         error = True
 

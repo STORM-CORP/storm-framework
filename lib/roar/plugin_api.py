@@ -64,12 +64,15 @@ class StormAPI:
         """Eksekusi tunggal plugin."""
         plugin = manager.get_plugin(plugin_name)
         if not plugin or isinstance(plugin, manager.NullPlugin):
-            return f"[ERROR] Plugin '{plugin_name}' could not be executed."
+            msf.printd(f"Plugin '{plugin_name}' could not be executed.", level="ERROR")
+            return
 
         action = getattr(plugin, "run", None)
         if callable(action):
             return action(payload)
-        return f"[ERROR] Plugin {plugin_name} has no function 'run()'."
+            
+        smf.printd(f"Plugin {plugin_name}", "Has no function 'run()'", level="ERROR")
+        return
 
 
 # Expose instance untuk di-import oleh file CLI/Terminal Anda

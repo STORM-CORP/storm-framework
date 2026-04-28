@@ -22,7 +22,7 @@ def execute(args: list[str], ctx: Context) -> None:
             smf.printf(f"[-] ERROR => {var_name} > is not a valid options!")
             return
 
-        if "PASS" in var_name:
+        if "PASS" in var_name or "SUBDOM" in var_name:
             found_path = utils.resolve_path(var_value)
 
             if found_path:

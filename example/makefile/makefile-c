@@ -7,9 +7,9 @@ SOURCES  := $(wildcard *.c)
 all: $(TARGET)
 
 $(TARGET): $(SOURCES)
-    @mkdir -p $(OUT)
-    @LIBS=$$(grep -q "pcap.h" $(SOURCES) && echo "-lpcap" || echo ""); \
-    gcc $(SOURCES) -o $(TARGET) $$LIBS
+	@mkdir -p $(OUT)
+	@LIBS=$$(grep -q "pcap.h" $(SOURCES) && echo "-lpcap" || echo ""); \
+	gcc $(SOURCES) -o $(TARGET) $$LIBS
 
 clean:
-    rm -f $(TARGET)
+	rm -f $(TARGET)

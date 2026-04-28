@@ -15,11 +15,11 @@ SRC      := $(shell find src -name "*.rs") Cargo.toml
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-    @mkdir -p $(OUT)
-    @cargo build --release --offline
-    @cp $(CACHE)/release/lib$(RAW_NAME).so $(TARGET)
-    @strip $(TARGET)
+	@mkdir -p $(OUT)
+	@cargo build --release --offline
+	@cp $(CACHE)/release/lib$(RAW_NAME).so $(TARGET)
+	@strip $(TARGET)
 
 clean:
-    @cargo clean
-    @rm -f $(TARGET)
+	@cargo clean
+	@rm -f $(TARGET)

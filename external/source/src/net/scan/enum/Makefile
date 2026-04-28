@@ -1,5 +1,5 @@
-NAME     := binary output name
-OUT      := $(OUT_DIR)/category name
+NAME     := subenum
+OUT      := $(OUT_DIR)/recon
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 

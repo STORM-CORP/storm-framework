@@ -18,11 +18,8 @@ exploited.
     "DefaultAction": "Scanner",
     "License": "SMF License",
 }
-REQUIRED_OPTIONS = {
-    "DOMAIN": "", 
-    "WORDLIST": "",
-    "THREAD": ""
-}
+REQUIRED_OPTIONS = {"DOMAIN": "", "WORDLIST": "", "THREAD": ""}
+
 
 def execute(options):
     target_domain = options.get("DOMAIN")
@@ -30,7 +27,7 @@ def execute(options):
     threads = str(options.get("THREAD"))
 
     bin_path = os.path.join(ROOT, "external", "source", "out", "recon", "subenum")
-    
+
     if not os.path.exists(bin_path):
         smf.printf(f"[!] ERROR => Binary not found at >", bin_path)
         return
@@ -38,32 +35,23 @@ def execute(options):
     smf.printf(f"\n[*] Starting SUBDOMAIN ENUMERATION for", target_domain)
     smf.printf()
 
-    cmd = [
-        bin_path,
-        "-d", target_domain,
-        "-w", wordlist_path,
-        "-c", threads
-    ]
+    cmd = [bin_path, "-d", target_domain, "-w", wordlist_path, "-c", threads]
 
     try:
         process = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True, 
-            bufsize=1 
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1
         )
 
         # Thread untuk parsing hasil valid (stdout)
         def read_stdout(pipe):
-            for line in iter(pipe.readline, ''):
+            for line in iter(pipe.readline, ""):
                 if line:
                     smf.printf(f"[✓] {line.strip()}")
             pipe.close()
 
         # Thread untuk parsing info/error (stderr)
         def read_stderr(pipe):
-            for line in iter(pipe.readline, ''):
+            for line in iter(pipe.readline, ""):
                 if line:
                     smf.printf(f"{line.strip()}")
             pipe.close()
@@ -81,4 +69,3 @@ def execute(options):
     except Exception as e:
         smf.printf(f"[!] An IPC module error occurred")
         smf.printd("Subenum IPC error", e, level="ERROR")
-        

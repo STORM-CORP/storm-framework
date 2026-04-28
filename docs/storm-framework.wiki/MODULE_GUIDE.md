@@ -49,6 +49,8 @@ REQUIRED_OPTIONS = {
     "DOMAIN": "",
     "HOSTNAME": "",
     "MODULE": "",
+    "API": "",
+    "SUBDOM": ""
 }
 ```
 

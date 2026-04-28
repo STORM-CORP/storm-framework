@@ -18,12 +18,12 @@ exploited.
     "DefaultAction": "Scanner",
     "License": "SMF License",
 }
-REQUIRED_OPTIONS = {"DOMAIN": "", "WORDLIST": "", "THREAD": ""}
+REQUIRED_OPTIONS = {"DOMAIN": "", "SUBDOM": "", "THREAD": ""}
 
 
 def execute(options):
     target_domain = options.get("DOMAIN")
-    wordlist_path = options.get("WORDLIST")
+    wordlist_path = options.get("SUBDOM")
     threads = str(options.get("THREAD"))
 
     bin_path = os.path.join(ROOT, "external", "source", "out", "recon", "subenum")

@@ -8,14 +8,35 @@
   <a href="https://github.com/StormWorld0/storm-framework/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-GPL-blue">
   </a>
-  <a href="https://github.com/StormWorld0/storm-framework">
+  <a href="https://github.com/kalilinux">
     <img src="https://img.shields.io/badge/Kali%20Linux-supported-black?logo=kalilinux">
   </a>
-  <a href="https://github.com/StormWorld0/storm-framework">
+  <a href="https://github.com/termux">
     <img src="https://img.shields.io/badge/Termux-supported-black?logo=android">
+  </a>
+  <a href="https://github.com/ubuntu">
+    <img src="https://img.shields.io/badge/Ubuntu-supported-black?logo=ubuntu">
+  </a>
+  <a href="https://github.com/debian">
+    <img src="https://img.shields.io/badge/Debian-supported-black?logo=debian">
   </a>
   <a href="https://github.com/StormWorld0/storm-framework/blob/main/README_ID.md">
     <img src="https://img.shields.io/badge/Language-Indonesian-red?logo=indonesia&logoColor=white">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/python">
+    <img src="https://img.shields.io/badge/Python-3.12.13-black">
+  </a>
+  <a href="https://github.com/golang/go">
+    <img src="https://img.shields.io/badge/Golang-1.26.2-black">
+  </a>
+  <a href="https://github.com/rust-lang/rust">
+    <img src="https://img.shields.io/badge/Rustc-1.95.0-black">
+  </a>
+  <a href="https://www.gnu.org/software/bash/">
+    <img src="https://img.shields.io/badge/Bash-5.3.9-black">
   </a>
 </p>
 

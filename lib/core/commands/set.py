@@ -2,6 +2,7 @@
 # -- SMF License
 import smf
 import apps.utility.utils as utils
+from apps.utility.colors import CC
 from lib.smf.core.console.engine import Context
 
 
@@ -22,16 +23,17 @@ def execute(args: list[str], ctx: Context) -> None:
             smf.printf(f"[-] ERROR => {var_name} > is not a valid options!")
             return
 
-        if "PASS" in var_name or "SUBDOM" in var_name:
+        allow = {"PASS", "SUBDOM"}
+        if var_name in allow:
             found_path = utils.resolve_path(var_value)
 
             if found_path:
                 options[var_name] = found_path
-                smf.printf(f"{var_name} => {found_path}")
+                smf.printf(f"{CC.YELLOW}{var_name} => {found_path}{CC.RESET}")
             else:
                 smf.printf(f"[!] WARN => {var_value} > not found!")
         else:
             options[var_name] = var_value
-            smf.printf(f"{var_name} => {var_value}")
+            smf.printf(f"{CC.YELLOW}{var_name} => {var_value}{CC.RESET}")
     else:
         smf.printf(f"[!] Use the command => set <VAR> <VALUE>")

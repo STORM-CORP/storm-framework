@@ -23,7 +23,7 @@ forward proxy logic.
 
 def execute(options):
     lib = os.path.join(ROOT, "external", "source", "out")
-    out = os.path.join(lib, "mod", "aux", "proxy", "http")
+    out = os.path.join(lib, "module", "aux", "proxy", "http")
     bin = os.path.join(out, "http_prox")
 
     cmd = [bin]

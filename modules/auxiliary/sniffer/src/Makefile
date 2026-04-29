@@ -1,5 +1,5 @@
 NAME     := dpi_netspy
-OUT      := $(OUT_DIR)/mod/aux/sniff
+OUT      := $(OUT_DIR)/module/aux/sniff
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 

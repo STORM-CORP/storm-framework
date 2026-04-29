@@ -26,16 +26,18 @@ def execute(options):
     wordlist_path = options.get("SUBDOM")
     threads = str(options.get("THREAD"))
 
-    bin_path = os.path.join(ROOT, "external", "source", "out", "recon", "subenum")
+    out = os.path.join(ROOT, "external", "source", "out")
+    bin = os.path.join(out, "module", "aux", "recon")
+    binary = os.path.join(bin, "subenum")
 
-    if not os.path.exists(bin_path):
-        smf.printf(f"[!] ERROR => Binary not found at >", bin_path)
+    if not os.path.exists(binary):
+        smf.printf(f"[!] ERROR => Binary not found at >", binary)
         return
 
     smf.printf(f"\n[*] Starting SUBDOMAIN ENUMERATION for", target_domain)
     smf.printf()
 
-    cmd = [bin_path, "-d", target_domain, "-w", wordlist_path, "-c", threads]
+    cmd = [binary, "-d", target_domain, "-w", wordlist_path, "-c", threads]
 
     try:
         process = subprocess.Popen(

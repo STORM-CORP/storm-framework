@@ -25,7 +25,7 @@ def execute(options):
     threads = options.get("THREAD")
 
     bindir = os.path.join(ROOT, "external", "source", "out")
-    out_bin = os.path.join(bindir, "mod", "aux", "dos", "ftp")
+    out_bin = os.path.join(bindir, "module", "aux", "dos", "ftp")
     bin_path = os.path.join(out_bin, "ftp_flood")
 
     if not target:

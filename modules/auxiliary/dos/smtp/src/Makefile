@@ -1,5 +1,5 @@
 NAME     := smtp_flood
-OUT      := $(OUT_DIR)/mod/aux/dos/smtp
+OUT      := $(OUT_DIR)/module/aux/dos/smtp
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 

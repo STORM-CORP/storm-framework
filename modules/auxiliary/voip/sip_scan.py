@@ -40,14 +40,16 @@ def execute(options):
     threads = str(options.get("THREAD"))
 
     # Resolusi path absolut ke binary (diasumsikan binary bernama 'sip_scan')
-    bin_path = os.path.join(ROOT, "external", "source", "out", "voip", "sip_scan")
+    out = os.path.join(ROOT, "external", "source", "out")
+    bin = os.path.join(out, "module", "aux", "voip")
+    binary = os.path.join(bin, "sip_scan")
 
-    if not os.path.exists(bin_path):
-        smf.printf(f"[!] Binary not found =>", bin_path)
+    if not os.path.exists(binary):
+        smf.printf(f"[!] Binary not found =>", binary)
         return
 
     # 2. Konstruksi argumen Command-Line
-    cmd = [bin_path, "-p", port, "-proto", protocol, "-c", threads]
+    cmd = [binary, "-p", port, "-proto", protocol, "-c", threads]
 
     smf.printf(f"[*] External process initialization: {' '.join(cmd)}")
 

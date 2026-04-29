@@ -1,5 +1,5 @@
 NAME     := sip_scan
-OUT      := $(OUT_DIR)/voip
+OUT      := $(OUT_DIR)/module/aux/voip
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 

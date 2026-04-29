@@ -29,7 +29,7 @@ def execute(options):
     threads = str(options.get("THREAD"))
 
     bindir = os.path.join(ROOT, "external", "source", "out")
-    out_dir = os.path.join(bindir, "mod", "aux", "dos", "smtp")
+    out_dir = os.path.join(bindir, "module", "aux", "dos", "smtp")
     bin_path = os.path.join(out_dir, "smtp_flood")
     if not target:
         smf.printf("[-] Target is missing!")

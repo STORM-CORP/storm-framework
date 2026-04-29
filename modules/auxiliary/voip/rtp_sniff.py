@@ -26,8 +26,8 @@ def execute(options):
     # --- DYNAMIC PATH LOGIC ---
     # Internal path for Storm's innards
     out = os.path.join(ROOT, "external", "source", "out")
-    bin = os.path.join(ROOT, "module", "aux", "voip")
-    binary = os.path.join(out, "rtp_sniff")
+    bin = os.path.join(out, "module", "aux", "voip")
+    binary = os.path.join(bin, "rtp_sniff")
 
     # Output path for User (Current Working Directory)
     output_pcm = os.path.join(os.getcwd(), "storm_capture.pcm")

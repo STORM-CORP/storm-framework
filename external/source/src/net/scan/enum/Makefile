@@ -1,5 +1,5 @@
 NAME     := subenum
-OUT      := $(OUT_DIR)/recon
+OUT      := $(OUT_DIR)/module/aux/recon
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 

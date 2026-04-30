@@ -3,14 +3,20 @@ OUT      := $(OUT_DIR)/module/aux/voip
 TARGET   := $(OUT)/$(NAME)
 SOURCES  := $(wildcard *.c)
 
+# --- Hardware Optimization Flags ---
+# -O3          : Optimasi level tinggi (vektorisasi, loop unrolling, dll).
+# -march=native: Mengaktifkan semua instruksi set (AVX, AVX2, dll) milik CPU lokal.
+# -mtune=native: Mengatur jadwal instruksi agar pas dengan mikroarsitektur CPU lokal.
+# -pipe        : Menggunakan pipe antar tahapan kompilasi (mempercepat proses build).
+CFLAGS   := -O3 -march=native -mtune=native -pipe
+
 .PHONY: all clean
 all: $(TARGET)
 
 $(TARGET): $(SOURCES)
 	@mkdir -p $(OUT)
-	@LIBS=$$(grep -q "pcap.h" $(SOURCES) && echo "-lpcap" || echo ""); \
-	gcc $(SOURCES) -o $(TARGET) $$LIBS
+	@LIBS=$$(grep -q "pcap.h" $(SOURCES) && echo "-lpcap" || echo "");
+	gcc $(CFLAGS) $(SOURCES) -o $(TARGET) $$LIBS
 
 clean:
 	rm -f $(TARGET)
-

@@ -3,13 +3,33 @@ OUT      := $(OUT_DIR)/module/aux/voip
 TARGET   := $(OUT)/$(NAME)
 SRC      := $(wildcard *.go)
 
+# --- Go Hardware Optimization ---
+# Mendeteksi fitur CPU untuk menentukan level GOAMD64 (v1-v4)
+# v3 = AVX, AVX2, BMI1, BMI2, FMA (Standar CPU modern)
+# v4 = AVX-512 (Hanya untuk CPU kelas server/high-end terbaru)
+
+ARCH := $(shell uname -m)
+
+ifeq ($(ARCH), x86_64)
+    # Cek dukungan fitur melalui /proc/cpuinfo
+    HAS_AVX512 := $(shell grep -q avx512f /proc/cpuinfo && echo "yes" || echo "no")
+    HAS_AVX2    := $(shell grep -q avx2 /proc/cpuinfo && echo "yes" || echo "no")
+
+    ifeq ($(HAS_AVX512), yes)
+        GO_OPT := GOAMD64=v4
+    else ifeq ($(HAS_AVX2), yes)
+        GO_OPT := GOAMD64=v3
+    else
+        GO_OPT := GOAMD64=v2
+    endif
+endif
+
 .PHONY: all clean
 all: $(TARGET)
 
 $(TARGET): $(SRC)
 	@mkdir -p $(OUT)
-	@go build -o $(TARGET) .
+	@$(GO_OPT) go build -ldflags="-s -w" -o $(TARGET) .
 
 clean:
 	rm -rf $(OUT)
-

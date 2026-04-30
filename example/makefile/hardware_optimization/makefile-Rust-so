@@ -12,26 +12,15 @@ ifeq ($(CACHE),)
     CACHE := target
 endif
 
-# --- Host OS & Architecture Detection ---
-ARCH     := $(shell uname -m)
+# --- HARDWARE OPTIMIZATION LAYER ---
+# Using the Compile-on-Device paradigm. 
+# Delegates 100% of microarchitectural resolution to the host LLVM backend.
+# rustc will evaluate CPUID (x86_64) or MIDR_EL1 (ARM64) dynamically 
+# to inject the most advanced vector instruction sets (AVX, SVE, NEON) 
+# supported by the user's local silicon.
+export RUSTFLAGS := -C target-cpu=native
 
-# --- Hardware Optimization Layer ---
-OPT_FLAGS :=
-
-ifeq ($(ARCH), x86_64)
-    # PC/Server AMD64: LLVM execution with host microarchitecture specific instructions.
-    OPT_FLAGS := -C target-cpu=native
-else ifeq ($(ARCH), aarch64)
-    # Mobile/ARM64: Leave blank. LLVM will use generic ARM64 code-gen
-    # to ensure a secure Application Binary Interface (ABI) across Android devices.
-    OPT_FLAGS :=
-endif
-
-# Export RUSTFLAGS if target is not mobile/generic architecture
-ifneq ($(OPT_FLAGS),)
-    export RUSTFLAGS := $(OPT_FLAGS)
-endif
-
+# Source code resolution for re-compile trigger
 SRC      := $(shell find src -name "*.rs" 2>/dev/null) Cargo.toml
 
 .PHONY: all clean
@@ -42,7 +31,7 @@ $(TARGET): $(SRC)
 	mkdir -p $(OUT)
 	cargo build --release --offline --quiet
 	cp $(CACHE)/release/lib$(RAW_NAME).so $(TARGET)
-	strip $(TARGET)
+	strip --strip-unneeded $(TARGET)
 
 clean:
 	cargo clean --quiet

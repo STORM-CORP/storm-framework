@@ -1,23 +1,56 @@
-NAME     := binary output name
-OUT      := $(OUT_DIR)/category name
+.SILENT:
+
+NAME     := binary_output_name
+OUT_DIR  ?= build
+OUT      := $(OUT_DIR)/category_name
 TARGET   := $(OUT)/$(NAME)
 SOURCES  := $(wildcard *.c)
 
-# --- Hardware Optimization Flags ---
-# -O3          : Optimasi level tinggi (vektorisasi, loop unrolling, dll).
-# -march=native: Mengaktifkan semua instruksi set (AVX, AVX2, dll) milik CPU lokal.
-# -mtune=native: Mengatur jadwal instruksi agar pas dengan mikroarsitektur CPU lokal.
-# -pipe        : Menggunakan pipe antar tahapan kompilasi (mempercepat proses build).
-CFLAGS   := -O3 -march=native -mtune=native -pipe
+# --- Host Detection ---
+UNAME_S := $(shell uname -s)
+UNAME_O := $(shell uname -o 2>/dev/null || echo "Unknown")
 
+# --- Toolchain Initialization & Base Flags ---
+CC      ?= gcc
+CFLAGS  := -O3 -pipe
+LDFLAGS :=
+
+# --- Environment Branching Logic ---
+ifeq ($(UNAME_O),Android)
+    # --- Android Configuration (Termux / Native) ---
+    CC      := clang
+    CFLAGS  += -fPIE -fPIC
+    LDFLAGS += -pie
+    
+else ifeq ($(UNAME_S),Linux)
+    # --- GNU/Linux Configuration (PC) ---
+    CFLAGS  += -march=native -mtune=native
+
+else ifeq ($(UNAME_S),Darwin)
+    # --- macOS Configuration ---
+    CC      := clang
+    CFLAGS  += -march=native -mtune=native
+
+else
+    # --- Fallback (Windows MSYS2, Cygwin, etc) ---
+    CFLAGS  += -march=native -mtune=native
+endif
+
+# --- Dynamic Dependency Resolution ---
+# Added 2>/dev/null to grep to prevent stderr leaking if $(SOURCES) is empty.
+HAS_PCAP := $(shell grep -q "pcap.h" $(SOURCES) 2>/dev/null && echo 1 || echo 0)
+ifeq ($(HAS_PCAP),1)
+    LDFLAGS += -lpcap
+endif
+
+# --- Build Rules ---
 .PHONY: all clean
+
 all: $(TARGET)
 
 $(TARGET): $(SOURCES)
-	@mkdir -p $(OUT)
-	@LIBS=$$(grep -q "pcap.h" $(SOURCES) && echo "-lpcap" || echo "");
-	gcc $(CFLAGS) $(SOURCES) -o $(TARGET) $$LIBS
+	mkdir -p $(OUT)
+	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET) $(LDFLAGS)
 
 clean:
 	rm -f $(TARGET)
-

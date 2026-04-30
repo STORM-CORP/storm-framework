@@ -1,21 +1,55 @@
+.SILENT:
+
 NAME     := verified
+OUT_DIR  ?= build
 OUT      := $(OUT_DIR)/core/integrity
 TARGET   := $(OUT)/$(NAME)
 
+# Rust target cache resolution
 CACHE    := $(CARGO_TARGET_DIR)
 ifeq ($(CACHE),)
     CACHE := target
 endif
 
-SRC      := $(shell find src -name "*.rs") Cargo.toml
+# --- Host OS & Architecture Detection ---
+OS_NAME  := $(shell uname -o 2>/dev/null || uname -s)
+ARCH     := $(shell uname -m)
+
+# Inisialisasi parameter kompilasi (RUSTFLAGS)
+# -C strip=symbols : Equivalent to -s -w in Go. Removes debug symbols
+#                    to reduce the final binary size at the linker level.
+RUST_FLAGS_ENV := -C strip=symbols
+
+# --- Architecture Optimization Branching ---
+ifeq ($(ARCH), x86_64)
+    # PC-specific instruction set optimization (AMD64)
+    # LLVM will recompile the machine code to maximize the features 
+    # host processor (AVX, SSE, etc.).
+    RUST_FLAGS_ENV += -C target-cpu=native
+else ifeq ($(ARCH), aarch64)
+    # Isolation for ARM64 (Android/Termux or Apple Silicon)
+    # Technically LLVM in Rust supports target-cpu=native on ARM, 
+    # but in the mobile environment this often triggers linker anomalies or 
+    # illegal instruction when the binary is moved to another Android device.
+    RUST_FLAGS_ENV +=
+endif
+
+# Export RUSTFLAGS to be automatically captured by session 'cargo'
+export RUSTFLAGS := $(RUST_FLAGS_ENV)
+
+SRC      := $(shell find src -name "*.rs" 2>/dev/null) Cargo.toml
+
 .PHONY: all clean
+
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-	@mkdir -p $(OUT)
-	@cargo build --release --offline
-	@cp $(CACHE)/release/$(NAME) $(TARGET)
+	mkdir -p $(OUT)
+	# --quiet (-q) silences all logs, progress bars, and warnings from Cargo.
+	# It will only throw output to stderr IF a fatal/panic error occurs.
+	cargo build --release --offline --quiet
+	cp $(CACHE)/release/$(NAME) $(TARGET)
 
 clean:
-	@cargo clean
-	@rm -f $(TARGET)
+	cargo clean --quiet
+	rm -f $(TARGET)

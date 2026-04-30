@@ -1,52 +1,55 @@
+.SILENT:
+
 NAME     := binary_output_name
 OUT_DIR  ?= build
 OUT      := $(OUT_DIR)/category_name
 TARGET   := $(OUT)/$(NAME)
 SOURCES  := $(wildcard *.c)
 
-# --- 1. Deteksi Sistem Operasi (Host Detection) ---
+# --- Host Detection ---
 UNAME_S := $(shell uname -s)
 UNAME_O := $(shell uname -o 2>/dev/null || echo "Unknown")
 
-# --- 2. Inisialisasi Toolchain & Base Flags ---
+# --- Toolchain Initialization & Base Flags ---
 CC      ?= gcc
 CFLAGS  := -O3 -pipe
 LDFLAGS :=
 
-# --- 3. Logika Percabangan Environment ---
+# --- Environment Branching Logic ---
 ifeq ($(UNAME_O),Android)
-    # --- Konfigurasi Android (Termux / Native) ---
+    # --- Android Configuration (Termux / Native) ---
     CC      := clang
     CFLAGS  += -fPIE -fPIC
     LDFLAGS += -pie
     
 else ifeq ($(UNAME_S),Linux)
-    # --- Konfigurasi GNU/Linux (PC) ---
+    # --- GNU/Linux Configuration (PC) ---
     CFLAGS  += -march=native -mtune=native
 
 else ifeq ($(UNAME_S),Darwin)
-    # --- Konfigurasi macOS ---
+    # --- macOS Configuration ---
     CC      := clang
     CFLAGS  += -march=native -mtune=native
 
 else
-    # --- Fallback (Windows MSYS2, Cygwin, dll) ---
+    # --- Fallback (Windows MSYS2, Cygwin, etc) ---
     CFLAGS  += -march=native -mtune=native
 endif
 
-# --- 4. Resolusi Dependensi Dinamis ---
-HAS_PCAP := $(shell grep -q "pcap.h" $(SOURCES) && echo 1 || echo 0)
+# --- Dynamic Dependency Resolution ---
+# Added 2>/dev/null to grep to prevent stderr leaking if $(SOURCES) is empty.
+HAS_PCAP := $(shell grep -q "pcap.h" $(SOURCES) 2>/dev/null && echo 1 || echo 0)
 ifeq ($(HAS_PCAP),1)
     LDFLAGS += -lpcap
 endif
 
-# --- Aturan Build ---
+# --- Build Rules ---
 .PHONY: all clean
 
 all: $(TARGET)
 
 $(TARGET): $(SOURCES)
-	@mkdir -p $(OUT)
+	mkdir -p $(OUT)
 	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET) $(LDFLAGS)
 
 clean:

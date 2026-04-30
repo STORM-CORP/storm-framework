@@ -6,38 +6,28 @@ OUT      := $(OUT_DIR)/module/aux/voip
 TARGET   := $(OUT)/$(NAME)
 SOURCES  := $(wildcard *.c)
 
-# --- Host Detection ---
-UNAME_S := $(shell uname -s)
+# --- Operating System Detection (Not CPU) ---
 UNAME_O := $(shell uname -o 2>/dev/null || echo "Unknown")
 
-# --- Toolchain Initialization & Base Flags ---
+# --- Toolchain Initialization & Hardware Optimization ---
 CC      ?= gcc
-CFLAGS  := -O3 -pipe
+# Compile-on-Device Paradigm: 
+# -march=native -mtune=native is installed universally. GCC/Clang will 
+# squeeze 100% of specific instructions from the local CPU without regard 
+# whether it is x86_64 PC processor or aarch64 HP.
+CFLAGS  := -O3 -pipe -march=native -mtune=native
 LDFLAGS :=
 
-# --- Environment Branching Logic ---
+# --- OS-Specific Memory Compliance ---
 ifeq ($(UNAME_O),Android)
-    # --- Android Configuration (Termux / Native) ---
+    # Modern Termux/Android is based on LLVM, clang is recommended.
     CC      := clang
+    # Position Independent Code Injection is mandatory for the Android kernel
     CFLAGS  += -fPIE -fPIC
     LDFLAGS += -pie
-
-else ifeq ($(UNAME_S),Linux)
-    # --- GNU/Linux Configuration (PC) ---
-    CFLAGS  += -march=native -mtune=native
-
-else ifeq ($(UNAME_S),Darwin)
-    # --- macOS Configuration ---
-    CC      := clang
-    CFLAGS  += -march=native -mtune=native
-
-else
-    # --- Fallback (Windows MSYS2, Cygwin, etc) ---
-    CFLAGS  += -march=native -mtune=native
 endif
 
 # --- Dynamic Dependency Resolution ---
-# Added 2>/dev/null to grep to prevent stderr leaking if $(SOURCES) is empty.
 HAS_PCAP := $(shell grep -q "pcap.h" $(SOURCES) 2>/dev/null && echo 1 || echo 0)
 ifeq ($(HAS_PCAP),1)
     LDFLAGS += -lpcap
@@ -51,6 +41,7 @@ all: $(TARGET)
 $(TARGET): $(SOURCES)
 	mkdir -p $(OUT)
 	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET) $(LDFLAGS)
+	strip --strip-unneeded $(TARGET) 2>/dev/null || true
 
 clean:
 	rm -f $(TARGET)

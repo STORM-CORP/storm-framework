@@ -32,3 +32,7 @@ indent_size = 2
 # Makefiles must use Tabs, no Spaces
 indent_style = tab
 
+[*.{go}]
+# Golang must use Tabs, no Spaces
+indent_style = tab
+

@@ -1,4 +1,3 @@
-# Dampens all Make's built-in output
 .SILENT:
 
 NAME    := binary_output_name

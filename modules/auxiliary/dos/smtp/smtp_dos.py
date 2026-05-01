@@ -1,7 +1,9 @@
 import subprocess
 import os
 import smf
+
 from rootmap import ROOT
+from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
     "Name": "DoS to SMTP network",
@@ -28,14 +30,14 @@ def execute(options):
     port = str(options.get("PORT"))
     threads = str(options.get("THREAD"))
 
-    bindir = os.path.join(ROOT, "external", "source", "out")
-    out_dir = os.path.join(bindir, "module", "aux", "dos", "smtp")
-    bin_path = os.path.join(out_dir, "smtp_flood")
+    bin_path = call_bin("smtp_flood")
+    
     if not target:
         smf.printf("[-] Target is missing!")
         return
 
-    if not os.path.exists(bin_path):
+    if not bin_path:
+        smf.printf("[!] Binary not found =>", bin_path)
         return
 
     if os.getuid() == 0:

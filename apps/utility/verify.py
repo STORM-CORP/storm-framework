@@ -2,12 +2,13 @@ import subprocess
 import os
 import sys
 import smf
-from rootmap import ROOT
 
+from rootmap import ROOT
+from lib.roar.callbin.calling import call_bin
 
 def run_verif():
-    lib = "external/source/out/core/integrity/verified"
-    if not os.path.exists(lib):
+    lib = call_bin("verified")  
+    if not lib:
         smf.printd("Binary verification missing", lib, level="CRITICAL")
         smf.printf("[!] ERROR => Rust binary not found in", lib)
         sys.exit(1)

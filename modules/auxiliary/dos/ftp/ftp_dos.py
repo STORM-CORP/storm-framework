@@ -33,7 +33,7 @@ def execute(options):
     if not bin_path:
         smf.printf("[!] Binary not found =>", bin_path)
         return
-        
+
     smf.printf(f"[*] Preparing DoS to {target}:{port}")
 
     try:

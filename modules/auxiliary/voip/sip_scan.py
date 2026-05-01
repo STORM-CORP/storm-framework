@@ -2,7 +2,9 @@ import subprocess
 import threading
 import os
 import smf
+
 from rootmap import ROOT
+from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
     "Name": "Session Initiation Protocol Scanning",
@@ -39,12 +41,10 @@ def execute(options):
     protocol = str(options.get("PROTOCOL")).lower()
     threads = str(options.get("THREAD"))
 
-    # Resolusi path absolut ke binary (diasumsikan binary bernama 'sip_scan')
-    out = os.path.join(ROOT, "external", "source", "out")
-    bin = os.path.join(out, "module", "aux", "voip")
-    binary = os.path.join(bin, "sip_scan")
+    # Resolusi path absolut ke binary
+    binary = call_bin("sip_scan")
 
-    if not os.path.exists(binary):
+    if not binary:
         smf.printf(f"[!] Binary not found =>", binary)
         return
 

@@ -27,9 +27,7 @@ def execute(options):
     target_domain = options.get("DOMAIN")
     wordlist_path = options.get("SUBDOM")
     threads = str(options.get("THREAD"))
-
-    out = os.path.join(ROOT, "external", "source", "out")
-    bin = os.path.join(out, "module", "aux", "recon")
+    
     binary = call_bin("subenum")
 
     if not binary:

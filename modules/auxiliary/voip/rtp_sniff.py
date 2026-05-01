@@ -3,7 +3,6 @@ import subprocess
 import shutil
 import smf
 
-from rootmap import ROOT
 from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
@@ -25,7 +24,7 @@ REQUIRED_OPTIONS = {"INTERFACE": "example: eth0"}
 
 def execute(options):
     interface = options.get("INTERFACE")
-    # --- DYNAMIC PATH LOGIC --- 
+    # --- DYNAMIC PATH LOGIC ---
     binary = call_bin("rtp_sniff")
 
     if not binary:

@@ -27,9 +27,13 @@ def execute(options):
     bin_path = call_bin("ftp_flood")
 
     if not target:
-        smf.printf("[-] ERROR: TARGET is missing!")
+        smf.printf("[-] TARGET is missing!")
         return
 
+    if not bin_path:
+        smf.printf("[!] Binary not found =>", bin_path)
+        return
+        
     smf.printf(f"[*] Preparing DoS to {target}:{port}")
 
     try:

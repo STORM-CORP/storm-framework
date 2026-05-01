@@ -9,6 +9,7 @@ from lib.roar.plugin_api import plugin
 from lib.roar.cache import cache_modules as cache
 from lib.roar.callbin import calling
 
+
 def boot():
     smf.printd("Boot starting...", level="INFO")
     smf.printd("Start checking the core...", level="INFO")
@@ -32,7 +33,7 @@ def boot():
     # Verify file integrity
     run_verif()
     smf.printd("Verification of integrity check success", level="INFO")
-        
+
     # Countdown to pause and start
     try:
         for i in range(6, 0, -1):

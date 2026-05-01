@@ -4,6 +4,7 @@ import os
 import smf
 
 from rootmap import ROOT
+from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
     "Name": "Forward proxy http",
@@ -22,10 +23,12 @@ forward proxy logic.
 
 
 def execute(options):
-    lib = os.path.join(ROOT, "external", "source", "out")
-    out = os.path.join(lib, "module", "aux", "proxy", "http")
-    bin = os.path.join(out, "http_prox")
+    bin = call_bin("http_prox")
 
+    if not bin:
+        smf.printf("[!] Binary not found =>", bin)
+        return
+        
     cmd = [bin]
 
     process = subprocess.Popen(

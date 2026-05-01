@@ -2,7 +2,9 @@ import os
 import subprocess
 import threading
 import smf
+
 from rootmap import ROOT
+from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
     "Name": "Searching for subdomains",
@@ -28,9 +30,9 @@ def execute(options):
 
     out = os.path.join(ROOT, "external", "source", "out")
     bin = os.path.join(out, "module", "aux", "recon")
-    binary = os.path.join(bin, "subenum")
+    binary = call_bin("subenum")
 
-    if not os.path.exists(binary):
+    if not binary:
         smf.printf(f"[!] ERROR => Binary not found at >", binary)
         return
 

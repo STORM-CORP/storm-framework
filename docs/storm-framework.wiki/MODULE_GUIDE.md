@@ -1,6 +1,6 @@
 # Storm Framework Module Guide Explanation 
 
-Cara menambahkan module di Storm sedikit mudah seperti salin -> tulis -> jalan, dan module secara otomatis akan di load dan siap di gunakan. Kita menggunakan mekanisme Dynamic Loading di load hanya saat di panggil.
+How to add a module in Storm is a bit easy like copy -> write -> run, and the module will automatically be loaded and ready to use. We use Dynamic Loading mechanism to load only when called.
 
 ## information template
 

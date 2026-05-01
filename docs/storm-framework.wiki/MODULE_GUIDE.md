@@ -56,7 +56,7 @@ REQUIRED_OPTIONS = {
 
 > [!IMPORTANT]
 > **REQUIRED_OPTIONS:** For `PASS` and `SUBDOM` will be automatically directed to `assets/wordlist`,
-> So just enter the wordlist name, for example: (`set PASS pasword_unix`) will automatically bewill automatically be
+> So just enter the wordlist name, for example: (`set PASS pasword_unix`) will automatically be
 > pathed to `../storm-framework/assets/wordlist/password_unix.txt`.
 
 ### 3. **Module Function:**

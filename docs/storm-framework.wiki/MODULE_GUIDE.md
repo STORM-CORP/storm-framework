@@ -61,7 +61,7 @@ REQUIRED_OPTIONS = {
 
 ### 3. **Module Function:**
 
-Make sure to always consistently use the entry point function `def execute(options)`, otherwise you are free to use any function name.
+Make sure to always consistently use the entry point function `def execute(options)` Just use it as an entry point, otherwise you are free to use any function name you want.
 
 ```python
 # --- Main function ---

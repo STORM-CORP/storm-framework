@@ -1,9 +1,7 @@
-import os
 import subprocess
 import threading
 import smf
 
-from rootmap import ROOT
 from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
@@ -27,7 +25,7 @@ def execute(options):
     target_domain = options.get("DOMAIN")
     wordlist_path = options.get("SUBDOM")
     threads = str(options.get("THREAD"))
-    
+
     binary = call_bin("subenum")
 
     if not binary:

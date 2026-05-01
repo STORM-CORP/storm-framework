@@ -69,11 +69,11 @@ class StormAPI:
             smf.printd(f"Plugin '{plugin_name}' could not be executed.", level="ERROR")
             return
 
-        action = getattr(plugin, "run", None)
+        action = getattr(plugin, "execute", None)
         if callable(action):
             return action(payload)
 
-        smf.printd(f"Plugin {plugin_name}", "Has no function 'run()'", level="ERROR")
+        smf.printd(f"Plugin {plugin_name}", "Has no function 'execute()'", level="ERROR")
         return
 
 

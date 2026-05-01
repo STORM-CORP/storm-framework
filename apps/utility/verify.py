@@ -6,8 +6,9 @@ import smf
 from rootmap import ROOT
 from lib.roar.callbin.calling import call_bin
 
+
 def run_verif():
-    lib = call_bin("verified")  
+    lib = call_bin("verified")
     if not lib:
         smf.printd("Binary verification missing", lib, level="CRITICAL")
         smf.printf("[!] ERROR => Rust binary not found in", lib)

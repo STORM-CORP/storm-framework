@@ -41,6 +41,21 @@
 </p>
 
 <p align="center">
+  <a>
+    <img src="https://img.shields.io/github/languages/code-size/StormWorld0/storm-framework?logoColor=black&color=black">
+  </a>
+  <a>
+    <img src="https://img.shields.io/github/forks/StormWorld0/storm-framework?logoColor=ffff&color=%23ff0000">
+  </a>
+  <a>
+    <img src="https://img.shields.io/github/stars/StormWorld0/storm-framework?color=%2332cd32">
+  </a>
+  <a>
+    <img src="https://img.shields.io/github/contributors/StormWorld0/storm-framework?logoColor=black&color=black">
+  </a>
+</p>
+
+<p align="center">
   Tool Suite for Information Gathering and Initial Vulnerability Analysis.
 </p>
 

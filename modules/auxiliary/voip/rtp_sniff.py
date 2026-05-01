@@ -2,7 +2,9 @@ import os
 import subprocess
 import shutil
 import smf
+
 from rootmap import ROOT
+from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
     "Name": "Real-Time Transport Protocol",
@@ -23,11 +25,11 @@ REQUIRED_OPTIONS = {"INTERFACE": "example: eth0"}
 
 def execute(options):
     interface = options.get("INTERFACE")
-    # --- DYNAMIC PATH LOGIC ---
-    # Internal path for Storm's innards
-    out = os.path.join(ROOT, "external", "source", "out")
-    bin = os.path.join(out, "module", "aux", "voip")
-    binary = os.path.join(bin, "rtp_sniff")
+    # --- DYNAMIC PATH LOGIC --- 
+    binary = call_bin("rtp_sniff")
+
+    if not binary:
+        smf.printf("[!] Binary not found =>", binary)
 
     # Output path for User (Current Working Directory)
     output_pcm = os.path.join(os.getcwd(), "storm_capture.pcm")

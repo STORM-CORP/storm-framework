@@ -93,6 +93,36 @@ Make sure to add a Makefile to each compiled language module, whether it's Rust,
 
 You can use the existing template in `example/Makefile/` and adjust it to your needs.
 
+### Binary path information
+
+You don't need to do a path or memorize the path where the binary is located, because we already have an automatic binary search mechanism and you just need to use it like this:
+
+```python
+# Use this import
+from lib.roar.callbin.calling import call_bin
+
+def execute(options):
+    bin = call_bin("binary_name")
+
+    if not bin:
+        smf.printf("[] Binary not found =>", bin)
+        return
+
+    cmd = [bin]
+    process = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1
+    )
+
+```
+
+But before that, make sure you remember what the binary output is in the Makefile you created. If you enter the wrong binary name, it won't find the binary.
+
+### Message
+
+Make sure the binary source code is placed inside `external/source/src/module` and the binary result is directed to `external/source/out/module`.
+
+To save your python loader, place it in the modules folder because this is what will be executed first before running the binary.
+
 ## Important Warning
 
 When you submit a PR for a compiled language module, make sure you submit readable language source code. Don't submit a binary file because I will immediately reject it.

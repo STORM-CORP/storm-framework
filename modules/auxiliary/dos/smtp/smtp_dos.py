@@ -2,7 +2,6 @@ import subprocess
 import os
 import smf
 
-from rootmap import ROOT
 from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
@@ -31,7 +30,7 @@ def execute(options):
     threads = str(options.get("THREAD"))
 
     bin_path = call_bin("smtp_flood")
-    
+
     if not target:
         smf.printf("[-] Target is missing!")
         return

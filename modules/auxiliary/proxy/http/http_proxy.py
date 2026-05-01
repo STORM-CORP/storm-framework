@@ -1,9 +1,7 @@
 import subprocess
 import sys
-import os
 import smf
 
-from rootmap import ROOT
 from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {
@@ -28,7 +26,7 @@ def execute(options):
     if not bin:
         smf.printf("[!] Binary not found =>", bin)
         return
-        
+
     cmd = [bin]
 
     process = subprocess.Popen(

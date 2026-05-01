@@ -3,7 +3,6 @@ import threading
 import os
 import smf
 
-from rootmap import ROOT
 from lib.roar.callbin.calling import call_bin
 
 MOD_INFO = {

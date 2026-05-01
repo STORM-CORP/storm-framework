@@ -28,7 +28,7 @@ def _get_db_connection() -> sqlite3.Connection:
         """)
         conn.execute("CREATE INDEX IF NOT EXISTS idx_bin_name ON binary_cache(name)")
     except sqlite3.Error as e:
-        smf.printd"Failed to initialize SQLite cache schema", e, level="CRITICAL")
+        smf.printd("Failed to initialize SQLite cache schema", e, level="CRITICAL")
         raise
 
     return conn

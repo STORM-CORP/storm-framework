@@ -4,7 +4,6 @@
 TOOL_NAME="storm"
 REPO_NAME="storm-framework"
 GITHUB_REPO="https://github.com/StormWorld0/$REPO_NAME.git"
-VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json | jq -r '.version')
 
 # Color
 GREEN='\033[92m'
@@ -35,13 +34,13 @@ SHEBANG_PATH="#!/usr/bin/env bash"
 PYTHON_CMD="python3"
 INSTALL_DIR="/opt/$REPO_NAME"
 
-sudo apt install -y jq python3-full python3-venv python3-pip git golang build-essential libpcap-dev clang ffmpeg openssl pkg-config libssl-dev
+sudo apt install -y python3-full python3-venv python3-pip git golang build-essential libpcap-dev clang ffmpeg openssl pkg-config libssl-dev
 
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"
 
-# 1. Check Python and Git
+# Check Python and Git
 if ! command -v git &> /dev/null; then
     echo -e "${RED}[x] ERROR: Git not found. Install Git first.${NC}"
     exit 1
@@ -51,7 +50,7 @@ if ! command -v "$PYTHON_CMD" &> /dev/null; then
     exit 1
 fi
 
-# 2. Installation Directory Preparation
+# Installation Directory Preparation
 if [ -d "$INSTALL_DIR" ]; then
     echo -e "${GREEN}[-] Remove old installations.${NC}"
     cd ~
@@ -87,7 +86,7 @@ if [ ! -f "$INSTALL_DIR/pyproject.toml" ]; then
 fi
 
 
-# 3. Install Python Dependencies
+# Install Python Dependencies
 if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
     echo -e "${GREEN}[+] Installing Python dependencies.${NC}"
 
@@ -103,17 +102,17 @@ fi
 # Kita mengecek ketersediaan cargo menggunakan sudo agar mendeteksi environment root
 if ! sudo command -v cargo &> /dev/null || ! sudo cargo --version | grep -q "1.8"; then
     echo -e "${GREEN}[+] Installing modern Rust toolchain for ROOT environment...${NC}"
-    
-    # [PERBAIKAN 1] Paksa instalasi sepenuhnya menggunakan user ROOT
+
+    # Paksa instalasi sepenuhnya menggunakan user ROOT
     # Ini menghindari konflik $HOME antara user biasa dan euid sudo
     sudo bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
-    
-    # [PERBAIKAN 2] Buat symlink biner Rust dari direktori root ke sistem global
+
+    # Buat symlink biner Rust dari direktori root ke sistem global
     sudo ln -sf /root/.cargo/bin/cargo /usr/local/bin/cargo
     sudo ln -sf /root/.cargo/bin/rustc /usr/local/bin/rustc
     sudo ln -sf /root/.cargo/bin/rustup /usr/local/bin/rustup
-    
-    # [PERBAIKAN 3] Atur default toolchain secara eksplisit khusus untuk user root
+
+    # Atur default toolchain secara eksplisit khusus untuk user root
     # Ini mengabulkan permintaan error: "run 'rustup default stable'"
     sudo /usr/local/bin/rustup default stable
 fi
@@ -123,7 +122,7 @@ echo -e "${BLUE}[*] Cargo version: $(sudo /usr/local/bin/cargo --version)${NC}"
 # ----------------------------------
 
 
-# 4. Run binary compilation
+# Run binary compilation
 if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Cannot access $INSTALL_DIR${NC}"; }
 fi
@@ -161,7 +160,7 @@ fi
 sudo chmod 600 .env
 sudo python3 -m scripts.security.sign
 
-# 5. Creating a Dynamic Wrapper Script
+# Creating a Dynamic Wrapper Script
 WRAPPER_DST="$BIN_DIR/$TOOL_NAME"
 
 # Create wrapper content in variables for easy management
@@ -172,15 +171,12 @@ cd \"\$PROJECT_DIR\" || { echo \"[x] ERROR: Failed to access project directory.\
 
 if [ \"\$1\" == \"--update\" ] && [ \$# -eq 1 ]; then
     exec ./smfupdate
-
 elif [ \$# -eq 0 ]; then
-
     if [ ! -f \"./smfstart\" ]; then
         exec ./smfupdate
     else
         exec ./smfstart
     fi
-
 else
     echo \"[x] Error: Command '\$@' not found.\"
     exit 1
@@ -191,7 +187,7 @@ write_to_file "$CREATE_WRAPPER" "$WRAPPER_DST" false
 sudo chmod +x "$WRAPPER_DST"
 
 echo -e "${GREEN}####################################################${NC}"
+echo -e "${GREEN}[✓] INSTALLATION COMPLETE${NC}"
 echo -e "${GREEN}[✓] PATH STORM: ${INSTALL_DIR}${NC}"
 echo -e "${GREEN}[✓] PATH WRAPPER: ${BIN_DIR}/${TOOL_NAME}${NC}"
-echo -e "${GREEN}[✓] INSTALLATION COMPLETE VERSION: ${VERSION}${NC}"
 echo -e "${GREEN}####################################################${NC}"

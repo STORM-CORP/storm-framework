@@ -4,7 +4,6 @@
 TOOL_NAME="storm"
 REPO_NAME="storm-framework"
 GITHUB_REPO="https://github.com/StormWorld0/$REPO_NAME.git"
-VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json | jq -r '.version')
 
 # Color
 GREEN='\033[92m'
@@ -35,12 +34,12 @@ SHEBANG_PATH="#!/usr/bin/env bash"
 PYTHON_CMD="python"
 INSTALL_DIR="$PREFIX/share/$REPO_NAME"
 
-pkg install -y jq python git golang rust build-essential libpcap clang ffmpeg openssl binutils pkg-config
+pkg install -y python git golang rust build-essential libpcap clang ffmpeg openssl binutils pkg-config
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"
 
-# 1. Check Python and Git
+# Check Python and Git
 if ! command -v git &> /dev/null; then
     echo -e "${RED}[x] ERROR: Git not found. Install Git first.${NC}"
     exit 1
@@ -50,7 +49,7 @@ if ! command -v "$PYTHON_CMD" &> /dev/null; then
     exit 1
 fi
 
-# 2. Installation Directory Preparation
+# Installation Directory Preparation
 if [ -d "$INSTALL_DIR" ]; then
     echo -e "${GREEN}[-] Remove old installations.${NC}"
     cd ~
@@ -69,7 +68,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 3. Install Python Dependencies
+# Install Python Dependencies
 if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
     echo -e "${GREEN}[+] Installing Python dependencies.${NC}"
 
@@ -119,7 +118,7 @@ fi
 chmod 600 .env
 python3 -m scripts.security.sign
 
-# 5. Creating a Dynamic Wrapper Script
+# Creating a Dynamic Wrapper Script
 WRAPPER_DST="$BIN_DIR/$TOOL_NAME"
 
 # Create wrapper content in variables for easy management
@@ -130,17 +129,14 @@ cd \"\$PROJECT_DIR\" || { echo \"[x] ERROR: Failed to access project directory.\
 
 if [ \"\$1\" == \"--update\" ] && [ \$# -eq 1 ]; then
     exec ./smfupdate
-
 elif [ \$# -eq 0 ]; then
-
     if [ ! -f \"./smfstart\" ]; then
         exec ./smfupdate
     else
         exec ./smfstart
     fi
-
 else
-    echo \"[x] Error: Command '\$@' not found.\"
+    echo \"[*] Command '\$@' not found.\"
     exit 1
 fi"
 
@@ -149,7 +145,7 @@ write_to_file "$CREATE_WRAPPER" "$WRAPPER_DST" false
 chmod +x "$WRAPPER_DST"
 
 echo -e "${GREEN}####################################################${NC}"
+echo -e "${GREEN}[✓] INSTALLATION COMPLETE${NC}"
 echo -e "${GREEN}[✓] PATH STORM: ${INSTALL_DIR}${NC}"
 echo -e "${GREEN}[✓] PATH WRAPPER: ${BIN_DIR}/${TOOL_NAME}${NC}"
-echo -e "${GREEN}[✓] INSTALLATION COMPLETE VERSION: ${VERSION}${NC}"
 echo -e "${GREEN}####################################################${NC}"

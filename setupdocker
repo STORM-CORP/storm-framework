@@ -4,7 +4,6 @@
 TOOL_NAME="storm"
 REPO_NAME="storm-framework"
 GITHUB_REPO="https://github.com/StormWorld0/$REPO_NAME.git"
-VERSION=$(curl -s https://raw.githubusercontent.com/StormWorld0/storm-framework/main/data/data_version.json | jq -r '.version')
 
 # Color
 GREEN='\033[92m'
@@ -38,12 +37,12 @@ INSTALL_DIR="/opt/$REPO_NAME"
 # Kita hanya menginstal dependensi inti untuk orkestrasi di Host, termasuk Docker.
 # Compiler berat (golang, rust, dll) akan dipindahkan ke dalam Dockerfile.
 sudo apt update
-sudo apt install -y jq python3 git openssl docker.io
+sudo apt install -y python3 git openssl docker.io
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"
 
-# 1. Check Python and Git (Dan Docker)
+# Check Python and Git (Dan Docker)
 if ! command -v git &> /dev/null; then
     echo -e "${RED}[x] ERROR: Git not found. Install Git first.${NC}"
     exit 1
@@ -57,7 +56,7 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
-# 2. Installation Directory Preparation
+# Installation Directory Preparation
 if [ -d "$INSTALL_DIR" ]; then
     echo -e "${GREEN}[-] Remove old installations.${NC}"
     cd ~
@@ -92,7 +91,7 @@ if [ ! -f "$INSTALL_DIR/pyproject.toml" ]; then
     exit 1
 fi
 
-# 3. Install Python Dependencies (Diubah menjadi proses Build Docker Image)
+# Install Python Dependencies (Diubah menjadi proses Build Docker Image)
 if [ -f "$INSTALL_DIR/pyproject.toml" ]; then
     echo -e "${GREEN}[+] Installing Python dependencies and Building Image.${NC}"
 
@@ -127,12 +126,12 @@ RUN pip install --no-cache-dir $INSTALL_DIR/."
     fi
 fi
 
-# 4. Run binary compilation
+# Run binary compilation
 if [ -d "$INSTALL_DIR" ]; then
     cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Cannot access $INSTALL_DIR${NC}"; }
 fi
 
-# [PERBAIKAN GO] Menyuntikkan -e GOFLAGS="-buildvcs=false" untuk mematikan VCS stamping
+# Menyuntikkan -e GOFLAGS="-buildvcs=false" untuk mematikan VCS stamping
 sudo docker run --rm -e GOFLAGS="-buildvcs=false" -v "$INSTALL_DIR":"$INSTALL_DIR" -w "$INSTALL_DIR" "$REPO_NAME" "$PYTHON_CMD" -m scripts.cpl.compiler
 cd "$INSTALL_DIR" || { echo -e "${RED}[x] ERROR: Lost track of directory!${NC}"; exit 1; }
 
@@ -167,7 +166,7 @@ sudo chmod 600 .env
 # Sign dieksekusi di dalam Docker, karena librari kriptografinya ada di dalam image
 sudo docker run --rm -v "$INSTALL_DIR":"$INSTALL_DIR" -w "$INSTALL_DIR" "$REPO_NAME" python3 -m scripts.security.sign
 
-# 5. Creating a Dynamic Wrapper Script
+# Creating a Dynamic Wrapper Script
 WRAPPER_DST="$BIN_DIR/$TOOL_NAME"
 
 # Create wrapper content in variables for easy management
@@ -176,7 +175,6 @@ CREATE_WRAPPER="${SHEBANG_PATH}
 PROJECT_DIR=\"$INSTALL_DIR\"
 cd \"\$PROJECT_DIR\" || { echo \"[x] ERROR: Failed to access project directory.\"; exit 1; }
 
-# [PERBAIKAN] Dynamic TTY Detection
 # Cek apakah descriptor 1 (STDOUT) terhubung ke terminal asli (TTY)
 if [ -t 1 ]; then
     TTY_FLAG=\"-it\"
@@ -188,15 +186,12 @@ DOCKER_CMD=\"sudo docker run \$TTY_FLAG --rm --network host -v \$PROJECT_DIR:\$P
 
 if [ \"\$1\" == \"--update\" ] && [ \$# -eq 1 ]; then
     exec \$DOCKER_CMD ./smfupdate
-
 elif [ \$# -eq 0 ]; then
-
     if [ ! -f \"./smfstart\" ]; then
         exec \$DOCKER_CMD ./smfupdate
     else
         exec \$DOCKER_CMD ./smfstart
     fi
-
 else
     echo \"[x] Error: Command '\$@' not found.\"
     exit 1
@@ -208,7 +203,7 @@ sudo chmod +x "$WRAPPER_DST"
 
 
 echo -e "${GREEN}####################################################${NC}"
+echo -e "${GREEN}[✓] INSTALLATION COMPLETE${NC}"
 echo -e "${GREEN}[✓] PATH STORM: ${INSTALL_DIR}${NC}"
 echo -e "${GREEN}[✓] PATH WRAPPER: ${BIN_DIR}/${TOOL_NAME}${NC}"
-echo -e "${GREEN}[✓] INSTALLATION COMPLETE VERSION: ${VERSION}${NC}"
 echo -e "${GREEN}####################################################${NC}"

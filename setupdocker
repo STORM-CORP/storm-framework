@@ -37,7 +37,7 @@ INSTALL_DIR="/opt/$REPO_NAME"
 # Kita hanya menginstal dependensi inti untuk orkestrasi di Host, termasuk Docker.
 # Compiler berat (golang, rust, dll) akan dipindahkan ke dalam Dockerfile.
 sudo apt update
-sudo apt install -y python3 git openssl docker.io
+sudo apt install -y jq python3 git openssl docker.io
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"

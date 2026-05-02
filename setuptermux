@@ -34,7 +34,7 @@ SHEBANG_PATH="#!/usr/bin/env bash"
 PYTHON_CMD="python"
 INSTALL_DIR="$PREFIX/share/$REPO_NAME"
 
-pkg install -y python git golang rust build-essential libpcap clang ffmpeg openssl binutils pkg-config
+pkg install -y jq python git golang rust build-essential libpcap clang ffmpeg openssl binutils pkg-config
 # -----------------------------------------------------------------------------
 
 echo -e "${GREEN}[!] Start Installation: ${REPO_NAME} [!] ${NC}"

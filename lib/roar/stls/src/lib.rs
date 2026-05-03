@@ -1,4 +1,3 @@
-// src/lib.rs
 mod tls;
 mod http2;
 
@@ -6,7 +5,6 @@ use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use tokio::runtime::Runtime;
 
-// Import modul yang sudah kita bangun
 use tls::builder::build_chrome_ssl_context;
 use http2::fingerprint::ChromeH2Settings;
 use tokio::net::TcpStream;

@@ -16,7 +16,7 @@ use boring::ssl::Ssl;
 // C-ABI / FFI BOUNDARY
 // =========================================================================
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn storm_fetch(url_ptr: *const c_char) -> *mut c_char {
     // 1. Validasi Pointer dari bahasa eksternal (Python/Go)
     if url_ptr.is_null() {
@@ -40,7 +40,7 @@ pub extern "C" fn storm_fetch(url_ptr: *const c_char) -> *mut c_char {
     let result = rt.block_on(async {
         match execute_request(url_str).await {
             Ok(response_body) => response_body,
-            Err(e) => format!("ERROR: Storm Engine Failure - {}", e),
+            Err(e) => format!("ERROR: STLS Failure - {}", e),
         }
     });
 
@@ -49,7 +49,7 @@ pub extern "C" fn storm_fetch(url_ptr: *const c_char) -> *mut c_char {
     c_result.into_raw()
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn storm_free_string(s: *mut c_char) {
     if s.is_null() {
         return;
@@ -68,7 +68,7 @@ pub extern "C" fn storm_free_string(s: *mut c_char) {
 async fn execute_request(target_url: &str) -> Result<String, Box<dyn std::error::Error>> {
     // 1. Ekstraksi Host dan Port dari URL target
     let uri = target_url.parse::<http::Uri>()?;
-    let host = uri.host().ok_or("URL tidak memiliki host")?;
+    let host = uri.host().ok_or("URL has no host")?;
     let port = uri.port_u16().unwrap_or(443);
     let target_addr = format!("{}:{}", host, port);
 

@@ -1,5 +1,5 @@
 RAW_NAME := stls
-NAME     := libstls
+NAME     := libstls.so
 OUT      := $(OUT_DIR)/core/tls
 TARGET   := $(OUT)/$(NAME)
 

@@ -1,5 +1,5 @@
 [package]
-name = "Storm Transport Layer Security"
+name = "STLS"
 version = "0.1.0"
 edition = "2021"
 

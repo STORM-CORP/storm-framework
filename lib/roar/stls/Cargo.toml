@@ -1,0 +1,18 @@
+[package]
+name = "Storm Transport Layer Security"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "stls"
+crate-type = ["cdylib"]
+
+[dependencies]
+boring = "4.4.0" 
+tokio = { version = "1", features = ["full"] }
+hyper = "1.0"
+http = "1.0"
+tokio-boring = "4.4.0"
+h2 = "0.4"
+bytes = "1.5"
+libc = "0.2"

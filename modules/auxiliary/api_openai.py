@@ -1,9 +1,9 @@
 import smf
 from lib.roar.tls import get
 
-REQUIRED_OPTIONS = {
-    "URL": ""
-}
+REQUIRED_OPTIONS = {"URL": ""}
+
+
 def execute(options):
 
     url = options.get("URL")

@@ -8,7 +8,7 @@ def execute(options):
 
     url = options.get("URL")
     try:
-        cal = get(req)
+        cal = get(url)
 
         smf.printf(cal)
     except Exception as e:

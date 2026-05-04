@@ -105,12 +105,10 @@ async fn execute_request(target_url: &str) -> Result<String, Box<dyn std::error:
     let request = http::Request::builder()
         .method("GET")
         .uri(target_url)
-        .header("host", host)
         .header("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
         .header("accept", "application/json")
         .header("accept-language", "en-US,en;q=0.9")
-        // Catatan: 'identity' mencegah respon dikompresi gzip/brotli agar FFI langsung bisa membaca JSON mentah
-        .header("accept-encoding", "identity") 
+        .header("accept-encoding", "gzip, deflate, br, zstd") 
         .body(())?;
 
     // 6. Kirim Request
